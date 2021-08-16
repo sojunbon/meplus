@@ -1,5 +1,5 @@
 import 'package:meplus/app_properties.dart';
-//import 'package:meplus/screens/auth/welcome_back_page.dart';
+import 'package:meplus/authen/welcome_back_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,9 +21,9 @@ class _SplashScreenState extends State<SplashScreen>
       ..addListener(() {
         setState(() {});
       });
-    //controller.forward().then((_) {
-    //navigationPage();
-    //});
+    controller.forward().then((_) {
+      navigationPage();
+    });
   }
 
   @override
@@ -32,12 +32,10 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  /*
   void navigationPage() {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (_) => WelcomeBackPage()));
   }
-  */
 
   Widget build(BuildContext context) {
     return Container(

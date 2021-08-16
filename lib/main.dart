@@ -1,4 +1,4 @@
-import 'package:meplus/screens/splash_page.dart';
+import 'package:meplus/startscreen/splash_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
