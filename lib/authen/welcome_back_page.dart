@@ -1,13 +1,34 @@
+import 'dart:io' show Platform;
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'register_page.dart';
+import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:meplus/components/notification.dart';
+import 'package:meplus/components/signin_button.dart';
+import 'package:meplus/screens/main_page.dart';
+import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
+import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
+//import 'package:meplus/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
+import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+//import 'package:flutter/src/material/button_style.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:apple_sign_in/apple_sign_in_button.dart';
 
 class WelcomeBackPage extends StatefulWidget {
+  WelcomeBackPage({Key key}) : super(key: key);
   @override
   _WelcomeBackPageState createState() => _WelcomeBackPageState();
 }
 
 class _WelcomeBackPageState extends State<WelcomeBackPage> {
+  @override
+  void initState() {
+    // initLineSdk();
+    super.initState();
+  }
+
   TextEditingController email =
       TextEditingController(text: 'example@email.com');
 
@@ -16,7 +37,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
-      'ME PLUS,',
+      'ME PLUS',
       style: TextStyle(
           color: Colors.white,
           fontSize: 34.0,
