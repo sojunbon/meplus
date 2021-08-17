@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     Widget title = Text(
-      'Glad To Meet You',
+      'Register / ลงทะเบียนสมาชิก',
       style: TextStyle(
           color: Colors.white,
           fontSize: 34.0,
@@ -36,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Widget subTitle = Padding(
         padding: const EdgeInsets.only(right: 56.0),
         child: Text(
-          'Create your new account for future uses.',
+          'Create user name / สร้างสมาชิก',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
