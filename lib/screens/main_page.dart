@@ -12,7 +12,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Firebase Authentication"),
+        title: Text("MainPage"),
         actions: <Widget>[
           IconButton(
             tooltip: "Sign-out",

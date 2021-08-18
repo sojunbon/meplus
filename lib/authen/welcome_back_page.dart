@@ -15,6 +15,12 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/src/material/button_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:apple_sign_in/apple_sign_in_button.dart';
+import 'package:meplus/components/notification.dart';
+import 'package:meplus/screens/signin_with_email/register_with_email.dart';
+import 'package:meplus/services/signin_with_email_method_services/signin_with_email_service.dart';
+import 'package:meplus/providers/login_provider.dart';
+import 'package:meplus/providers/register_provider.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeBackPage extends StatefulWidget {
   WelcomeBackPage({Key key}) : super(key: key);
@@ -23,16 +29,17 @@ class WelcomeBackPage extends StatefulWidget {
 }
 
 class _WelcomeBackPageState extends State<WelcomeBackPage> {
+  IconData get icon => null;
+
   @override
   void initState() {
     // initLineSdk();
     super.initState();
   }
 
-  TextEditingController email =
-      TextEditingController(text: 'example@email.com');
+  TextEditingController email = TextEditingController(text: "");
 
-  TextEditingController password = TextEditingController(text: '12345678');
+  TextEditingController password = TextEditingController(text: "");
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +72,67 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
       left: MediaQuery.of(context).size.width / 4,
       bottom: 40,
       child: InkWell(
+        /*
         onTap: () {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+        },
+        */
+
+        onTap: () async {
+          if (!await context
+              .read<LoginProvider>()
+              .login(email.text, password.text)) {
+            var key;
+            key.currentState
+                .showSnackBar(SnackBar(content: Text('Unable to login.')));
+          }
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
           height: 80,
           child: Center(
               child: new Text("Log In",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(236, 60, 3, 1),
+                    Color.fromRGBO(234, 60, 3, 1),
+                    Color.fromRGBO(216, 78, 16, 1),
+                  ],
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              borderRadius: BorderRadius.circular(9.0)),
+        ),
+      ),
+    );
+
+    Widget registerMember = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 40,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+        },
+        child: Container(
+          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+          width: MediaQuery.of(context).size.width / 2,
+          height: 80,
+          child: Center(
+              child: new Text("Register",
                   style: const TextStyle(
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
@@ -119,6 +178,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration: InputDecoration(hintText: 'Email'),
                     controller: email,
                     style: TextStyle(fontSize: 16.0),
                   ),
@@ -126,6 +186,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration: InputDecoration(hintText: 'Password'),
                     controller: password,
                     style: TextStyle(fontSize: 16.0),
                     obscureText: true,
@@ -136,46 +197,6 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
           ),
           loginButton,
         ],
-      ),
-    );
-
-    Widget registerMember = Positioned(
-      left: MediaQuery.of(context).size.width / 4,
-      bottom: 40,
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-        },
-        child: Container(
-          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
-          width: MediaQuery.of(context).size.width / 2,
-          height: 80,
-          child: Center(
-              child: new Text("Register",
-                  style: const TextStyle(
-                      color: const Color(0xfffefefe),
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [
-                    Color.fromRGBO(236, 60, 3, 1),
-                    Color.fromRGBO(234, 60, 3, 1),
-                    Color.fromRGBO(216, 78, 16, 1),
-                  ],
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.16),
-                  offset: Offset(0, 5),
-                  blurRadius: 10.0,
-                )
-              ],
-              borderRadius: BorderRadius.circular(9.0)),
-        ),
       ),
     );
 
@@ -242,5 +263,12 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
   }
 }

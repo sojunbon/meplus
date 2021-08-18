@@ -1,6 +1,20 @@
 import 'package:meplus/startscreen/splash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:meplus/providers/login_provider.dart';
+import 'package:provider/provider.dart';
+import 'my_app.dart';
 
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => LoginProvider.instance())
+    ],
+    child: MyApp(),
+  ));
+}
+
+
+/*
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -20,6 +34,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/
 
 /*
 import 'package:flutter/material.dart';
