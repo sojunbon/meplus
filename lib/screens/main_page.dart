@@ -4,9 +4,9 @@ import 'package:meplus/services/signin_with_google_services/signin_with_google_s
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class MainPage extends StatelessWidget {
+class MainPageview extends StatelessWidget {
   final FirebaseUser user;
-  const MainPage({Key key, @required this.user}) : super(key: key);
+  const MainPageview({Key key, @required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

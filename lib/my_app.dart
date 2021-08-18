@@ -8,8 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meplus/startscreen/splash_page.dart';
-import 'package:meplus/screens/main_page.dart';
+
+//import 'package:meplus/screens/main_page.dart';
+import 'package:meplus/screens/mainsrc/main_page.dart';
+
 import 'package:meplus/authen/welcome_back_page.dart';
+import 'package:meplus/models/user.dart';
 
 class MyApp extends StatelessWidget {
   // UserManagement userObj = new UserManagement();

@@ -15,7 +15,7 @@ Future<bool> signInWithEmail(BuildContext context,
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) => MainPage(
+          builder: (context) => MainPageview(
                 user: result.user,
               )),
     );

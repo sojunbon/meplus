@@ -2,6 +2,7 @@ class User {
   String users;
   bool admin;
 
+  //User(this.users);
   User(this.users);
 
   Map<String, dynamic> toJson() => {

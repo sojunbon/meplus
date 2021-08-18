@@ -94,7 +94,8 @@ class _SigninPageState extends State<SigninPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MainPage(user: user)));
+                                  builder: (context) =>
+                                      MainPageview(user: user)));
                           showMessageBox(context,
                               title: "Welcome to Firebase Authentication",
                               content: "You've just signed in with Google!");
@@ -138,7 +139,7 @@ class _SigninPageState extends State<SigninPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          MainPage(user: user)));
+                                          MainPageview(user: user)));
                               showMessageBox(context,
                                   title: "Welcome to Firebase Authentication",
                                   content: "You've just signed in with Apple");
