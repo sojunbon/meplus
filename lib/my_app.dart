@@ -10,10 +10,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meplus/startscreen/splash_page.dart';
 
 //import 'package:meplus/screens/main_page.dart';
-import 'package:meplus/screens/mainsrc/main_page.dart';
+import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 
 import 'package:meplus/authen/welcome_back_page.dart';
 import 'package:meplus/models/user.dart';
+
+//----- ME PLUS Main page -----
+import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
 class MyApp extends StatelessWidget {
   // UserManagement userObj = new UserManagement();
@@ -48,7 +51,8 @@ Widget _showScreen(BuildContext context) {
     case AppState.initial:
       return SplashScreen();
     case AppState.authenticated:
-      return MainPage(user: context.watch<LoginProvider>().user);
+      //  return MainPage(user: context.watch<LoginProvider>().user);
+      return MemainPage(user: context.watch<LoginProvider>().user);
 
     //MyHomePage(user: context.watch<LoginProvider>().user);
   }

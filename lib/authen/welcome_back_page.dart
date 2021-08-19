@@ -5,7 +5,7 @@ import 'register_page.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
-import 'package:meplus/screens/main_page.dart';
+import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
 import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
 //import 'package:meplus/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
@@ -21,6 +21,9 @@ import 'package:meplus/services/signin_with_email_method_services/signin_with_em
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/providers/register_provider.dart';
 import 'package:provider/provider.dart';
+
+//----- ME PLUS Main page -----
+import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
 class WelcomeBackPage extends StatefulWidget {
   WelcomeBackPage({Key key}) : super(key: key);
@@ -78,14 +81,14 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));
         },
         */
-
+        // -------- Me plus Login -------
         onTap: () async {
           if (!await context
               .read<LoginProvider>()
               .login(email.text, password.text)) {
-            var key;
-            key.currentState
-                .showSnackBar(SnackBar(content: Text('Unable to login.')));
+            // var key;
+            // key.currentState
+            //    .showSnackBar(SnackBar(content: Text('Unable to login.')));
           }
         },
         child: Container(

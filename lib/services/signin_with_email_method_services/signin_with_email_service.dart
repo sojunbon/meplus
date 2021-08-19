@@ -1,4 +1,4 @@
-import 'package:meplus/screens/main_page.dart';
+import 'package:meplus/screens/shopping/main_page.dart';
 import 'package:meplus/screens/signin_with_email/register_with_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
