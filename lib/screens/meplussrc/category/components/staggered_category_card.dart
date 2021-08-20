@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meplus/screens/meplussrc/products/meproduct.dart';
 
 class CategoryCard extends StatelessWidget {
   final Color begin;
@@ -8,17 +9,17 @@ class CategoryCard extends StatelessWidget {
 
   CategoryCard(
       {Key key,
-        this.controller,
-        this.begin,
-        this.end,
-        this.categoryName,
-        this.assetPath})
+      this.controller,
+      this.begin,
+      this.end,
+      this.categoryName,
+      this.assetPath})
       :
 
-  // Each animation defined here transforms its value during the subset
-  // of the controller's duration defined by the animation's interval.
-  // For example the opacity animation transforms its value during
-  // the first 10% of the controller's duration.
+        // Each animation defined here transforms its value during the subset
+        // of the controller's duration defined by the animation's interval.
+        // For example the opacity animation transforms its value during
+        // the first 10% of the controller's duration.
 
         height = Tween<double>(begin: 150, end: 250.0).animate(
           CurvedAnimation(
@@ -89,9 +90,9 @@ class CategoryCard extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(24))),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Text(
-                  'View more',
+                  'View',
                   style: TextStyle(color: end, fontWeight: FontWeight.bold),
                 ),
               )
@@ -129,6 +130,7 @@ class _StaggeredCardCardState extends State<StaggeredCardCard>
     with TickerProviderStateMixin {
   AnimationController _controller;
   bool isActive = false;
+  final getkey = StaggeredCardCard().categoryName;
 
   @override
   void initState() {
@@ -154,12 +156,21 @@ class _StaggeredCardCardState extends State<StaggeredCardCard>
     }
   }
 
+  // -------- Link สินค้า และ การลงทุน ---------
   @override
   Widget build(BuildContext context) {
     var timeDilation = 10.0; // 1.0 is normal animation speed.
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+        if (getkey == "สินค้า") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => Meproduct()));
+        } else if (getkey == "การลงทุน") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => Meproduct()));
+        }
+        /*
         if (isActive) {
           isActive = !isActive;
           _reverseAnimation();
@@ -167,6 +178,7 @@ class _StaggeredCardCardState extends State<StaggeredCardCard>
           isActive = !isActive;
           _playAnimation();
         }
+        */
       },
       child: CategoryCard(
         controller: _controller.view,

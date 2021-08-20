@@ -15,6 +15,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:meplus/screens/meplussrc/mainpage/components/custom_bottom_bar.dart';
 import 'package:meplus/screens/meplussrc/mainpage/components/tab_view.dart';
 import 'package:meplus/screens/meplussrc/category/mecategory_list_page.dart';
+import 'package:meplus/screens/meplussrc/category/mecard.dart';
+import 'package:meplus/screens/meplussrc/category/melink.dart';
 //import 'components/product_list.dart';
 //import 'components/tab_view.dart';
 
@@ -233,7 +235,7 @@ class _MainPageState extends State<MemainPage>
           controller: bottomTabController,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            MeCategoryListPage(),
+            Melink(), //MeCategoryListPage(),
             CategoryListPage(),
             CheckOutPage(),
             ProfilePage()

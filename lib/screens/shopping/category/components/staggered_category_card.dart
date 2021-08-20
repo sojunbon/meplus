@@ -8,17 +8,17 @@ class CategoryCard extends StatelessWidget {
 
   CategoryCard(
       {Key key,
-        this.controller,
-        this.begin,
-        this.end,
-        this.categoryName,
-        this.assetPath})
+      this.controller,
+      this.begin,
+      this.end,
+      this.categoryName,
+      this.assetPath})
       :
 
-  // Each animation defined here transforms its value during the subset
-  // of the controller's duration defined by the animation's interval.
-  // For example the opacity animation transforms its value during
-  // the first 10% of the controller's duration.
+        // Each animation defined here transforms its value during the subset
+        // of the controller's duration defined by the animation's interval.
+        // For example the opacity animation transforms its value during
+        // the first 10% of the controller's duration.
 
         height = Tween<double>(begin: 150, end: 250.0).animate(
           CurvedAnimation(
@@ -89,7 +89,7 @@ class CategoryCard extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(24))),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Text(
                   'View more',
                   style: TextStyle(color: end, fontWeight: FontWeight.bold),
@@ -129,6 +129,7 @@ class _StaggeredCardCardState extends State<StaggeredCardCard>
     with TickerProviderStateMixin {
   AnimationController _controller;
   bool isActive = false;
+  final getkey = StaggeredCardCard().categoryName;
 
   @override
   void initState() {
