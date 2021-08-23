@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
-import 'package:meplus/authen/register_page.dart';
+import 'package:meplus/screens/authen/register_page.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
@@ -28,9 +28,12 @@ import 'package:meplus/screens/meplussrc/package/package.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
 class Melink extends StatefulWidget {
-  Melink({Key key}) : super(key: key);
+  final FirebaseUser user;
+
   @override
   _Melink createState() => _Melink();
+
+  const Melink({Key key, this.user}) : super(key: key);
 }
 
 class _Melink extends State<Melink> {
@@ -107,8 +110,10 @@ class _Melink extends State<Melink> {
       bottom: 40,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => Package()));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => Package(),
+            // builder: (_) => Package(user: context.watch<LoginProvider>().user),
+          ));
         },
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),

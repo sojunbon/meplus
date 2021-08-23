@@ -12,7 +12,7 @@ import 'package:meplus/startscreen/splash_page.dart';
 //import 'package:meplus/screens/main_page.dart';
 import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 
-import 'package:meplus/authen/welcome_back_page.dart';
+import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/models/user.dart';
 
 //----- ME PLUS Main page -----

@@ -1,6 +1,6 @@
 import 'package:meplus/app_properties.dart';
 import 'package:meplus/custom_background.dart';
-import 'package:meplus/authen/welcome_back_page.dart';
+import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/shopping/settings/change_country.dart';
 import 'package:meplus/screens/shopping/settings/change_password_page.dart';
 import 'package:meplus/screens/shopping/settings/legal_about_page.dart';

@@ -1,5 +1,5 @@
 import 'package:meplus/app_properties.dart';
-import 'package:meplus/authen/welcome_back_page.dart';
+import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
