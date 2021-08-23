@@ -140,12 +140,12 @@ class _Package extends State<Package> {
 
     Widget picView = Positioned(
       left: MediaQuery.of(context).size.width / 4,
-      bottom: 280,
+      bottom: 190,
       child: InkWell(
         //onTap: () => pickImage(context),
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
-          height: 80,
+          //height: 80,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
