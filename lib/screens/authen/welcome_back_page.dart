@@ -64,7 +64,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     Widget subTitle = Padding(
         padding: const EdgeInsets.only(right: 56.0),
         child: Text(
-          'Login to your account using\nMobile number',
+          'Login to your account using\nEmail',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
@@ -73,7 +73,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
 
     Widget loginButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
-      bottom: 40,
+      bottom: 190,
       child: InkWell(
         /*
         onTap: () {
@@ -124,7 +124,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
 
     Widget registerMember = Positioned(
       left: MediaQuery.of(context).size.width / 4,
-      bottom: 40,
+      bottom: 100,
       child: InkWell(
         onTap: () {
           Navigator.of(context)
@@ -144,9 +144,89 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
-                    Color.fromRGBO(236, 60, 3, 1),
-                    Color.fromRGBO(234, 60, 3, 1),
-                    Color.fromRGBO(216, 78, 16, 1),
+                    Color.fromRGBO(280, 90, 3, 1),
+                    Color.fromRGBO(280, 90, 3, 1),
+                    Color.fromRGBO(280, 90, 16, 1),
+                  ],
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              borderRadius: BorderRadius.circular(9.0)),
+        ),
+      ),
+    );
+
+    Widget registerPhone = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 80,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+        },
+        child: Container(
+          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+          width: MediaQuery.of(context).size.width / 2,
+          height: 80,
+          child: Center(
+              child: new Text("Register",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(300, 230, 3, 1),
+                    Color.fromRGBO(200, 230, 3, 1),
+                    Color.fromRGBO(100, 78, 16, 1),
+                  ],
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              borderRadius: BorderRadius.circular(9.0)),
+        ),
+      ),
+    );
+
+    Widget registerApple = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 10,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+        },
+        child: Container(
+          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+          width: MediaQuery.of(context).size.width / 2,
+          height: 80,
+          child: Center(
+              child: new Text("Apple ID",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(120, 60, 3, 1),
+                    Color.fromRGBO(100, 60, 3, 1),
+                    Color.fromRGBO(108, 78, 16, 1),
                   ],
                   begin: FractionalOffset.topCenter,
                   end: FractionalOffset.bottomCenter),
@@ -163,7 +243,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     );
 
     Widget loginForm = Container(
-      height: 240,
+      height: 400,
       child: Stack(
         children: <Widget>[
           Container(
@@ -199,6 +279,9 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
             ),
           ),
           loginButton,
+          registerMember,
+          //registerPhone,
+          registerApple,
         ],
       ),
     );
@@ -256,8 +339,8 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 subTitle,
                 Spacer(flex: 2),
                 loginForm,
-                Spacer(flex: 2),
-                registerMember,
+                // Spacer(flex: 2),
+                //registerMember,
                 Spacer(flex: 2),
                 forgotPassword
               ],

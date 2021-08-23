@@ -9,12 +9,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController email =
-      TextEditingController(text: 'example@email.com');
+  TextEditingController email = TextEditingController(text: '');
 
-  TextEditingController password = TextEditingController(text: '12345678');
+  TextEditingController password = TextEditingController(text: '');
 
-  TextEditingController cmfPassword = TextEditingController(text: '12345678');
+  TextEditingController cmfPassword = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: email,
+                    decoration: InputDecoration(hintText: 'Email'),
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ),
@@ -104,6 +104,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: password,
+                    decoration:
+                        InputDecoration(hintText: 'รหัสผ่าน / password'),
                     style: TextStyle(fontSize: 16.0),
                     obscureText: true,
                   ),
@@ -112,6 +114,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: cmfPassword,
+                    decoration: InputDecoration(
+                        hintText: 'กรอกรหัสผ่านอีกครั้ง / confirm password'),
                     style: TextStyle(fontSize: 16.0),
                     obscureText: true,
                   ),
