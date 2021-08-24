@@ -33,7 +33,7 @@ class WelcomeBackPage extends StatefulWidget {
 
 class _WelcomeBackPageState extends State<WelcomeBackPage> {
   IconData get icon => null;
-
+  final _key = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     // initLineSdk();
@@ -74,6 +74,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     Widget loginButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 190,
+      key: _key,
       child: InkWell(
         /*
         onTap: () {
@@ -86,9 +87,8 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
           if (!await context
               .read<LoginProvider>()
               .login(email.text, password.text)) {
-            // var key;
-            // key.currentState
-            //    .showSnackBar(SnackBar(content: Text('Unable to login.')));
+            _key.currentState;
+            // .showSnackBar(SnackBar(content: Text('Unable to login.')));
           }
         },
         child: Container(
@@ -127,8 +127,12 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
       bottom: 100,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          MaterialPageRoute materialPageRoute = MaterialPageRoute(
+              builder: (BuildContext context) => RegisterPage());
+          Navigator.of(context).push(materialPageRoute);
+
+          //Navigator.of(context)
+          //   .push(MaterialPageRoute(builder: (_) => RegisterPage()));
         },
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
