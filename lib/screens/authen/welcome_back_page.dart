@@ -37,6 +37,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
   @override
   void initState() {
     // initLineSdk();
+    //setState(() { userStatus = null; });
     super.initState();
   }
 

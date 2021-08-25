@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/providers/logger_service.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
+import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/my_app.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,9 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordString = TextEditingController(text: '');
   //TextEditingController cmfPassword = TextEditingController(text: '');
   //String nameString, emailString, passwordString, cmfPassword;
-  final formKey = GlobalKey<FormState>();
+  //final formKey = new GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  //final formKey = new GlobalKey();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   String disname;
@@ -61,8 +64,8 @@ class _RegisterPageState extends State<RegisterPage> {
       bottom: 10,
       child: InkWell(
         onTap: () {
-          // if (formKey.currentState.validate()) {
-          // formKey.currentState.save();
+          //if (formKey.currentState.validate()) {
+          //  formKey.currentState.save();
           print(
               'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString');
 
@@ -186,6 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     return Scaffold(
+      //key: formKey,
       body: Stack(
         children: <Widget>[
           Container(
@@ -263,7 +267,8 @@ class _RegisterPageState extends State<RegisterPage> {
     });
     //String title = "Save";
     //String message = "Create user complete,please press back button.";
-    showAlertDialog(context);
+    showModalAlertDialog(context);
+    //showAlertDialog(context);
   }
 
   void myAlert(String title, String message) {
@@ -284,21 +289,23 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Text("OK"),
       onPressed: () {
         Navigator.push(
+            //Navigator.pop(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     MemainPage(user: context.watch<LoginProvider>().user)));
-
-        //MaterialPageRoute materialPageRoute = MaterialPageRoute(
-        //    builder: (BuildContext context) =>
-        //       MemainPage(user: context.watch<LoginProvider>().user));
       },
     );
+
+    //BottomSheet BottomSheetalert = BottomSheet(
+    //    builder: (context) => Container(
+    //          color: Colors.red,
+    //        ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("บันทึก"),
-      content: Text("สร้างผู้ใช้เรียบร้อย กรุณากดปุ่ม Back"),
+      content: Text("สร้างผู้ใช้เรียบร้อย"),
       actions: [
         okButton,
       ],
@@ -310,6 +317,107 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (BuildContext context) {
         return alert;
       },
+    );
+  }
+
+  void showModalAlertDialog(BuildContext context) {
+    showModalBottomSheet(
+      enableDrag: false,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      backgroundColor: Colors.amber,
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => GestureDetector(
+        //Padding(
+        // padding: const EdgeInsets.symmetric(horizontal: 18),
+        onVerticalDragDown: (_) {}, // *** ไม่ให้ modal hide  control Modal
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            ),
+            SizedBox(
+              height: 15.0, //8.0,
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Center(
+                    child: Text('บันทึกข้อมูลเรียบร้อย',
+                        style: const TextStyle(
+                            color: const Color(0xfff36600),
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 20.0)))),
+            SizedBox(height: 20),
+            Container(
+              height: 100,
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(''),
+                    ElevatedButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WelcomeBackPage()));
+
+                        //Navigator.of(context).push(MaterialPageRoute(
+                        //    builder: (_) => MemainPage(
+                        //        user: context.watch<LoginProvider>().user)));
+                        /*
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MemainPage(
+                                    user:
+                                        context.watch<LoginProvider>().user)));
+                        */
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.normal)),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            /*
+            ElevatedButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.push(
+                    //Navigator.pop(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MemainPage(
+                            user: context.watch<LoginProvider>().user)));
+              },
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                  //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+                  textStyle:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+            )
+            */
+          ],
+        ),
+      ),
+      isDismissible: false, // *************** control Modal *******************
+      //isScrollControlled: true,
     );
   }
 //------------------------------------------------------

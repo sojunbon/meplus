@@ -39,6 +39,7 @@ class Melink extends StatefulWidget {
 class _Melink extends State<Melink> {
   IconData get icon => null;
   UserManagement userObj = new UserManagement();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -151,13 +152,17 @@ class _Melink extends State<Melink> {
       ),
     );
 
+/*
     Widget signoutLink = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 1,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           Navigator.of(context).pop();
+
+          await auth.signOut();
           userObj.signOut();
+
           // builder: (_) => Package(user: context.watch<LoginProvider>().user),
           // ));
         },
@@ -195,6 +200,7 @@ class _Melink extends State<Melink> {
         ),
       ),
     );
+    */
 
     return Scaffold(
       body: Stack(
@@ -223,7 +229,7 @@ class _Melink extends State<Melink> {
                 productLink,
                 Spacer(flex: 1),
                 packageLink,
-                signoutLink,
+                //  signoutLink,
                 Spacer(flex: 1),
                 //forgotPassword
               ],

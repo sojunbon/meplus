@@ -18,9 +18,11 @@ import 'package:meplus/screen/picqr.dart';
 import 'package:meplus/components/show_notification.dart';
 import 'package:meplus/providers/logger_service.dart';
 */
+import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
 class UserManagement {
   BehaviorSubject currentUser = BehaviorSubject<String>.seeded('user');
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   Widget handleAuth() {
     return new StreamBuilder(
@@ -29,8 +31,8 @@ class UserManagement {
         if (snapshot.hasData) {
           print(snapshot.data.uid);
           currentUser.add(snapshot.data.uid);
-          return WelcomeBackPage();
-          //DashboardPage(); //DashboardPage();
+          return MemainPage();
+          //DashboardPage(); //DashboardPage(); //WelcomeBackPage();
         }
         return WelcomeBackPage();
         //LoginPage(); //LoginPage();
@@ -38,8 +40,9 @@ class UserManagement {
     );
   }
 
-  signOut() {
-    FirebaseAuth.instance.signOut();
+  signOut() async {
+    await FirebaseAuth.instance.signOut();
+    //FirebaseAuth.instance.signOut();
   }
 
   /*
