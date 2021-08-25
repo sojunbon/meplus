@@ -626,6 +626,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "solid_bottom_sheet",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/solid_bottom_sheet-0.1.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "source_span",
       "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1",
       "packageUri": "lib/",
@@ -770,7 +776,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-08-23T09:16:29.570988Z",
+  "generated": "2021-08-25T07:38:05.715501Z",
   "generator": "pub",
   "generatorVersion": "2.13.4"
 }

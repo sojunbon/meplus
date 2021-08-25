@@ -23,7 +23,7 @@ import 'package:meplus/providers/register_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:meplus/screens/meplussrc/package/package.dart';
-
+import 'package:meplus/services/usermngmt.dart';
 //----- ME PLUS Main page -----
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
@@ -38,6 +38,7 @@ class Melink extends StatefulWidget {
 
 class _Melink extends State<Melink> {
   IconData get icon => null;
+  UserManagement userObj = new UserManagement();
 
   @override
   void initState() {
@@ -150,6 +151,51 @@ class _Melink extends State<Melink> {
       ),
     );
 
+    Widget signoutLink = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 1,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pop();
+          userObj.signOut();
+          // builder: (_) => Package(user: context.watch<LoginProvider>().user),
+          // ));
+        },
+        child: Container(
+          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+          //width: MediaQuery.of(context).size.width / 2,
+          width: MediaQuery.of(context).size.width,
+          height: 80,
+          child: Center(
+              child: new Text("SIGN OUT",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Color(0xff9999FF), Color(0xff9999FF),
+                    //Color.fromRGBO(246, 60, 3, 1),
+                    //Color.fromRGBO(200, 60, 3, 1),
+                    //Color.fromRGBO(180, 78, 16, 1),
+                  ],
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              //borderRadius: BorderRadius.circular(9.0)),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+        ),
+      ),
+    );
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -177,6 +223,7 @@ class _Melink extends State<Melink> {
                 productLink,
                 Spacer(flex: 1),
                 packageLink,
+                signoutLink,
                 Spacer(flex: 1),
                 //forgotPassword
               ],

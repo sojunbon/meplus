@@ -29,7 +29,8 @@ class UserManagement {
         if (snapshot.hasData) {
           print(snapshot.data.uid);
           currentUser.add(snapshot.data.uid);
-          return DashboardPage(); //DashboardPage();
+          return WelcomeBackPage();
+          //DashboardPage(); //DashboardPage();
         }
         return WelcomeBackPage();
         //LoginPage(); //LoginPage();
