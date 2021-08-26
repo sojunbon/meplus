@@ -187,52 +187,57 @@ class _RegisterPageState extends State<RegisterPage> {
         )
       ],
     );
-
-    return Scaffold(
-      //key: formKey,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/background.jpg'),
-                    fit: BoxFit.cover)),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: transparentYellow,
+    // ปิดใช้งานหรือแทนที่ปุ่ม "ย้อนกลับ" ของ Android
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: new Scaffold(
+        //return Scaffold(
+        //key: formKey,
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/background.jpg'),
+                      fit: BoxFit.cover)),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 28.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Spacer(flex: 3),
-                title,
-                //Spacer(),
-                //subTitle,
-                Spacer(flex: 2),
-                registerForm,
-                Spacer(flex: 2),
-                Padding(
-                    padding: EdgeInsets.only(bottom: 20), child: socialRegister)
-              ],
+            Container(
+              decoration: BoxDecoration(
+                color: transparentYellow,
+              ),
             ),
-          ),
-          Positioned(
-            top: 35,
-            left: 5,
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            Padding(
+              padding: const EdgeInsets.only(left: 28.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Spacer(flex: 3),
+                  title,
+                  //Spacer(),
+                  //subTitle,
+                  Spacer(flex: 2),
+                  registerForm,
+                  Spacer(flex: 2),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: socialRegister)
+                ],
+              ),
             ),
-          )
-        ],
+            Positioned(
+              top: 35,
+              left: 5,
+              child: IconButton(
+                color: Colors.white,
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -366,10 +371,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: const Text('OK'),
                       onPressed: () {
                         Navigator.push(
+                            //Navigator.pop(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MemainPage(
+                                    user:
+                                        context.watch<LoginProvider>().user)));
+                        /*
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => WelcomeBackPage()));
-
+                        */
                         //Navigator.of(context).push(MaterialPageRoute(
                         //    builder: (_) => MemainPage(
                         //        user: context.watch<LoginProvider>().user)));
