@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 import 'change_language_page.dart';
 import 'package:meplus/services/usermngmt.dart';
+import 'package:provider/provider.dart';
+import 'package:meplus/providers/login_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   UserManagement userObj = new UserManagement();
@@ -112,6 +114,8 @@ class SettingsPage extends StatelessWidget {
                               leading: Image.asset('assets/icons/sign_out.png'),
                               onTap: () {
                                 Navigator.of(context).pop();
+
+                                //context.read<LoginProvider>().logout();
                                 userObj.signOut();
                               },
                               /* onTap: () => Navigator.of(context).push(

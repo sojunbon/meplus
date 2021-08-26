@@ -1,10 +1,12 @@
 import 'dart:io' show Platform;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:meplus/screens/authen/register_page.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
+import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
 import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
@@ -40,15 +42,41 @@ class _Melink extends State<Melink> {
   IconData get icon => null;
   UserManagement userObj = new UserManagement();
   final FirebaseAuth auth = FirebaseAuth.instance;
-
+  String namedis;
+  String userID = "";
+  Firestore _db = Firestore.instance;
   @override
   void initState() {
     // initLineSdk();
     super.initState();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      setState(() {
+        userID = user.uid;
+      });
+    });
+    getUsername();
+  }
+
+  Future<dynamic> getUsername() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection("users")
+        .document(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+      namedis = snapshot.data['name'];
+      return namedis;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    String displayname;
+    if (namedis == null) {
+      displayname = "-";
+    } else {
+      displayname = namedis;
+    }
     Widget welcomeBack = Text(
       'ME PLUS',
       style: TextStyle(
@@ -152,19 +180,25 @@ class _Melink extends State<Melink> {
       ),
     );
 
-/*
     Widget signoutLink = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 1,
       child: InkWell(
         onTap: () async {
-          Navigator.of(context).pop();
-
-          await auth.signOut();
-          userObj.signOut();
-
-          // builder: (_) => Package(user: context.watch<LoginProvider>().user),
-          // ));
+          FirebaseAuth.instance.currentUser().then((firebaseUser) {
+            if (firebaseUser == null) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => WelcomeBackPage()));
+            } else {
+              userObj.signOut();
+              //Navigator.pushReplacement(
+              //    context,
+              //   MaterialPageRoute(
+              //       builder: (BuildContext context) => HomePage()));
+            }
+          });
         },
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
@@ -200,7 +234,30 @@ class _Melink extends State<Melink> {
         ),
       ),
     );
-    */
+
+    Widget showname = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 1,
+      child: InkWell(
+        onTap: () async {},
+        child: Container(
+          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+          //width: MediaQuery.of(context).size.width / 2,
+          width: MediaQuery.of(context).size.width,
+          height: 80,
+          child: Center(
+            child: Card(
+              color: Colors.transparent, // -- Card transparent --
+              child: ListTile(
+                // --- แสดงยอดเงิน ---
+                title: new Text("คุณ : " + displayname),
+                // subtitle: Text("ยอดเงินในบัญชี"),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
     return Scaffold(
       body: Stack(
@@ -216,6 +273,19 @@ class _Melink extends State<Melink> {
               color: transparentYellow,
             ),
           ),
+          /*
+          Padding(
+            padding: EdgeInsets.all(30),
+            child: Card(
+              color: Colors.transparent, // -- Card transparent --
+              child: ListTile(
+                // --- แสดงยอดเงิน ---
+                title: new Text("คุณ : " + displayname),
+                // subtitle: Text("ยอดเงินในบัญชี"),
+              ),
+            ),
+          ),
+          */
           Padding(
             padding: const EdgeInsets.only(left: 28.0),
             child: Column(
@@ -225,11 +295,12 @@ class _Melink extends State<Melink> {
                 welcomeBack,
                 //Spacer(),
                 //subTitle,
+                showname,
                 Spacer(flex: 1),
                 productLink,
                 Spacer(flex: 1),
                 packageLink,
-                //  signoutLink,
+                signoutLink,
                 Spacer(flex: 1),
                 //forgotPassword
               ],

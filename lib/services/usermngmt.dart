@@ -31,7 +31,7 @@ class UserManagement {
         if (snapshot.hasData) {
           print(snapshot.data.uid);
           currentUser.add(snapshot.data.uid);
-          return MemainPage();
+          return WelcomeBackPage(); //MemainPage();
           //DashboardPage(); //DashboardPage(); //WelcomeBackPage();
         }
         return WelcomeBackPage();
@@ -42,6 +42,7 @@ class UserManagement {
 
   signOut() async {
     await FirebaseAuth.instance.signOut();
+    //context.read<LoginProvider>().logout();
     //FirebaseAuth.instance.signOut();
   }
 

@@ -1,4 +1,5 @@
 import 'dart:io' show Platform;
+import 'package:flushbar/flushbar.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'register_page.dart';
@@ -21,7 +22,7 @@ import 'package:meplus/services/signin_with_email_method_services/signin_with_em
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/providers/register_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:meplus/services/usermngmt.dart';
 //----- ME PLUS Main page -----
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
@@ -44,6 +45,8 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
   TextEditingController email = TextEditingController(text: "");
 
   TextEditingController password = TextEditingController(text: "");
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  UserManagement userObj = new UserManagement();
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +90,42 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
         onTap: () async {
           if (!await context
               .read<LoginProvider>()
-              .login(email.text, password.text)) {
+              .login(email.text.trim(), password.text.trim())) {
             _key.currentState;
-            // .showSnackBar(SnackBar(content: Text('Unable to login.')));
+            /*
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: "กรอก username/password ผิด'",
+              duration: Duration(seconds: 3),
+            ).show(context);
+            */
+            //_key.currentState.showSnackBar(
+            //    SnackBar(content: Text('กรอก username/password ผิด')));
+            //showAlertDialog(context);
+
+            //showModalAlertDialog(context);
+
           }
+          /*
+          FirebaseAuth.instance.currentUser().then((firebaseUser) async {
+            if (firebaseUser == null) {
+              userObj.signOut();
+              if (!await context
+                  .read<LoginProvider>()
+                  .login(email.text.trim(), password.text.trim())) {
+                _key.currentState;
+                // .showSnackBar(SnackBar(content: Text('Unable to login.')));
+              }
+            } else {
+              userObj.signOut();
+              if (!await context
+                  .read<LoginProvider>()
+                  .login(email.text.trim(), password.text.trim())) {
+                _key.currentState;
+                // .showSnackBar(SnackBar(content: Text('Unable to login.')));
+              }
+            }
+          });*/
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -356,10 +391,137 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     );
   }
 
+  void showModalAlertDialog(BuildContext context) {
+    showModalBottomSheet(
+      enableDrag: false,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      backgroundColor: Colors.amber,
+      context: context,
+      isDismissible: false, // ***** control Modal *****
+      isScrollControlled: true,
+      builder: (context) => GestureDetector(
+        onVerticalDragDown: (_) {}, // *** ไม่ให้ modal hide  control Modal
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            ),
+            SizedBox(
+              height: 15.0, //8.0,
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Center(
+                    child: Text('กรอก username/password ผิด',
+                        style: const TextStyle(
+                            color: const Color(0xfff36600),
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 20.0)))),
+            SizedBox(height: 20),
+            Container(
+              height: 100,
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(''),
+                    ElevatedButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        FirebaseAuth.instance
+                            .currentUser()
+                            .then((firebaseUser) {
+                          if (firebaseUser == null) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        WelcomeBackPage()));
+                          } else {
+                            userObj.signOut();
+                          }
+                        });
+                        /*
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    WelcomeBackPage()));
+                                    */
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.normal)),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        //Navigator.push(
+        FirebaseAuth.instance.currentUser().then((firebaseUser) {
+          if (firebaseUser == null) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => WelcomeBackPage()));
+          } else {
+            userObj.signOut();
+          }
+        });
+      },
+    );
+
+    //BottomSheet BottomSheetalert = BottomSheet(
+    //    builder: (context) => Container(
+    //          color: Colors.red,
+    //        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("แจ้งเตือน"),
+      content: Text("กรอก username/password ผิด"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+/*
   @override
   void dispose() {
     email.dispose();
     password.dispose();
     super.dispose();
   }
+  */
 }

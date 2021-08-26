@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/providers/logger_service.dart';
-import 'package:meplus/providers/login_provider.dart';
+
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/my_app.dart';
 import 'package:provider/provider.dart';
+import 'package:meplus/providers/login_provider.dart';
+import 'package:meplus/services/usermngmt.dart';
 
 //import 'forgot_password_page.dart';
 
@@ -27,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   //final formKey = new GlobalKey();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  UserManagement userObj = new UserManagement();
 
   String disname;
   String dismail;
@@ -370,6 +373,29 @@ class _RegisterPageState extends State<RegisterPage> {
                     ElevatedButton(
                       child: const Text('OK'),
                       onPressed: () {
+                        FirebaseAuth.instance
+                            .currentUser()
+                            .then((firebaseUser) {
+                          if (firebaseUser == null) {
+                            userObj.signOut();
+                            //FirebaseAuth.instance.signOut();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        WelcomeBackPage()));
+                          } else {
+                            Navigator.push(
+                                //Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MemainPage(
+                                        user: context
+                                            .watch<LoginProvider>()
+                                            .user)));
+                          }
+                        });
+                        /*
                         Navigator.push(
                             //Navigator.pop(
                             context,
@@ -377,6 +403,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 builder: (context) => MemainPage(
                                     user:
                                         context.watch<LoginProvider>().user)));
+                        */
+
                         /*
                         Navigator.push(
                             context,
