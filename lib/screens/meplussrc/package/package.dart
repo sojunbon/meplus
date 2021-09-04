@@ -44,18 +44,16 @@ class _Package extends State<Package> {
   ///Needs image_picker plugin {https://pub.dev/packages/image_picker}
   final picker = ImagePicker();
 
-  //TextEditingController email =
-  //    TextEditingController(text: 'example@email.com');
-
+  //TextEditingController email=TextEditingController(text: 'example@email.com');
   //TextEditingController password = TextEditingController(text: '12345678');
-
   //TextEditingController cmfPassword = TextEditingController(text: '12345678');
 
   TextEditingController tradeamount = TextEditingController();
   //TextEditingController password = TextEditingController();
   //TextEditingController cmfPassword = TextEditingController();
+  String userID = "";
 
-/*
+  /*
   int _counter = 0;
   File _image;
   String _uploadedFileURL;
@@ -109,6 +107,31 @@ class _Package extends State<Package> {
     taskSnapshot.ref.getDownloadURL().then(
           (value) => imageUrl = value,
         );
+  }
+
+  dynamic data;
+  Future<dynamic> getData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    final DocumentReference document =
+        Firestore.instance.collection("users").document(user.uid);
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      setState(() {
+        data = snapshot.data;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      setState(() {
+        userID = user.uid;
+      });
+    });
+    getData();
   }
 
   @override

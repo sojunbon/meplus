@@ -16,7 +16,7 @@ import 'package:meplus/screens/meplussrc/mainpage/components/custom_bottom_bar.d
 import 'package:meplus/screens/meplussrc/mainpage/components/tab_view.dart';
 import 'package:meplus/screens/meplussrc/category/mecategory_list_page.dart';
 import 'package:meplus/screens/meplussrc/category/mecard.dart';
-import 'package:meplus/screens/meplussrc/category/melink.dart';
+
 //import 'components/product_list.dart';
 //import 'components/tab_view.dart';
 
@@ -28,6 +28,9 @@ import 'package:meplus/services/signin_with_google_services/signin_with_google_s
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meplus/services/usermngmt.dart';
+
+import 'package:meplus/screens/meplussrc/category/melink.dart';
+import 'package:meplus/screens/meplussrc/category/meplusmain.dart';
 
 class MemainPage extends StatefulWidget {
   final FirebaseUser user;
@@ -230,12 +233,13 @@ class _MainPageState extends State<MemainPage>
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
       body: CustomPaint(
-        painter: MainBackground(),
+        painter:
+            MainBackground(), // **/flutterdev/meplus/lib/custom_background.dart
         child: TabBarView(
           controller: bottomTabController,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            Melink(), //MeCategoryListPage(),
+            Meplusmain(), //Melink(), //MeCategoryListPage(),
             CategoryListPage(),
             CheckOutPage(),
             ProfilePage()

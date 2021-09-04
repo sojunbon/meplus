@@ -8,6 +8,7 @@ import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
+import 'package:meplus/screens/shopping/product/product_page.dart';
 import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
 import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
 //import 'package:meplus/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
@@ -97,8 +98,8 @@ class _Melink extends State<Melink> {
       bottom: 40,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => MainPage())); //RegisterPage()));
         },
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
@@ -244,13 +245,21 @@ class _Melink extends State<Melink> {
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
           //width: MediaQuery.of(context).size.width / 2,
           width: MediaQuery.of(context).size.width,
+          //decoration: BoxDecoration(
+          //    image: DecorationImage(
+          //        image: AssetImage('assets/card.jpg'), fit: BoxFit.cover)),
+
           height: 80,
+
           child: Center(
             child: Card(
-              color: Colors.transparent, // -- Card transparent --
+              //color: Colors.transparent,
+              // -- Card transparent --
+
               child: ListTile(
                 // --- แสดงยอดเงิน ---
                 title: new Text("คุณ : " + displayname),
+
                 // subtitle: Text("ยอดเงินในบัญชี"),
               ),
             ),
