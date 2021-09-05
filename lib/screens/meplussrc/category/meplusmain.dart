@@ -451,7 +451,7 @@ class _Meplusmain extends State<Meplusmain> {
                           child: IconButton(
                             icon: Image.asset('assets/icons/exchange.png'),
                             onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => MainPage())),
+                                MaterialPageRoute(builder: (_) => Package())),
                           ),
 
                           //Text(
@@ -521,58 +521,49 @@ class _Meplusmain extends State<Meplusmain> {
 
     return Material(
       color: Color(0xffF9F9F9),
-      child: Container(
-        margin: const EdgeInsets.only(top: kToolbarHeight),
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Align(
-              alignment: Alignment(-1, 0),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  'ME PLUS',
-                  style: TextStyle(
-                    color: darkGrey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+      // กำหนด --scroll view ทั้งหน้า  SingleChildScrollView
+      child: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(top: kToolbarHeight),
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Align(
+                alignment: Alignment(-1, 0),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    'ME PLUS',
+                    style: TextStyle(
+                      color: darkGrey,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            Container(
-              padding: EdgeInsets.only(left: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.white,
-              ),
-              /*
-              child: TextField(
-                //controller: searchController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Search',
-                  //prefixIcon: SvgPicture.asset(
-                  //  'assets/icons/search_icon.svg',
-                  //  fit: BoxFit.scaleDown,
-                  // )
+              Container(
+                padding: EdgeInsets.only(left: 16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  color: Colors.white,
                 ),
-              ),*/
-            ),
+              ),
 
-            showDesc,
-            //Spacer(flex: 1),
-            SizedBox(height: 20),
-            //packageLinkk,
-            packageLink,
+              showDesc,
+              //Spacer(flex: 1),
+              SizedBox(height: 20),
+              //packageLinkk,
+              packageLink,
 
-            SizedBox(height: 20),
-            showCard,
+              SizedBox(height: 20),
+              showCard,
 
-            //showname,
-          ],
+              //showname,
+            ],
+          ),
         ),
       ),
     );

@@ -239,8 +239,35 @@ class _MainPageState extends State<MemainPage>
           controller: bottomTabController,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
+            SafeArea(
+              child: NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  // These are the slivers that show up in the "outer" scroll view.
+                  return <Widget>[
+                    SliverToBoxAdapter(
+                      child: appBar,
+                    ),
+                    SliverToBoxAdapter(
+                      child: topHeader,
+                    ),
+                    SliverToBoxAdapter(
+                        // child: ProductList(
+                        //products: products,
+                        //),
+                        ),
+                    SliverToBoxAdapter(
+                      child: tabBar,
+                    )
+                  ];
+                },
+                body: TabView(
+                  tabController: tabController,
+                ),
+              ),
+            ),
             Meplusmain(), //Melink(), //MeCategoryListPage(),
-            CategoryListPage(),
+            //CategoryListPage(),
             CheckOutPage(),
             ProfilePage()
           ],
