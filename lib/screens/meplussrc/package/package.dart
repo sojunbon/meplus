@@ -53,6 +53,22 @@ class _Package extends State<Package> {
   //TextEditingController cmfPassword = TextEditingController();
   String userID = "";
 
+  String namedis;
+  Firestore _db = Firestore.instance;
+  TabController tabController;
+  var percent;
+  var count;
+  var percenta;
+  var percentb;
+  var percentc;
+  var percentd;
+  var perday;
+
+  var desca;
+  var descb;
+  var descc;
+  var descd;
+
   /*
   int _counter = 0;
   File _image;
@@ -123,6 +139,59 @@ class _Package extends State<Package> {
     });
   }
 
+  Future<dynamic> getUsername() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection("users")
+        .document(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+      namedis = snapshot.data['name'];
+      return namedis;
+    });
+  }
+
+/*
+  dynamic datadesc;
+  Future<dynamic> getDesc() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    final DocumentReference document =
+        Firestore.instance.collection("packagedesc").document('desc');
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      setState(() {
+        datadesc = snapshot.data;
+      });
+    });
+  }
+  */
+
+  dynamic datadesc;
+  Future getDescription() async {
+    final DocumentReference getpackage =
+        Firestore.instance.collection("packagedesc").document('desc');
+
+    await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
+      setState(() {
+        datadesc = getsnapshot.data;
+        desca = datadesc['desca'];
+        descb = datadesc['descb'];
+        descc = datadesc['descc'];
+        descd = datadesc['descd'];
+      });
+    });
+    /*
+    DocumentSnapshot ds = await Firestore.instance
+        .collection('packagedesc')
+        .document('desc')
+        .get();
+    final datadesc = ds.data; //do something with document snapshot
+
+    return datadesc;
+    */
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,16 +200,115 @@ class _Package extends State<Package> {
         userID = user.uid;
       });
     });
+
     getData();
+    //getDesc();
+    getCal();
+    getDescription();
+    // getUsername();
   }
+
+  void getCal() async {
+    final db = Firestore.instance;
+    await db
+        .collection('conftab')
+        .document('conf')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      count = documentSnapshot.data['count'];
+      percenta = documentSnapshot.data['percenta'];
+      percentb = documentSnapshot.data['percentb'];
+      percentc = documentSnapshot.data['percentc'];
+      percentd = documentSnapshot.data['percentd'];
+      perday = documentSnapshot.data['perday'];
+    });
+  }
+
+  /*
+  void getDesc() async {
+    final db = Firestore.instance;
+    await db
+        .collection('packagedesc')
+        .document('desc')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      desca = documentSnapshot.data['desca'];
+      descb = documentSnapshot.data['descb'];
+      descc = documentSnapshot.data['descc'];
+      descd = documentSnapshot.data['descd'];
+    });
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
+    String displayname;
+    String desc1;
+    String desc2;
+    String desc3;
+    String desc4;
+
+    if (namedis == null) {
+      displayname = "-";
+    } else {
+      displayname = namedis;
+    }
+
+    /*
+    if (datadesc['desca'] == null) {
+      desc1 = "ฝาก 100 ปันผล บาท/วัน";
+    } else {
+      desc1 = datadesc['desca'];
+    }
+
+    if (datadesc['descb'] == null) {
+      desc2 = "ฝาก 1,000 ปันผล บาท/วัน";
+    } else {
+      desc2 = datadesc['descb'];
+    }
+
+    if (datadesc['descc'] == null) {
+      desc3 = "ฝาก 10,000 ปันผล บาท/วัน";
+    } else {
+      desc3 = datadesc['descc'];
+    }
+
+    if (datadesc['descd'] == null) {
+      desc4 = "ฝาก 100,000 ปันผล บาท/วัน";
+    } else {
+      desc4 = datadesc['descd'];
+    }
+    */
+
+    if (desca == null) {
+      desc1 = "ฝาก 100 ปันผล บาท/วัน";
+    } else {
+      desc1 = desca;
+    }
+
+    if (descb == null) {
+      desc2 = "ฝาก 1,000 ปันผล บาท/วัน";
+    } else {
+      desc2 = descb;
+    }
+
+    if (descc == null) {
+      desc3 = "ฝาก 10,000 ปันผล บาท/วัน";
+    } else {
+      desc3 = descc;
+    }
+
+    if (descd == null) {
+      desc4 = "ฝาก 100,000 ปันผล บาท/วัน";
+    } else {
+      desc4 = descd;
+    }
+
     Widget title = Text(
-      'PACKAGE',
+      'PACKAGE s',
       style: TextStyle(
           color: Colors.white,
-          fontSize: 34.0,
+          fontSize: 30.0,
           fontWeight: FontWeight.bold,
           shadows: [
             BoxShadow(
@@ -154,7 +322,18 @@ class _Package extends State<Package> {
     Widget subTitle = Padding(
         padding: const EdgeInsets.only(right: 56.0),
         child: Text(
-          ' รายละเอียดการลงทุน \n ฝาก 100 ปันผล 3.5 บาท/วัน \n ฝาก 1,000 ปันผล 35 บาท/วัน \n ฝาก 10,000 ปันผล 350 บาท/วัน \n ฝาก 100,000 ปันผล 3,500 บาท/วัน ',
+          //data['name'] +
+          //' รายละเอียดการลงทุน \n ฝาก 100 ปันผล 3.5 บาท/วัน \n ฝาก 1,000 ปันผล 35 บาท/วัน \n ฝาก 10,000 ปันผล 350 บาท/วัน \n ฝาก 100,000 ปันผล 3,500 บาท/วัน '
+
+          'รายละเอียดการลงทุน \n' +
+              desc1 +
+              '\n' +
+              desc2 +
+              '\n' +
+              desc3 +
+              '\n' +
+              desc4,
+
           style: TextStyle(
             color: Colors.black,
             fontSize: 16.0,
@@ -258,7 +437,7 @@ class _Package extends State<Package> {
       ),
     );
 
-    Widget registerButton = Positioned(
+    Widget saveButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 1,
       child: InkWell(
@@ -338,7 +517,7 @@ class _Package extends State<Package> {
           ),
           picView,
           uploadButton,
-          registerButton,
+          saveButton,
         ],
       ),
     );
