@@ -254,52 +254,26 @@ class _Package extends State<Package> {
       displayname = namedis;
     }
 
-    /*
-    if (datadesc['desca'] == null) {
-      desc1 = "ฝาก 100 ปันผล บาท/วัน";
-    } else {
-      desc1 = datadesc['desca'];
-    }
-
-    if (datadesc['descb'] == null) {
-      desc2 = "ฝาก 1,000 ปันผล บาท/วัน";
-    } else {
-      desc2 = datadesc['descb'];
-    }
-
-    if (datadesc['descc'] == null) {
-      desc3 = "ฝาก 10,000 ปันผล บาท/วัน";
-    } else {
-      desc3 = datadesc['descc'];
-    }
-
-    if (datadesc['descd'] == null) {
-      desc4 = "ฝาก 100,000 ปันผล บาท/วัน";
-    } else {
-      desc4 = datadesc['descd'];
-    }
-    */
-
     if (desca == null) {
-      desc1 = "ฝาก 100 ปันผล บาท/วัน";
+      desc1 = " ";
     } else {
       desc1 = desca;
     }
 
     if (descb == null) {
-      desc2 = "ฝาก 1,000 ปันผล บาท/วัน";
+      desc2 = " ";
     } else {
       desc2 = descb;
     }
 
     if (descc == null) {
-      desc3 = "ฝาก 10,000 ปันผล บาท/วัน";
+      desc3 = " ";
     } else {
       desc3 = descc;
     }
 
     if (descd == null) {
-      desc4 = "ฝาก 100,000 ปันผล บาท/วัน";
+      desc4 = " ";
     } else {
       desc4 = descd;
     }
