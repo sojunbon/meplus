@@ -33,9 +33,15 @@ class CustomBottomBar extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Image.asset('assets/icons/profile_icon.png'),
+            icon: Image.asset('assets/icons/truck.png'),
             onPressed: () {
               controller.animateTo(3);
+            },
+          ),
+          IconButton(
+            icon: Image.asset('assets/icons/profile_icon.png'),
+            onPressed: () {
+              controller.animateTo(4);
             },
           )
         ],

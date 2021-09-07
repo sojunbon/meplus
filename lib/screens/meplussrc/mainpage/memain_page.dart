@@ -31,6 +31,8 @@ import 'package:meplus/services/usermngmt.dart';
 
 import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/category/meplusmain.dart';
+import 'package:meplus/screens/meplussrc/package/topuplist.dart';
+import 'package:meplus/screens/meplussrc/package/topupmoney.dart';
 
 class MemainPage extends StatefulWidget {
   final FirebaseUser user;
@@ -78,7 +80,7 @@ class _MainPageState extends State<MemainPage>
   void initState() {
     super.initState();
     tabController = TabController(length: 5, vsync: this);
-    bottomTabController = TabController(length: 4, vsync: this);
+    bottomTabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -240,7 +242,8 @@ class _MainPageState extends State<MemainPage>
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             Meplusmain(), //Melink(), //MeCategoryListPage(),
-            CategoryListPage(),
+            Topuplist(), //CategoryListPage(),
+            Topupmoney(), //CategoryListPage(),
             CheckOutPage(),
             ProfilePage()
           ],

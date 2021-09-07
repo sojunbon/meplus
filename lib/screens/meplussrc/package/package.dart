@@ -1,10 +1,15 @@
+import 'package:intl/intl.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:meplus/components/notification.dart';
+import 'package:meplus/components/show_notification.dart';
+import 'package:meplus/providers/add_money_service.dart';
 import 'package:meplus/providers/logger_service.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:meplus/providers/login_provider.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -68,6 +73,9 @@ class _Package extends State<Package> {
   var descb;
   var descc;
   var descd;
+
+  //var outputDateFormat = DateFormat('dd/MM/yyyy');
+  //var getdate = FieldValue.serverTimestamp();
 
   /*
   int _counter = 0;
@@ -279,7 +287,7 @@ class _Package extends State<Package> {
     }
 
     Widget title = Text(
-      'PACKAGE s',
+      'PACKAGE',
       style: TextStyle(
           color: Colors.white,
           fontSize: 30.0,
@@ -383,7 +391,6 @@ class _Package extends State<Package> {
         onTap: () => pickImage(context),
 
         //onTap: () {
-
         //  Navigator.of(context)
         //   .push(MaterialPageRoute(builder: (_) => chooseFile));
         //},
@@ -415,10 +422,78 @@ class _Package extends State<Package> {
       left: MediaQuery.of(context).size.width / 4,
       bottom: 1,
       child: InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-        },
+        onTap: () async {
+          //Navigator.of(context)
+          //    .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          //onPressed: () {
+
+          if (data['bankaccount'] == "") {
+            showMessageBox(
+                context, "Error", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
+                actions: [dismissButton(context)]);
+            logger.e("bank account can't be null");
+          } else if (tradeamount.text == null) {
+            showMessageBox(context, "Error", "กรูณากรอกจำนวนเงิน",
+                actions: [dismissButton(context)]);
+            logger.e("amount can't be null");
+          } else if (double.parse(tradeamount.text) < 100) {
+            showMessageBox(context, "Error", "ลงทุนขั้นต่ำ 100 บาท",
+                actions: [dismissButton(context)]);
+            logger.e("amount over 100");
+          } else if (imageUrl == null) {
+            showMessageBox(context, "Error", "กรุณา upload สลิปโอนเงิน",
+                actions: [dismissButton(context)]);
+            logger.e("Transfer money slip");
+          } else {
+            //var myDouble = double.parse('amount');
+            //amtval = myDouble;
+            var myamt = double.parse(tradeamount.text);
+            bool active = false;
+            //String covertdate = getdate.toString();
+            //var inputDate = outputDateFormat.parse(covertdate);
+            DateTime now = DateTime.now();
+            DateTime serverdate = await NTP.now();
+            String formatdate = DateFormat('dd/MM/yyyy').format(serverdate);
+
+            // if formatdate.compareTo(now);
+            /*
+            DateTime startDate = DateTime.parse(service_start_date);
+            DateTime endDate = DateTime.parse(service_end_date);
+            DateTime now = DateTime.now();
+  
+            print('now: $now');
+            print('startDate: $startDate');
+            print('endDate: $endDate');
+            print(startDate.isBefore(now));
+            print(endDate.isAfter(now));
+            */
+
+            addMoneyItem(
+                context,
+                {
+                  "name": data['name'], //nametxt,
+                  "amount": myamt, //amount.text,
+                  "active": active, //"false",
+                  "bankname": data['bankname'], //banknamedis,
+                  "bankaccount": data['bankaccount'], //bankaccountdis,
+                  "uid": userID,
+                  "createdAt": FieldValue.serverTimestamp(),
+                  "updatedAt": FieldValue.serverTimestamp(),
+                  "paymentamt": 0,
+                  "payment": false,
+                  "sumtotal": myamt,
+                  "datestamp": formatdate,
+                  "dateint": formatdate,
+                  "picurl": imageUrl,
+                  "paytype": 1, // 1 = ฝาก , 2 = ถอน
+                },
+                userID);
+            tradeamount.text = "";
+            //--- Update total ----
+            //updateTotal();
+
+          }
+        }, //},
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
           height: 80,
@@ -463,6 +538,7 @@ class _Package extends State<Package> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: tradeamount,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(hintText: 'กรอกยอดเงินโอน'),
                     style: TextStyle(fontSize: 16.0),
                   ),
