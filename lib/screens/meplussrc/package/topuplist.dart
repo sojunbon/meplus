@@ -136,11 +136,12 @@ class BookList extends StatelessWidget {
                   child: Card(
                     child: ListTile(
                       onTap: () {
+                        /*
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text("Update Dilaog"),
+                                title: Text("View"),
                                 content: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -187,33 +188,18 @@ class BookList extends StatelessWidget {
                                         Navigator.of(context).pop();
                                       },
                                       child: Text(
-                                        "Undo",
+                                        "OK",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ),
-                                  // Update Button
-                                  /*RaisedButton(
-                                      onPressed: () {
-
-                                         //TODO: Firestore update a record code
-
-                                        Map<String, dynamic> updateBook = new Map<String,dynamic>();
-                                        updateBook["amount"] = titleController.text;
-                                        updateBook["bankname"] = authorController.text;
-
-                                        // Updae Firestore record information regular way
-                                       Firestore.instance
-                                           .collection("moneytrans")
-                                           .document(document.documentID)
-                                           .updateData(updateBook)
-                                           .whenComplete((){
-                                         Navigator.of(context).pop();
-                                      });
-                                      */
                                 ],
-                              );
-                            });
+                              ); 
+                              
+                            } 
+                            
+                            );
+                            */
                       },
                       title: new Text(
                           gettype + " : " + document['amount'].toString()),

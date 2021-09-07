@@ -8,6 +8,7 @@ import 'package:meplus/providers/logger_service.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class Topupmoney extends StatefulWidget {
   @override
@@ -15,12 +16,12 @@ class Topupmoney extends StatefulWidget {
 }
 
 class _Topupmoney extends State<Topupmoney> {
-  FirebaseUser currentUser;
   String userID = "";
+  //bool _value = false;
   bool isSwitch = false;
-  bool dynamicSwitch;
-  var sumtotal;
-  var sumpayment;
+  //bool dynamicSwitch;
+
+  FirebaseUser currentUser;
 
   TextEditingController titleController = new TextEditingController();
   TextEditingController authorController = new TextEditingController();
@@ -28,22 +29,17 @@ class _Topupmoney extends State<Topupmoney> {
   @override
   void initState() {
     super.initState();
-
-    //_active = TextEditingController(text: "");
-    //_password = TextEditingController(text: "");
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       setState(() {
         userID = user.uid;
       });
     });
-    queryValues();
-    queryPayment();
   }
-
+  /*
   handleSwitch(bool value, String docid, DocumentSnapshot documents) {
     setState(() {
       isSwitch = value;
-      dynamicSwitch = value;
+      //dynamicSwitch = value;
 
       var attendanceCollection = Firestore.instance
           .collection('moneytrans')
@@ -62,44 +58,6 @@ class _Topupmoney extends State<Topupmoney> {
     });
   }
 
-  queryValues() async {
-    double tempTotal = 0;
-    sumtotal = 0;
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
-        .collection('moneytrans')
-        .where("uid", isEqualTo: user.uid)
-        .where("active", isEqualTo: true)
-        .where("payment", isEqualTo: false)
-        .snapshots()
-        .listen((snapshot) {
-      tempTotal =
-          snapshot.documents.fold(0, (tot, doc) => tot + doc.data['amount']);
-      sumtotal = tempTotal.toString();
-
-      return sumtotal;
-    });
-  }
-
-  queryPayment() async {
-    double tempTotal = 0;
-    sumpayment = 0;
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
-        .collection('moneytrans')
-        .where("uid", isEqualTo: user.uid)
-        .where("active", isEqualTo: true)
-        .where("payment", isEqualTo: true)
-        .snapshots()
-        .listen((snapshot) {
-      tempTotal =
-          snapshot.documents.fold(0, (tot, doc) => tot + doc.data['amount']);
-      sumpayment = tempTotal.toString();
-
-      return sumpayment;
-    });
-  }
-
   // update ยอด sumtotal และ sumpayment ไปที่ users table เพื่อแยกระหว่างยอด trade payment
   Future<void> updateTotal(String docid) async {
     var postRef = Firestore.instance.collection("users").document(docid);
@@ -112,92 +70,343 @@ class _Topupmoney extends State<Topupmoney> {
       });
     });
   }
+  */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("รายการ ฝาก/ถอน"),
-        backgroundColor: Colors.grey,
-      ),
-      //body: BookList(),
+        backgroundColor: Colors.amber, // Colors.transparent,
+        shape: CustomShapeBorder(),
 
-      body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection('moneytrans')
-            .where("active", isEqualTo: false)
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            default:
-              return new ListView(
-                padding: EdgeInsets.only(bottom: 80),
-                children:
-                    snapshot.data.documents.map((DocumentSnapshot document) {
-                  // List.generate(document.data.length, (index) {
-                  var attendanceCollection = Firestore.instance
-                      .collection('moneytrans')
-                      .document(document.documentID)
-                      .collection(document.documentID);
-                  var documentId = document["name"].toString().toLowerCase();
-                  var attendanceReference =
-                      attendanceCollection.document(documentId);
-                  //children: List.generate(document.data.length, (index) {
-                  //String namedis = document[index].data['name'].toString();
-                  dynamicSwitch = document["active"];
-                  // snapshot.data.active;
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                    child: Card(
-                      child: ListTile(
-                        title: new Text("ชื่อ : " +
-                            document['name'].toString() +
-                            "ฝาก/ถอน : " +
-                            document['amount'].toString()),
-                        subtitle: new Text("ชื่อธนาคาร : " +
-                            ' ' +
-                            document['bankname'] +
-                            ' ' +
-                            document['bankaccount']),
-                        trailing: new Switch(
-                          activeTrackColor: Colors.green,
-                          activeColor: Colors.white,
-                          inactiveTrackColor: Colors.grey,
-                          //value:
-                          //    dynamicSwitch != true ? isSwitch : dynamicSwitch,
-                          //value: document.data == null
-                          //    ? false
-                          //    : document["active"],
-                          value: dynamicSwitch == null ? false : dynamicSwitch,
-                          onChanged: (bool value) {
-                            isSwitch = value;
-                            handleSwitch(
-                                isSwitch, document.documentID, document);
-                            /*
-                            Firestore.instance
-                                .runTransaction((transaction) async {
-                              DocumentSnapshot freshSnap =
-                                  await transaction.get(attendanceReference);
-                              await transaction.update(
-                                  freshSnap.reference, {"active": value});
-                            });*/
-                          },
-                        ),
-                      ),
-                    ),
-                    // ),
-                  );
-                  //});
-                }).toList(),
-              );
-          }
-        },
+        elevation: 0.0,
+        //leading: Icon(Icons.menu),
+        iconTheme: IconThemeData(color: darkGrey),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/icons/denied_wallet.png'),
+            // onPressed: () => Navigator.of(context)
+            // .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
+          )
+        ],
+        //title: Text("รายการ"),
+        title: Text(
+          'รายการ ฝาก/ถอน',
+          style: TextStyle(
+              color: darkGrey, fontWeight: FontWeight.w500, fontSize: 18.0),
+        ),
+      ),
+      // ------ load widget ProjectList -------
+      body: ProjectList(), // BookList(),
+    );
+  }
+}
+
+class ProjectList extends StatelessWidget {
+  ProjectList();
+
+  final FirebaseAuth firestore = FirebaseAuth.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance
+          .collection('moneytrans')
+          .where("active", isEqualTo: false)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) return const Text('Loading...');
+        //final int projectsCount = snapshot.data.documents.length;
+        List<DocumentSnapshot> documents = snapshot.data.documents; //!.docs;
+        return ExpansionTileList(
+          documents: documents,
+        );
+      },
+    );
+  }
+}
+
+class ExpansionTileList extends StatelessWidget {
+  final List<DocumentSnapshot> documents;
+  final FirebaseAuth firestore = FirebaseAuth.instance;
+
+  var displayType;
+  ExpansionTileList({this.documents});
+
+  List<Widget> _getChildren() {
+    List<Widget> children = [];
+    documents.forEach((doc) {
+      if (doc['paytype'] == 1) {
+        displayType = 'ฝากเงิน';
+      } else {
+        displayType = 'ถอนเงิน';
+      }
+
+      children.add(
+        ProjectsExpansionTile(
+          name: doc['name'],
+          projectKey: doc.documentID,
+          amount: doc['amount'],
+          gettype: displayType,
+          bankname: doc['bankname'],
+          bankaccount: doc['bankaccount'],
+          picurl: doc['picurl'],
+          getdocuments: doc,
+          firestore: firestore,
+        ),
+      );
+    });
+    return children;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: _getChildren(),
+    );
+  }
+}
+
+class ProjectsExpansionTile extends StatelessWidget {
+  ProjectsExpansionTile(
+      {this.projectKey,
+      this.name,
+      this.amount,
+      this.gettype,
+      this.bankname,
+      this.bankaccount,
+      this.picurl,
+      this.getdocuments,
+      this.firestore});
+
+  final String projectKey;
+  final String name;
+  final String bankname;
+  final String bankaccount;
+  final String picurl;
+  var amount;
+  var gettype;
+  final FirebaseAuth firestore;
+  final DocumentSnapshot getdocuments;
+  var sumtotal;
+  var sumpayment;
+
+  get isSwitch => null;
+
+  @override
+  Widget build(BuildContext context) {
+    bool dynamicSwitch;
+
+    PageStorageKey _projectKey = PageStorageKey('$projectKey');
+    var getprjkey = _projectKey;
+
+    return Card(
+      child: ExpansionTile(
+        key: _projectKey,
+        title: Text(
+          "ชื่อ : " + name,
+          style: TextStyle(fontSize: 15.0),
+        ),
+        subtitle: Text(
+          gettype + " : " + amount.toString(),
+          style: TextStyle(fontSize: 15.0),
+        ),
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              bankname + " / เลขบัญชี : " + bankaccount,
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Ink.image(
+              image: NetworkImage(picurl),
+              // fit: BoxFit.cover,
+              width: 350,
+              height: 350,
+            ),
+          ),
+          ListTile(
+            trailing: new Switch(
+              activeTrackColor: Colors.green,
+              activeColor: Colors.white,
+              inactiveTrackColor: Colors.grey,
+              value: dynamicSwitch == null ? false : dynamicSwitch,
+              onChanged: (bool value) {
+                var isSwitch = value;
+                handleSwitch(isSwitch, projectKey, getdocuments);
+              },
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  void handleSwitch(bool value, String docid, DocumentSnapshot documents) {
+    //setState(() {
+    //isSwitch = value;
+    //dynamicSwitch = value;
+
+    var attendanceCollection = Firestore.instance
+        .collection('moneytrans')
+        .document(docid)
+        .collection(docid);
+    var documentId = docid.toString();
+    //document["name"].toString().toLowerCase();
+    var attendanceReference = attendanceCollection.document(documentId);
+    //return FirestoreListView(documents: snapshot.data.documents);
+
+    Firestore.instance.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(documents.reference);
+      await transaction.update(snapshot.reference, {"active": value});
+      await updateTotal(snapshot.data['uid']);
+    });
+    //});
+  }
+
+  updateTotal(String docid) {
+    var postRef = Firestore.instance.collection("users").document(docid);
+    Firestore.instance.runTransaction((transaction) async {
+      await transaction.get(postRef).then((res) async {
+        transaction.update(postRef, {
+          'sumtotal': sumtotal,
+          'paymentamt': sumpayment,
+        });
+      });
+    });
+  }
+}
+
+class BookList extends StatelessWidget {
+  TextEditingController titleController = new TextEditingController();
+  TextEditingController authorController = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final user = (context.watch<LoginProvider>().user);
+    var gettype;
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance
+          .collection('moneytrans')
+          .where("uid", isEqualTo: user.uid)
+          //  .where("active", isEqualTo: "true")
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            return new ListView(
+              padding: EdgeInsets.only(bottom: 80),
+              children:
+                  snapshot.data.documents.map((DocumentSnapshot document) {
+                if (document['paytype'] == 1) {
+                  gettype = 'ฝากเงิน';
+                } else {
+                  gettype = 'ถอนเงิน';
+                }
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                  child: Card(
+                    child: ListTile(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Update Dilaog"),
+                                content: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      document['amount'].toString(),
+                                      // "amount: ",
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    TextField(
+                                      controller: titleController,
+                                      decoration: InputDecoration(
+                                        hintText: document['amount'].toString(),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Text("bankname: "),
+                                    ),
+                                    TextField(
+                                      controller: authorController,
+                                      decoration: InputDecoration(
+                                        hintText: document['bankname'],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Text("bankaccount: "),
+                                    ),
+                                    TextField(
+                                      controller: authorController,
+                                      decoration: InputDecoration(
+                                        hintText: document['bankaccount'],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: <Widget>[
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    child: RaisedButton(
+                                      color: Colors.red,
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "Undo",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                      title: new Text(
+                          gettype + " : " + document['amount'].toString()),
+                      subtitle: new Text("ชื่อธนาคาร : " +
+                          ' ' +
+                          document['bankname'] +
+                          ' ' +
+                          document['bankaccount']),
+                    ),
+                  ),
+                );
+              }).toList(),
+            );
+        }
+      },
+    );
+  }
+}
+
+class CustomShapeBorder extends ContinuousRectangleBorder {
+  @override
+  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
+    final double innerCircleRadius = 150.0;
+    double height = rect.height;
+    double width = rect.width;
+    Path path = Path();
+
+    path.lineTo(0, height - 9);
+    path.quadraticBezierTo(width / 2, height, width, height - 9);
+    path.lineTo(width, 0);
+    path.close();
+
+    return path;
   }
 }

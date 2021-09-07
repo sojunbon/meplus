@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:meplus/providers/logger_service.dart';
 
+void generateData(BuildContext context) {}
+
 void showNotification(BuildContext context,
     {AlertDialog alertContent, Stack stackContent}) async {
   try {
