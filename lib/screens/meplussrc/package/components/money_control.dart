@@ -1,7 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:meplus/providers/logger_service.dart';
 
-void generateData(BuildContext context) {}
+void generateData(
+    BuildContext context, String docid, DocumentSnapshot documents) {
+  var attendanceCollection = Firestore.instance
+      .collection('moneytrans')
+      .document(docid)
+      .collection(docid);
+  var documentId = docid.toString();
+  //document["name"].toString().toLowerCase();
+  var attendanceReference = attendanceCollection.document(documentId);
+  //return FirestoreListView(documents: snapshot.data.documents);
+
+  Firestore.instance.runTransaction((transaction) async {
+    DocumentSnapshot snapshot = await transaction.get(documents.reference);
+    await transaction.update(snapshot.reference, {"active": context});
+    //await updateTotal(snapshot.data['uid']);
+  });
+}
 
 void showNotification(BuildContext context,
     {AlertDialog alertContent, Stack stackContent}) async {
