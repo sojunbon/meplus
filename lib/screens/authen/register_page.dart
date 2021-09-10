@@ -23,6 +23,10 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailString = TextEditingController(text: '');
   TextEditingController nameString = TextEditingController(text: '');
   TextEditingController passwordString = TextEditingController(text: '');
+  TextEditingController banknamestr = TextEditingController(text: '');
+  TextEditingController bankacctstr = TextEditingController(text: '');
+  TextEditingController mobilestr = TextEditingController(text: '');
+  TextEditingController phonereferstr = TextEditingController(text: '');
   //TextEditingController cmfPassword = TextEditingController(text: '');
   //String nameString, emailString, passwordString, cmfPassword;
   //final formKey = new GlobalKey<FormState>();
@@ -34,14 +38,18 @@ class _RegisterPageState extends State<RegisterPage> {
   String disname;
   String dismail;
   String dispass;
+  String disbank;
+  String disacct;
+  String disphone;
+  String disrefer;
 
   @override
   Widget build(BuildContext context) {
     Widget title = Text(
-      'Register / ลงทะเบียนสมาชิก',
+      'ลงทะเบียนสมาชิก',
       style: TextStyle(
           color: Colors.white,
-          fontSize: 34.0,
+          fontSize: 30.0,
           fontWeight: FontWeight.bold,
           shadows: [
             BoxShadow(
@@ -70,13 +78,18 @@ class _RegisterPageState extends State<RegisterPage> {
           //if (formKey.currentState.validate()) {
           //  formKey.currentState.save();
           print(
-              'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString');
+              'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString , bankname = $banknamestr , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
 
           // --- convert TextEditingController ---
           disname = nameString.text;
           dismail = emailString.text;
           dispass = passwordString.text;
-          registerThread(dismail, dispass, disname);
+          disbank = banknamestr.text;
+          disacct = bankacctstr.text;
+          disphone = mobilestr.text;
+          disrefer = phonereferstr.text;
+          registerThread(
+              dismail, dispass, disname, disbank, disacct, disphone, disrefer);
 
           //MemainPage();
           // }
@@ -146,7 +159,43 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                   ),
                 ),
-
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: banknamestr,
+                    decoration: InputDecoration(hintText: 'ธนาคาร'),
+                    style: TextStyle(fontSize: 16.0),
+                    obscureText: true,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: bankacctstr,
+                    decoration: InputDecoration(hintText: 'เลขบัญชี'),
+                    style: TextStyle(fontSize: 16.0),
+                    obscureText: true,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: mobilestr,
+                    decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
+                    style: TextStyle(fontSize: 16.0),
+                    obscureText: true,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: phonereferstr,
+                    decoration:
+                        InputDecoration(hintText: 'เบอร์โทรศัพท์ ผู้แนะนำ'),
+                    style: TextStyle(fontSize: 16.0),
+                    obscureText: true,
+                  ),
+                ),
                 /*
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -215,11 +264,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Spacer(flex: 3),
+                  Spacer(flex: 1),
                   title,
                   //Spacer(),
                   //subTitle,
-                  Spacer(flex: 2),
+                  //Spacer(flex: 2),
                   registerForm,
                   Spacer(flex: 2),
                   Padding(
@@ -246,7 +295,13 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> registerThread(
-      String getmail, String getpassword, String getname) async {
+      String getmail,
+      String getpassword,
+      String getname,
+      String getbank,
+      String getbankname,
+      String getphone,
+      String getrefer) async {
     //String getmail = emailString.toString();
     //String getpassword = passwordString.toString();
     final FirebaseUser user =
@@ -261,10 +316,12 @@ class _RegisterPageState extends State<RegisterPage> {
       "password": getpassword, //passwordString,
       "usertype": "user",
       "uid": user.uid,
-      "bankname": "",
-      "bankaccount": "",
-      "phone": "",
+      "bankname": getbank,
+      "bankaccount": getbankname,
+      "phone": getphone,
       "active": true,
+      "mobile": getphone,
+      "mobilerefer": getrefer,
       "createdAt": FieldValue.serverTimestamp(),
       "updatedAt": FieldValue.serverTimestamp()
     }).catchError((response) {

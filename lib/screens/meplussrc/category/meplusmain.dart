@@ -32,6 +32,7 @@ import 'package:meplus/services/usermngmt.dart';
 //----- ME PLUS Main page -----
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
+import 'package:meplus/screens/meplussrc/package/withdraw_money.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -267,7 +268,7 @@ class _Meplusmain extends State<Meplusmain> {
                           //width: MediaQuery.of(context).size.width,
                           height: 60,
                           child: Center(
-                              child: new Text("ถอนเงิน",
+                              child: new Text("รายได้",
                                   style: const TextStyle(
                                       color: const Color(0xfffefefe),
                                       fontWeight: FontWeight.w600,
@@ -338,11 +339,12 @@ class _Meplusmain extends State<Meplusmain> {
                           radius: 20,
                           width: MediaQuery.of(context).size.width / 3,
                           //padding: const EdgeInsets.all(8),
-                          text: "ถอนเงิน",
+                          text: "รายได้",
                           gradientColors: [secondColor, firstColor],
 
                           onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => Package())),
+                              MaterialPageRoute(
+                                  builder: (_) => Withdraw_money())),
                           background: null,
                         ),
                       ],
