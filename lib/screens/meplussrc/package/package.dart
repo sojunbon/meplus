@@ -74,6 +74,8 @@ class _Package extends State<Package> {
   var descc;
   var descd;
 
+  String formatdate;
+
   //var outputDateFormat = DateFormat('dd/MM/yyyy');
   //var getdate = FieldValue.serverTimestamp();
 
@@ -197,6 +199,15 @@ class _Package extends State<Package> {
     final datadesc = ds.data; //do something with document snapshot
 
     return datadesc;
+    
+    DateTime serverdate = await NTP.now();
+    DateTime.utc(
+      serverdate.year,
+      serverdate.month,
+      serverdate.day,
+    ).add(Duration(days: 1));
+
+    formatdate = DateFormat('dd/MM/yyyy').format(serverdate);
     */
   }
 

@@ -33,6 +33,7 @@ import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/category/meplusmain.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:meplus/screens/meplussrc/package/topupmoney_admin.dart';
+import 'package:meplus/screens/meplussrc/package/paymentlist.dart';
 
 class MemainPage extends StatefulWidget {
   final FirebaseUser user;
@@ -244,7 +245,7 @@ class _MainPageState extends State<MemainPage>
             Meplusmain(), //Melink(), //MeCategoryListPage(),
             Topuplist(), //CategoryListPage(),
             Topupmoney(), //CategoryListPage(),
-            CheckOutPage(),
+            Paymentlist(), //CheckOutPage(),
             ProfilePage()
           ],
         ),

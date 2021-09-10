@@ -21,6 +21,22 @@ class _Topupmoney extends State<Topupmoney> {
   //bool _value = false;
   bool isSwitch = false;
   //bool dynamicSwitch;
+  var percent;
+  var count;
+  var percenta;
+  var percentb;
+  var percentc;
+  var percentd;
+  var perday;
+
+  var desca;
+  var descb;
+  var descc;
+  var descd;
+
+  var fcount_percent;
+  var fcount_refer;
+  var fcount;
 
   FirebaseUser currentUser;
 
@@ -35,7 +51,30 @@ class _Topupmoney extends State<Topupmoney> {
         userID = user.uid;
       });
     });
+    getCal();
   }
+
+  void getCal() async {
+    final db = Firestore.instance;
+    await db
+        .collection('conftab')
+        .document('conf')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      count = documentSnapshot.data['count'];
+      percenta = documentSnapshot.data['percenta'];
+      percentb = documentSnapshot.data['percentb'];
+      percentc = documentSnapshot.data['percentc'];
+      percentd = documentSnapshot.data['percentd'];
+      perday = documentSnapshot.data['perday'];
+      fcount = documentSnapshot.data['fcount']; // จำนวนรอบ แนะนำเพื่อน
+      fcount_refer =
+          documentSnapshot.data['fcount_refer']; // percent ที่ได้รับในรอบนั้นๆ
+      fcount_percent =
+          documentSnapshot.data['fcount_percent']; // percent ที่ได้รับ
+    });
+  }
+
   /*
   handleSwitch(bool value, String docid, DocumentSnapshot documents) {
     setState(() {
@@ -237,7 +276,7 @@ class ProjectsExpansionTile extends StatelessWidget {
               value: dynamicSwitch == null ? false : dynamicSwitch,
               onChanged: (bool value) {
                 var isSwitch = value;
-                handleSwitch(isSwitch, projectKey, getdocuments);
+                handleSwitch(isSwitch, projectKey, getdocuments, context);
               },
             ),
           ),
@@ -246,7 +285,8 @@ class ProjectsExpansionTile extends StatelessWidget {
     );
   }
 
-  void handleSwitch(bool value, String docid, DocumentSnapshot documents) {
+  void handleSwitch(bool value, String docid, DocumentSnapshot documents,
+      BuildContext context) {
     //setState(() {
     //isSwitch = value;
     //dynamicSwitch = value;
@@ -265,7 +305,8 @@ class ProjectsExpansionTile extends StatelessWidget {
       await transaction.update(snapshot.reference, {"active": value});
       await updateTotal(snapshot.data['uid']);
     });
-    //});
+    // --- insert data รายการ trade ---
+    generateData(context, docid, documents);
   }
 
   updateTotal(String docid) {
