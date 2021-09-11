@@ -13,6 +13,7 @@ import 'package:meplus/my_app.dart';
 import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/services/usermngmt.dart';
+import 'package:meplus/screens/authen/dropdownlist.dart';
 
 //import 'forgot_password_page.dart';
 
@@ -123,6 +124,46 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
+    Widget DropDown = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 80,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => Dropdownlist()));
+        },
+        child: Container(
+          //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+          width: MediaQuery.of(context).size.width / 2,
+          height: 80,
+          child: Center(
+              child: new Text("Register",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(300, 230, 3, 1),
+                    Color.fromRGBO(200, 230, 3, 1),
+                    Color.fromRGBO(100, 78, 16, 1),
+                  ],
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              borderRadius: BorderRadius.circular(9.0)),
+        ),
+      ),
+    );
+
     Widget registerForm = Container(
       height: 500,
       child: Stack(
@@ -210,6 +251,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             DropdownButton(
                               items: currencyItems,
                               onChanged: (banknamestr) {
+                                //onChanged: (value) {
                                 final snackBar = SnackBar(
                                   content: Text(
                                     'เลือกธนาคาร $banknamestr',
@@ -331,7 +373,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   //Spacer(flex: 2),
                   registerForm,
                   Spacer(flex: 1),
-                  registerButton,
+                  //registerButton,
+                  DropDown,
+
                   //Spacer(flex: 1),
                   // Padding(
                   //     padding: EdgeInsets.only(bottom: 20),
