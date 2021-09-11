@@ -20,41 +20,45 @@ class _Dropdownlist extends State<Dropdownlist> {
       appBar: AppBar(
         title: Text('DropDown'),
       ),
-
+      backgroundColor: Colors.white,
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(0.0),
-          child: DropdownButton<String>(
-            value: _chosenValue,
-            //elevation: 5,
-            style: TextStyle(color: Colors.white),
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _chosenValue,
+              isDense: true,
+              isExpanded: true,
+              //elevation: 5,
+              style: TextStyle(color: Colors.black),
 
-            items: <String>[
-              'Android',
-              'IOS',
-              'Flutter',
-              'Node',
-              'Java',
-              'Python',
-              'PHP',
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            hint: Text(
-              "Please choose a langauage",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
+              items: <String>[
+                'Android',
+                'IOS',
+                'Flutter',
+                'Node',
+                'Java',
+                'Python',
+                'PHP',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: Text(
+                "Please choose a langauage",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600),
+              ),
+              onChanged: (String value) {
+                setState(() {
+                  _chosenValue = value;
+                });
+              },
             ),
-            onChanged: (String value) {
-              setState(() {
-                _chosenValue = value;
-              });
-            },
           ),
         ),
       ),
