@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:meplus/models/User.dart';
 import 'package:meplus/providers/add_money_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -112,6 +113,12 @@ class ProjectList extends StatelessWidget {
   ProjectList();
 
   final FirebaseAuth firestore = FirebaseAuth.instance;
+  //final FirebaseAuth getuid =
+  //    FirebaseAuth.instance.currentUser() as FirebaseAuth;
+  //final FirebaseAuth auth = FirebaseAuth.instance;
+
+  // final List<DocumentSnapshot> documents;
+
   //DateTime serverdate = NTP.now() as DateTime;
 
   DateTime _now = DateTime.now();
@@ -123,6 +130,7 @@ class ProjectList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = (context.watch<LoginProvider>().user);
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('trademoney')
@@ -130,6 +138,7 @@ class ProjectList extends StatelessWidget {
           //    isLessThanOrEqualTo: 8092021) //double.parse(formatdate))
           //.where("date_query", isLessThanOrEqualTo: double.parse(formatdate))
           .where("active", isEqualTo: true)
+          .where("uid", isEqualTo: user.uid)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return const Text('No data...');
@@ -175,6 +184,7 @@ class ExpansionTileList extends StatelessWidget {
           bankaccount: doc['bankaccount'],
           caldate: doc['caldate'],
           datequery: doc['date_query'],
+          uid: doc['uid'],
           //picurl: doc['picurl'],
           getdocuments: doc,
           count: doc['tradecount'],
@@ -204,6 +214,7 @@ class ProjectsExpansionTile extends StatelessWidget {
     this.bankaccount,
     this.caldate,
     this.datequery,
+    this.uid,
     // this.dateCreated,
     this.getdocuments,
     this.count,
@@ -218,6 +229,7 @@ class ProjectsExpansionTile extends StatelessWidget {
   var datequery;
   var calpayment;
   var count;
+  var uid;
   DateTime displaydate;
   //final String picurl;
   var amount;
@@ -236,7 +248,7 @@ class ProjectsExpansionTile extends StatelessWidget {
     PageStorageKey _projectKey = PageStorageKey('$projectKey');
     var getprjkey = _projectKey;
     // String formatdate = DateFormat('ddMMyyyy').format(DateTime.now());
-    // if (datequery <= double.parse(formatdate)) {
+    //if (uid == userID) {
     return Card(
       elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
@@ -309,9 +321,9 @@ class ProjectsExpansionTile extends StatelessWidget {
         ],
       ),
     );
-    // } else {
-    //   return Card();
-    // }
+    //} else {
+    //  return Card();
+    //}
   }
 
   void handleSwitch(bool value, String docid, DocumentSnapshot documents,

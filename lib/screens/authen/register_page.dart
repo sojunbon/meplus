@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,11 +44,14 @@ class _RegisterPageState extends State<RegisterPage> {
   String disacct;
   String disphone;
   String disrefer;
+  var selectbank, selectedType;
+  DocumentSnapshot currentCategory;
+  String categoryname;
 
   @override
   Widget build(BuildContext context) {
     Widget title = Text(
-      'ลงทะเบียนสมาชิก',
+      '  ลงทะเบียนสมาชิก',
       style: TextStyle(
           color: Colors.white,
           fontSize: 30.0,
@@ -72,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     Widget registerButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
-      bottom: 10,
+      bottom: 0,
       child: InkWell(
         onTap: () {
           //if (formKey.currentState.validate()) {
@@ -96,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
-          height: 80,
+          height: 50,
           child: Center(
               child: new Text("Register",
                   style: const TextStyle(
@@ -119,11 +124,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     Widget registerForm = Container(
-      height: 300,
+      height: 500,
       child: Stack(
         children: <Widget>[
           Container(
-            height: 230,
+            height: 1000,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.only(left: 32.0, right: 12.0),
             decoration: BoxDecoration(
@@ -159,13 +164,83 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                   ),
                 ),
+                /*
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: banknamestr,
                     decoration: InputDecoration(hintText: 'ธนาคาร'),
                     style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
+                  ),
+                ),
+                */
+                // ----------------- Dropdown select BANK ---------------------
+                StreamBuilder<QuerySnapshot>(
+                    stream:
+                        Firestore.instance.collection("banktable").snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+
+                      {
+                        List<DropdownMenuItem> currencyItems = [];
+                        for (int i = 0;
+                            i < snapshot.data.documents.length;
+                            i++) {
+                          DocumentSnapshot snap = snapshot.data.documents[i];
+                          var getbankname =
+                              snapshot.data.documents[i].data['bankname'];
+                          currencyItems.add(
+                            DropdownMenuItem(
+                              child: Text(
+                                snapshot.data.documents[i].data['bankname'],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              value: "${getbankname}",
+                            ),
+                          );
+                        }
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            //Icon(FontAwesomeIcons.building,
+                            //    size: 25.0, color: Color(0xff5b86e5)),
+                            SizedBox(width: 50.0),
+                            DropdownButton(
+                              items: currencyItems,
+                              onChanged: (banknamestr) {
+                                final snackBar = SnackBar(
+                                  content: Text(
+                                    'เลือกธนาคาร $banknamestr',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                );
+                                Scaffold.of(context).showSnackBar(snackBar);
+                              },
+                              value: selectbank,
+                              isExpanded: false,
+                              hint: new Text(
+                                "ธนาคาร",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    }),
+                // ------------------------------------------------------------
+                new TextFormField(
+                  initialValue: selectbank,
+                  enabled: false,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.comment_bank),
+                    hintText: 'ธนาคาร',
+                    labelText: 'ธนาคาร',
                   ),
                 ),
                 Padding(
@@ -174,7 +249,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: bankacctstr,
                     decoration: InputDecoration(hintText: 'เลขบัญชี'),
                     style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
                   ),
                 ),
                 Padding(
@@ -183,7 +257,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: mobilestr,
                     decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
                     style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
                   ),
                 ),
                 Padding(
@@ -193,25 +266,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration:
                         InputDecoration(hintText: 'เบอร์โทรศัพท์ ผู้แนะนำ'),
                     style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
                   ),
                 ),
-                /*
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    controller: cmfPassword,
-                    decoration:
-                        InputDecoration(hintText: 'กรอกรหัสผ่านอีกครั้ง'),
-                    style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
-                  ),
-                ),
-                */
               ],
             ),
           ),
-          registerButton,
+          // registerButton,
         ],
       ),
     );
@@ -270,10 +330,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   //subTitle,
                   //Spacer(flex: 2),
                   registerForm,
-                  Spacer(flex: 2),
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: socialRegister)
+                  Spacer(flex: 1),
+                  registerButton,
+                  //Spacer(flex: 1),
+                  // Padding(
+                  //     padding: EdgeInsets.only(bottom: 20),
+                  //     child: socialRegister)
                 ],
               ),
             ),
