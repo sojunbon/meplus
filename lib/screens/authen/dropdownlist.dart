@@ -10,12 +10,6 @@ class _Dropdownlist extends State<Dropdownlist> {
 
   @override
   Widget build(BuildContext context) {
-    //return new Container(
-    //  decoration: new BoxDecoration(color: Colors.white),
-    //  child: new Center(
-    //    child: new Text("Hello, World!"),
-    // ),
-
     return Scaffold(
       appBar: AppBar(
         title: Text('DropDown'),

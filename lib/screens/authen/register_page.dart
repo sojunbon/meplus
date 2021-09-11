@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var selectbank, selectedType;
   DocumentSnapshot currentCategory;
   String categoryname;
-
+  String selectbankname;
   @override
   Widget build(BuildContext context) {
     Widget title = Text(
@@ -84,13 +84,14 @@ class _RegisterPageState extends State<RegisterPage> {
           //if (formKey.currentState.validate()) {
           //  formKey.currentState.save();
           print(
-              'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString , bankname = $banknamestr , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
+              'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString , bankname = $selectbankname , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
 
           // --- convert TextEditingController ---
           disname = nameString.text;
           dismail = emailString.text;
           dispass = passwordString.text;
-          disbank = banknamestr.text;
+          disbank = selectbankname;
+          //banknamestr.text;
           disacct = bankacctstr.text;
           disphone = mobilestr.text;
           disrefer = phonereferstr.text;
@@ -230,6 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           DocumentSnapshot snap = snapshot.data.documents[i];
                           var getbankname =
                               snapshot.data.documents[i].data['bankname'];
+
                           currencyItems.add(
                             DropdownMenuItem(
                               child: Text(
@@ -249,40 +251,64 @@ class _RegisterPageState extends State<RegisterPage> {
                             //    size: 25.0, color: Color(0xff5b86e5)),
                             SizedBox(width: 50.0),
                             DropdownButton(
-                              items: currencyItems,
-                              onChanged: (banknamestr) {
-                                //onChanged: (value) {
-                                final snackBar = SnackBar(
-                                  content: Text(
-                                    'เลือกธนาคาร $banknamestr',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                              //items: currencyItems,
+
+                              //value: selectbank,
+                              //isExpanded: false,
+                              value: selectbankname,
+                              items: <String>[
+                                'ธนาคารกสิกรไทย',
+                                'ธนาคารกรุงเทพ',
+                                'ธนาคารกรุงไทย',
+                                'ธนาคารออมสิน',
+                                'ธนาคารไทยพานิชย์',
+                                'ธนาคารทหารไทย',
+                                'ธนาคารกรุงศรีอยุธยา',
+                                'ธนาคารธนชาติ',
+                                'ธนาคารยูโอบี',
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
                                 );
-                                Scaffold.of(context).showSnackBar(snackBar);
-                              },
-                              value: selectbank,
-                              isExpanded: false,
-                              hint: new Text(
-                                "ธนาคาร",
+                              }).toList(),
+                              hint: Text(
+                                "",
                                 style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600),
                               ),
+                              onChanged: (String value) {
+                                setState(() {
+                                  selectbankname = value;
+                                  //banknamestr =
+                                  //    selectbankname as TextEditingController;
+                                });
+                              },
                             ),
                           ],
                         );
                       }
                     }),
+                //TextFormField(initialValue: "I am smart")
                 // ------------------------------------------------------------
-                new TextFormField(
-                  initialValue: selectbank,
-                  enabled: false,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.comment_bank),
-                    hintText: 'ธนาคาร',
-                    labelText: 'ธนาคาร',
+
+                // ซ่อน ข้อความ Text field
+                Visibility(
+                  // showing the child widget
+                  visible: false,
+
+                  child: TextFormField(
+                    initialValue: selectbankname,
+                    //controller: banknamestr,
+                    enabled: false,
+
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.comment_bank),
+                      hintText: 'ธนาคาร',
+                      labelText: 'ธนาคาร',
+                    ),
                   ),
                 ),
                 Padding(
@@ -366,16 +392,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Spacer(flex: 1),
+                  Spacer(flex: 2),
                   title,
                   //Spacer(),
                   //subTitle,
                   //Spacer(flex: 2),
                   registerForm,
                   Spacer(flex: 1),
-                  //registerButton,
-                  DropDown,
-
+                  registerButton,
+                  //DropDown,
+                  Spacer(),
                   //Spacer(flex: 1),
                   // Padding(
                   //     padding: EdgeInsets.only(bottom: 20),
