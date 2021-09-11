@@ -251,9 +251,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             //    size: 25.0, color: Color(0xff5b86e5)),
                             SizedBox(width: 50.0),
                             DropdownButton(
-                              //items: currencyItems,
-
-                              //value: selectbank,
                               //isExpanded: false,
                               value: selectbankname,
                               items: <String>[
