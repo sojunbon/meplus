@@ -302,7 +302,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                       }
                     }),
-                //TextFormField(initialValue: "I am smart")
+
                 // ------------------------------------------------------------
 
                 // ซ่อน ข้อความ Text field
