@@ -4,16 +4,20 @@ import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:meplus/components/show_notification.dart';
 import 'package:meplus/providers/logger_service.dart';
 
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/my_app.dart';
+import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/screens/authen/dropdownlist.dart';
+
+//import 'package:meplus/screens/authen/components/referfriend_control.dart';
 
 //import 'forgot_password_page.dart';
 
@@ -37,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
   //final formKey = new GlobalKey();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   UserManagement userObj = new UserManagement();
-
+  String getmobile;
   String disname;
   String dismail;
   String dispass;
@@ -49,6 +53,99 @@ class _RegisterPageState extends State<RegisterPage> {
   DocumentSnapshot currentCategory;
   String categoryname;
   String selectbankname;
+  String userID = "";
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      setState(() {
+        userID = user.uid;
+      });
+    });
+    getData();
+    //checkPhoneNumber();
+  }
+
+  dynamic data;
+  Future<dynamic> getData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    final DocumentReference document =
+        Firestore.instance.collection("users").document(user.uid);
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      setState(() {
+        data = snapshot.data;
+      });
+    });
+  }
+
+  Future<QuerySnapshot> getmobie(String _mobile) async {
+    return await Firestore.instance
+        .collection('users')
+        .where('mobile', isEqualTo: _mobile)
+        .getDocuments();
+  }
+
+  /*
+  dynamic phoneexist;
+  Future<dynamic> checkPhoneNumber() {
+    String getmobile = mobilestr.text;
+
+    Firestore.instance
+        .collection('users')
+        .where("mobile", isEqualTo: getmobile)
+        .snapshots()
+        .listen((snapshot) {
+      snapshot.documents.forEach((result) {
+        phoneexist = result.data;
+      });
+    });
+  }
+  */
+
+  // void handleSwitch(
+  //     String docid, DocumentSnapshot documents, BuildContext context) {
+  // --- insert data รายการ Refer Friend ---
+  //  generateRefer(context, docid, documents);
+  // }
+
+  /*
+  void getCal() async {
+    final db = Firestore.instance;
+    await db
+        .collection('conftab')
+        .document('conf')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      count = documentSnapshot.data['count'];
+      percenta = documentSnapshot.data['percenta'];
+      percentb = documentSnapshot.data['percentb'];
+      percentc = documentSnapshot.data['percentc'];
+      percentd = documentSnapshot.data['percentd'];
+      perday = documentSnapshot.data['perday'];
+    });
+  }
+  
+
+  Future<String> checkPhoneNumber(String mobilenum) {
+    String getmobile;
+
+    Firestore.instance
+        .collection('users')
+        .where("mobile", isEqualTo: mobilenum)
+        .snapshots()
+        .listen((snapshot) {
+      snapshot.documents.forEach((result) {
+        //getmobile = result.data('mobile');
+        getmobile = result.data['mobile'];
+        return getmobile;
+      });
+    });
+  }
+  */
+
   @override
   Widget build(BuildContext context) {
     Widget title = Text(
@@ -95,11 +192,62 @@ class _RegisterPageState extends State<RegisterPage> {
           disacct = bankacctstr.text;
           disphone = mobilestr.text;
           disrefer = phonereferstr.text;
+
+          // เช็คเบอร์ลงทะเบียนซ้ำ
+          //String checkphone = Referfriend_control();
+          //String checkphone =
+          //    (context.watch<Referfriend_control>().checkPhone(disphone));
+          //context.read<Referfriend>().checkMobile(disphone) as String;
+
+          /*
+          Firestore.instance
+              .collection('users')
+              .where("mobile", isEqualTo: disphone)
+              .snapshots()
+              .listen((snapshot) {
+            snapshot.documents.forEach((result) {
+              getmobile = result.data['mobile'];
+            });
+          });
+          */
+
+          /*
+          FutureBuilder(
+            future: getmobie(disphone),
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  getmobile = snapshot.data.documents[0].data['mobile'];
+                  //Center(child: Text('data loaded'));
+                }
+              } else if (snapshot.hasError) {
+                Text('no data');
+              }
+              return CircularProgressIndicator();
+            },
+          );
+          */
+
+          //if (data['mobile'] == disphone) {
+          //  showMessageBox(context, "Error", "หมายเลขนี้",
+          //      actions: [dismissButton(context)]);
+          //  logger.e("bank account can't be null");
+          //}
+          /*
+          if (getmobile == disphone) {
+            showAlertMobile(context);
+          } else {
+            registerThread(dismail, dispass, disname, disbank, disacct,
+                disphone, disrefer);
+          }
+          */
+
           registerThread(
               dismail, dispass, disname, disbank, disacct, disphone, disrefer);
-
-          //MemainPage();
-          // }
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -247,9 +395,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
+                            Text(
+                              "ธนาคาร",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                //fontWeight: FontWeight.w600
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
                             //Icon(FontAwesomeIcons.building,
                             //    size: 25.0, color: Color(0xff5b86e5)),
-                            SizedBox(width: 50.0),
+                            SizedBox(width: 126.0),
                             DropdownButton(
                               //isExpanded: false,
                               value: selectbankname,
@@ -475,6 +632,10 @@ class _RegisterPageState extends State<RegisterPage> {
     });
     //String title = "Save";
     //String message = "Create user complete,please press back button.";
+
+    // ---- Insert refer friend ----
+    //generateReferFriend(context, getphone, getrefer, user.uid);
+
     showModalAlertDialog(context);
     //showAlertDialog(context);
   }
@@ -487,6 +648,34 @@ class _RegisterPageState extends State<RegisterPage> {
           title: Text(title),
           content: Text(message),
         );
+      },
+    );
+  }
+
+  void showAlertMobile(BuildContext context) {
+    // set up the button
+    Widget okButton = FlatButton(
+        //child: Text("OK"),
+
+        onPressed: () => Navigator.of(context).pop(true),
+        child: Text('OK'));
+    //onPressed: () => Navigator.of(context)
+    //    .push(MaterialPageRoute(builder: (_) => WelcomeBackPage())),
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("แจ้งเตือน"),
+      content: Text("เบอร์โทรศัพท์นี้ลงทะเบียนบนระบบแล้ว"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }
@@ -661,6 +850,28 @@ class _RegisterPageState extends State<RegisterPage> {
       //isScrollControlled: true,
     );
   }
+
 //------------------------------------------------------
+  /*
+  void checkPhoneNumber(String mobilenum, String other) => {
+        //String getmobile;
+
+        Firestore.instance
+            .collection('users')
+            .where("mobile", isEqualTo: mobilenum)
+            .snapshots()
+            .listen((snapshot) {
+          snapshot.documents.forEach((result) {
+            //getmobile = result.data('mobile');
+            other = result.data['mobile'];
+            return other;
+          });
+        })
+      };
+
+void foo() async {
+  final getmob = await checkPhoneNumber(this.mobilestr.text);
+}
+  */
 
 }
