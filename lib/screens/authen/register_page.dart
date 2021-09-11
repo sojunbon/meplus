@@ -12,12 +12,14 @@ import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/my_app.dart';
 import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/screens/authen/dropdownlist.dart';
 
 //import 'package:meplus/screens/authen/components/referfriend_control.dart';
+import 'package:meplus/providers/add_money_service.dart';
 
 //import 'forgot_password_page.dart';
 
@@ -245,6 +247,24 @@ class _RegisterPageState extends State<RegisterPage> {
                 disphone, disrefer);
           }
           */
+
+          //FutureBuilder(builder: (BuildContext context, snapshot) {
+          //generateReferFriend(disphone, disrefer);
+          //});
+
+          addReferFriend(
+            //context,
+            {
+              "uid": '',
+              "mobile": disphone,
+              "uid_refer": '',
+              "mobile_refer": disrefer,
+              "paytype": 4, // แนะนำเพื่อน
+              "payment": false,
+              "active": false,
+              "createdate": FieldValue.serverTimestamp(),
+            },
+          );
 
           registerThread(
               dismail, dispass, disname, disbank, disacct, disphone, disrefer);

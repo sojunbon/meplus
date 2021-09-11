@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:meplus/providers/logger_service.dart';
 import 'package:ntp/ntp.dart';
 
-Future<void> generateReferFriend(BuildContext context, String getphone,
-    String getrefer, String getuid) async {
+Future<void> generateReferFriend(String getphone, String getrefer) async {
+  // BuildContext context,
   var count;
   var amounta;
   var amountb;
@@ -92,26 +92,27 @@ Future<void> generateReferFriend(BuildContext context, String getphone,
     String formatdatex = DateFormat('ddMMyyyy').format(serverdate);
     double convertdate = double.parse(formatdatex);
     addRefer(
-        context,
-        {
-          "uid": getuid,
-          "mobile": getphone,
-          "uid_rfer": uid_refer,
-          "mobile_refer": getrefer,
-          "paytype": 4, // แนะนำเพื่อน
-          "payment": false,
-          "active": false,
-          "createdate": FieldValue.serverTimestamp(),
-          "date_query": convertdate, // for query date
-        },
-        getuid);
+      //context,
+      {
+        //"uid": getuid,
+        "mobile": getphone,
+        "uid_rfer": uid_refer,
+        "mobile_refer": getrefer,
+        "paytype": 4, // แนะนำเพื่อน
+        "payment": false,
+        "active": false,
+        "createdate": FieldValue.serverTimestamp(),
+        "date_query": convertdate, // for query date
+      },
+    );
+    // getuid);
   }
 }
 
 Future<void> addRefer(
-  BuildContext context,
+  //BuildContext context,
   Map<String, dynamic> data,
-  String docid,
+  //String docid,
   //int countdoc,
   //BuildContext context,
   //Map<String, dynamic> data,
@@ -124,12 +125,12 @@ Future<void> addRefer(
       ":" +
       now.second.toString());
 
-  String autodoc = docid + 'docid' + txttime;
+  //String autodoc = docid + 'docid' + txttime;
   //countdoc.toString();
 
   return Firestore.instance
       .collection("referfriend")
-      .document(autodoc)
+      .document()
       .setData(data)
       .then((returnData) {
     logger.i("setData success");
@@ -137,7 +138,6 @@ Future<void> addRefer(
     logger.e(e);
   });
 }
-
 
 /*
 class Referfriend with ChangeNotifier {
