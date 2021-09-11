@@ -253,16 +253,23 @@ class _RegisterPageState extends State<RegisterPage> {
                             DropdownButton(
                               //isExpanded: false,
                               value: selectbankname,
+
                               items: <String>[
+                                for (int i = 0;
+                                    i < snapshot.data.documents.length;
+                                    i++)
+                                  snapshot.data.documents[i].data['bankname'],
+                                /*
                                 'ธนาคารกสิกรไทย',
                                 'ธนาคารกรุงเทพ',
-                                'ธนาคารกรุงไทย',
+                                'ธนาคารกรุงไทย',s
                                 'ธนาคารออมสิน',
                                 'ธนาคารไทยพานิชย์',
                                 'ธนาคารทหารไทย',
                                 'ธนาคารกรุงศรีอยุธยา',
                                 'ธนาคารธนชาติ',
                                 'ธนาคารยูโอบี',
+                                */
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -277,6 +284,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                     fontWeight: FontWeight.w600),
                               ),
                               onChanged: (String value) {
+                                final snackBar = SnackBar(
+                                  content: Text(
+                                    'เลือกธนาคาร $value',
+                                    style: TextStyle(color: Color(0xff5b86e5)),
+                                  ),
+                                );
+                                Scaffold.of(context).showSnackBar(snackBar);
                                 setState(() {
                                   selectbankname = value;
                                   //banknamestr =
