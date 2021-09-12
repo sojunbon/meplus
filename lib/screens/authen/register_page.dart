@@ -668,6 +668,33 @@ class _RegisterPageState extends State<RegisterPage> {
     var documentdata;
     String phoneExistTxt = "";
 
+    String phoneUserRefer;
+    String phoneUserPrimary;
+    String phoneUser;
+    String userid_new;
+    String userid_refer;
+
+    String bankname_refer;
+    String bankacct;
+
+    QuerySnapshot querySnapshotuser =
+        await Firestore.instance.collection("users").getDocuments();
+    for (int i = 0; i < querySnapshotuser.documents.length; i++) {
+      var userphongap = querySnapshotuser.documents[i];
+      phoneUserPrimary = userphongap.data["mobile"];
+
+      if (phoneUserPrimary == getrefer) {
+        phoneUserRefer = phoneUserPrimary;
+        userid_refer = userphongap.data["uid"];
+        bankname_refer = userphongap.data["bankname"];
+        bankacct = userphongap.data["bankaccount"];
+      } else {
+        phoneUser = "";
+      }
+      print(userphongap.documentID);
+    }
+
+    /*
     QuerySnapshot querySnapshot =
         await Firestore.instance.collection("referfriend").getDocuments();
     for (int i = 0; i < querySnapshot.documents.length; i++) {
@@ -679,6 +706,25 @@ class _RegisterPageState extends State<RegisterPage> {
         checkstate = true;
       } else {
         phoneExist = "";
+        checkstate = false;
+      }
+      print(phongap.documentID);
+    }
+    */
+
+    QuerySnapshot querySnapshot =
+        await Firestore.instance.collection("users").getDocuments();
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+      var phongap = querySnapshot.documents[i];
+      checkphoneExist = phongap.data["mobile"];
+
+      if (checkphoneExist == getphone) {
+        phoneExistPrimary = checkphoneExist;
+        userid_new = phongap.data["uid"];
+        checkstate = true;
+      } else {
+        phoneExist = "";
+        userid_new = phongap.data["uid"];
         checkstate = false;
       }
       print(phongap.documentID);
@@ -715,21 +761,24 @@ class _RegisterPageState extends State<RegisterPage> {
         //String message = response.message;
         //myAlert(title, message);
       });
-
+      showModalAlertDialog(context);
+    }
+    if (phoneUserRefer != null && phoneExistPrimary == null) {
       addReferFriend(
         context,
         {
-          "uid": user.uid,
+          "uid": userid_new,
           "mobile": disphone,
-          "uid_refer": '',
+          "uid_refer": userid_refer,
           "mobile_refer": disrefer,
+          "bankname_refer": bankname_refer,
+          "bankaccount_refer": bankacct,
           "paytype": 4, // แนะนำเพื่อน
           "payment": false,
           "active": false,
           "createdate": FieldValue.serverTimestamp(),
         },
       );
-      showModalAlertDialog(context);
     }
     //String title = "Save";
     //String message = "Create user complete,please press back button.";
