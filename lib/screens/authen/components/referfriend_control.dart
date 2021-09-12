@@ -1,3 +1,127 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:meplus/components/show_notification.dart';
+import 'package:flutter/material.dart';
+import 'package:meplus/providers/logger_service.dart';
+
+Future<void> addReferFriend(
+    //BuildContext context, Map<String, dynamic> data, String documentName) {
+    BuildContext context,
+    Map<String, dynamic> data) async {
+  DateTime now = DateTime.now();
+  //String formattedDate = DateFormat('kk:mm:ss').format(now);
+  String txttime = (now.hour.toString() +
+      ":" +
+      now.minute.toString() +
+      ":" +
+      now.second.toString());
+  // String autodoc = documentName + txttime;
+
+  String getmobilephone = data['mobile'];
+  String checkmobile;
+  String checkmobile_dis;
+
+  // final db = Firestore.instance;
+  //await db
+  //   .collection('conftab')
+  //   .document('conf')
+  //   .get()
+  //   .then((DocumentSnapshot documentSnapshot) {
+
+  return Firestore.instance
+      .collection("referfriend")
+      .document(getmobilephone)
+      //.collection("users")
+      //.document()
+      //.document(autodoc)
+      .setData(data)
+      .then((returnData) {
+    //  showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
+    logger.i("setData success");
+  }).catchError((e) {
+    logger.e(e);
+  });
+}
+
+Future<void> checkPhoneExist(
+    BuildContext context, Map<String, dynamic> data) async {
+  DateTime now = DateTime.now();
+  String txttime = (now.hour.toString() +
+      ":" +
+      now.minute.toString() +
+      ":" +
+      now.second.toString());
+
+  String getmobilephone = data['mobile'];
+  String checkmobile;
+  String checkmobile_dis;
+
+  return Firestore.instance
+      .collection("phonecheck")
+      .document(getmobilephone)
+      .setData(data)
+      .then((returnData) {
+    logger.i("setData success");
+  }).catchError((e) {
+    logger.e(e);
+  });
+}
+
+/*
+Future<void> addMoneyItem(
+    BuildContext context, Map<String, dynamic> data, String documentName) {
+  //var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
+
+  DateTime now = DateTime.now();
+  //String formattedDate = DateFormat('kk:mm:ss').format(now);
+  String txttime = (now.hour.toString() +
+      ":" +
+      now.minute.toString() +
+      ":" +
+      now.second.toString());
+  String autodoc = documentName + txttime;
+  return Firestore.instance
+      .collection("moneytrans")
+      .document(autodoc)
+      //.collection("users")
+      //.document()
+      //.document(autodoc)
+      .setData(data)
+      .then((returnData) {
+    showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
+    logger.i("setData success");
+  }).catchError((e) {
+    logger.e(e);
+  });
+}
+
+Future<void> addPayMoneyItem(
+    BuildContext context, Map<String, dynamic> data, String documentName) {
+  //var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
+
+  DateTime now = DateTime.now();
+  String txttime = (now.hour.toString() +
+      ":" +
+      now.minute.toString() +
+      ":" +
+      now.second.toString());
+  String autodoc = documentName + txttime;
+
+  return Firestore.instance
+      .collection("users")
+      .document(documentName)
+      .collection("moneytrans")
+      .document()
+      .setData(data)
+      .then((returnData) {
+    showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
+    logger.i("setData success");
+  }).catchError((e) {
+    logger.e(e);
+  });
+}
+*/
+
+/*
 import 'package:intl/intl.dart';
 import 'package:meplus/components/show_notification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -138,7 +262,7 @@ Future<void> addRefer(
     logger.e(e);
   });
 }
-
+*/
 /*
 class Referfriend with ChangeNotifier {
   Future checkMobile(String mobile) async {

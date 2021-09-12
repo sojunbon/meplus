@@ -18,8 +18,8 @@ import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/screens/authen/dropdownlist.dart';
 
-//import 'package:meplus/screens/authen/components/referfriend_control.dart';
-import 'package:meplus/providers/add_money_service.dart';
+import 'package:meplus/screens/authen/components/referfriend_control.dart';
+//import 'package:meplus/providers/add_money_service.dart';
 
 //import 'forgot_password_page.dart';
 
@@ -56,6 +56,9 @@ class _RegisterPageState extends State<RegisterPage> {
   String categoryname;
   String selectbankname;
   String userID = "";
+  String getMobile;
+  DocumentSnapshot snapshotphone;
+  String checkphoneExist;
 
   @override
   void initState() {
@@ -66,7 +69,36 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     });
     getData();
-    //checkPhoneNumber();
+    checkPhoneSnap(mobilestr.text);
+    //checkPhone();
+  }
+
+  Future<dynamic> checkPhoneSnap(String phone) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection("referfriend")
+        .document(phone)
+        .snapshots()
+        .listen((snapshot) {
+      getMobile = snapshot.data['mobile'];
+      return getMobile;
+    });
+  }
+
+  getDataPhone(String phone) async {
+    final phonesnap = await Firestore.instance
+        .collection('referfriend')
+        .document(phone)
+        .get();
+
+    //DocumentSnapshot snapshot = phonesnap.data['mobile'];
+    snapshotphone = phonesnap.data['mobile'];
+
+    print(snapshotphone);
+    //return snapshotphone;
+    return ListTile(
+      title: Text("$snapshotphone"),
+    );
   }
 
   dynamic data;
@@ -79,6 +111,20 @@ class _RegisterPageState extends State<RegisterPage> {
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
         data = snapshot.data;
+      });
+    });
+  }
+
+  dynamic datacheckmobi;
+  Future<dynamic> checkPhone(String phone) async {
+    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    final DocumentReference document =
+        Firestore.instance.collection("referfriend").document(phone);
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      setState(() {
+        datacheckmobi = snapshot.data;
       });
     });
   }
@@ -252,19 +298,9 @@ class _RegisterPageState extends State<RegisterPage> {
           //generateReferFriend(disphone, disrefer);
           //});
 
-          addReferFriend(
-            //context,
-            {
-              "uid": '',
-              "mobile": disphone,
-              "uid_refer": '',
-              "mobile_refer": disrefer,
-              "paytype": 4, // แนะนำเพื่อน
-              "payment": false,
-              "active": false,
-              "createdate": FieldValue.serverTimestamp(),
-            },
-          );
+          // เช็คค่าซ้ำเบอร์โทรศัพท์
+          //getDataPhone(disphone);
+          //checkphoneExist = snapshotphone["mobile"];
 
           registerThread(
               dismail, dispass, disname, disbank, disacct, disphone, disrefer);
@@ -555,62 +591,63 @@ class _RegisterPageState extends State<RegisterPage> {
         )
       ],
     );
+    // --- ปิดใช้งานหรือแทนที่ปุ่ม "ย้อนกลับ" ของ Android ---
+    //return new WillPopScope(
+    //  onWillPop: () async => false,
+    // child: new Scaffold(
     // ปิดใช้งานหรือแทนที่ปุ่ม "ย้อนกลับ" ของ Android
-    return new WillPopScope(
-      onWillPop: () async => false,
-      child: new Scaffold(
-        //return Scaffold(
-        //key: formKey,
-        body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/background.jpg'),
-                      fit: BoxFit.cover)),
+    return Scaffold(
+      key: formKey,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/background.jpg'),
+                    fit: BoxFit.cover)),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: transparentYellow,
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: transparentYellow,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 28.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Spacer(flex: 2),
+                title,
+                //Spacer(),
+                //subTitle,
+                //Spacer(flex: 2),
+                registerForm,
+                Spacer(flex: 1),
+                registerButton,
+                //DropDown,
+                Spacer(),
+                //Spacer(flex: 1),
+                // Padding(
+                //     padding: EdgeInsets.only(bottom: 20),
+                //     child: socialRegister)
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 28.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Spacer(flex: 2),
-                  title,
-                  //Spacer(),
-                  //subTitle,
-                  //Spacer(flex: 2),
-                  registerForm,
-                  Spacer(flex: 1),
-                  registerButton,
-                  //DropDown,
-                  Spacer(),
-                  //Spacer(flex: 1),
-                  // Padding(
-                  //     padding: EdgeInsets.only(bottom: 20),
-                  //     child: socialRegister)
-                ],
-              ),
+          ),
+          Positioned(
+            top: 35,
+            left: 5,
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            Positioned(
-              top: 35,
-              left: 5,
-              child: IconButton(
-                color: Colors.white,
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
+      // ),
     );
   }
 
@@ -624,39 +661,83 @@ class _RegisterPageState extends State<RegisterPage> {
       String getrefer) async {
     //String getmail = emailString.toString();
     //String getpassword = passwordString.toString();
-    final FirebaseUser user =
-        (await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: getmail, //emailString.toString(),
-                password: getpassword)) //passwordString.toString()))
-            .user;
-    await Firestore.instance.collection("users").document(user.uid).setData({
-      "name": getname, //nameString,
-      "namesirname": getname, //nameString,
-      "email": getmail, //emailString,
-      "password": getpassword, //passwordString,
-      "usertype": "user",
-      "uid": user.uid,
-      "bankname": getbank,
-      "bankaccount": getbankname,
-      "phone": getphone,
-      "active": true,
-      "mobile": getphone,
-      "mobilerefer": getrefer,
-      "createdAt": FieldValue.serverTimestamp(),
-      "updatedAt": FieldValue.serverTimestamp()
-    }).catchError((response) {
-      print('response = ${response.toString()}');
-      String title = response.code;
-      String message = response.message;
-      myAlert(title, message);
-    });
+
+    String phoneExist = "";
+    String phoneExistPrimary;
+    bool checkstate;
+    var documentdata;
+    String phoneExistTxt = "";
+
+    QuerySnapshot querySnapshot =
+        await Firestore.instance.collection("referfriend").getDocuments();
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+      var phongap = querySnapshot.documents[i];
+      checkphoneExist = phongap.data["mobile"];
+
+      if (checkphoneExist == getphone) {
+        phoneExistPrimary = checkphoneExist;
+        checkstate = true;
+      } else {
+        phoneExist = "";
+        checkstate = false;
+      }
+      print(phongap.documentID);
+    }
+
+    if (phoneExistPrimary == getphone) {
+      showAlertMobile(context);
+    }
+
+    if (phoneExistPrimary == null) {
+      final FirebaseUser user =
+          (await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: getmail, //emailString.toString(),
+                  password: getpassword)) //passwordString.toString()))
+              .user;
+      await Firestore.instance.collection("users").document(user.uid).setData({
+        "name": getname, //nameString,
+        "namesirname": getname, //nameString,
+        "email": getmail, //emailString,
+        "password": getpassword, //passwordString,
+        "usertype": "user",
+        "uid": user.uid,
+        "bankname": getbank,
+        "bankaccount": getbankname,
+        "phone": getphone,
+        "active": true,
+        "mobile": getphone,
+        "mobilerefer": getrefer,
+        "createdAt": FieldValue.serverTimestamp(),
+        "updatedAt": FieldValue.serverTimestamp()
+      }).catchError((response) {
+        print('response = ${response.toString()}');
+        //String title = response.code;
+        //String message = response.message;
+        //myAlert(title, message);
+      });
+
+      addReferFriend(
+        context,
+        {
+          "uid": user.uid,
+          "mobile": disphone,
+          "uid_refer": '',
+          "mobile_refer": disrefer,
+          "paytype": 4, // แนะนำเพื่อน
+          "payment": false,
+          "active": false,
+          "createdate": FieldValue.serverTimestamp(),
+        },
+      );
+      showModalAlertDialog(context);
+    }
     //String title = "Save";
     //String message = "Create user complete,please press back button.";
 
     // ---- Insert refer friend ----
     //generateReferFriend(context, getphone, getrefer, user.uid);
 
-    showModalAlertDialog(context);
+    //showModalAlertDialog(context);
     //showAlertDialog(context);
   }
 
