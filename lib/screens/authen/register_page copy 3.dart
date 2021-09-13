@@ -23,12 +23,12 @@ import 'package:meplus/screens/authen/components/referfriend_control.dart';
 
 //import 'forgot_password_page.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage3 extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterPageState3 createState() => _RegisterPageState3();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState3 extends State<RegisterPage3> {
   TextEditingController emailString = TextEditingController(text: '');
   TextEditingController nameString = TextEditingController(text: '');
   TextEditingController passwordString = TextEditingController(text: '');
@@ -197,7 +197,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     Widget title = Text(
-      '  \nลงทะเบียนสมาชิก',
+      '  ลงทะเบียนสมาชิก',
       style: TextStyle(
           color: Colors.white,
           fontSize: 30.0,
@@ -598,53 +598,6 @@ class _RegisterPageState extends State<RegisterPage> {
     // ปิดใช้งานหรือแทนที่ปุ่ม "ย้อนกลับ" ของ Android
     return Scaffold(
       key: formKey,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        // color: Colors.grey,
-        child: Stack(
-          // alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/background.jpg'),
-                        fit: BoxFit.cover)),
-              ),
-            ),
-            Padding(
-              //padding: EdgeInsets.only(
-              //    bottom: MediaQuery.of(context).viewInsets.bottom),
-              padding: const EdgeInsets.only(left: 28.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    //Spacer(flex: 2),
-                    title,
-                    //Spacer(),
-                    //subTitle,
-                    //Spacer(flex: 2),
-                    registerForm,
-                    //Spacer(flex: 1),
-                    registerButton,
-                    //DropDown,
-                    //Spacer(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    // ---- End Scaffold ----
-  }
-
-  /*
-return Scaffold(
-      key: formKey,
       body: Stack(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -695,8 +648,10 @@ return Scaffold(
           )
         ],
       ),
+
+      // ),
     );
-  */
+  }
 
   Future<void> registerThread(
       String getmail,

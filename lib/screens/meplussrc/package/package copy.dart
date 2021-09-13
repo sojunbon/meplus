@@ -26,7 +26,7 @@ import 'package:meplus/screens/authen/register_page.dart';
 import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
 //import 'forgot_password_page.dart';
 
-class Package extends StatefulWidget {
+class Package2 extends StatefulWidget {
   //final String name;
   //final String email;
   FirebaseUser user;
@@ -34,14 +34,14 @@ class Package extends StatefulWidget {
   //Package({Key key, @required this.name, @required this.email})
   //     : super(key: key);
 
-  Package({Key key, this.user}) : super(key: key);
+  Package2({Key key, this.user}) : super(key: key);
   @override
-  _Package createState() => _Package();
+  _Package2 createState() => _Package2();
 
   //Package({Key key, this.user}) : super(key: key);
 }
 
-class _Package extends State<Package> {
+class _Package2 extends State<Package2> {
   UserManagement userObj = new UserManagement();
 
   File _imageFile;
@@ -299,7 +299,7 @@ class _Package extends State<Package> {
     }
 
     Widget title = Text(
-      '\n' + '\nPACKAGE',
+      'PACKAGE',
       style: TextStyle(
           color: Colors.white,
           fontSize: 30.0,
@@ -610,56 +610,6 @@ class _Package extends State<Package> {
     );
 
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        // color: Colors.grey,
-        child: Stack(
-          // alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/background.jpg'),
-                        fit: BoxFit.cover)),
-              ),
-            ),
-            Padding(
-              //padding: EdgeInsets.only(
-              //    bottom: MediaQuery.of(context).viewInsets.bottom),
-              padding: const EdgeInsets.only(left: 28.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    title,
-                    subTitle,
-                    registerForm,
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 35,
-              left: 5,
-              child: IconButton(
-                color: Colors.white,
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/*
-return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
@@ -707,7 +657,8 @@ return Scaffold(
         ],
       ),
     );
-*/
+  }
+}
 
 @override
 Widget build(BuildContext context) {
