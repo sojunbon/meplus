@@ -26,13 +26,13 @@ import 'package:meplus/services/usermngmt.dart';
 //----- ME PLUS Main page -----
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
-class WelcomeBackPage extends StatefulWidget {
-  WelcomeBackPage({Key key}) : super(key: key);
+class WelcomeBackPage_back extends StatefulWidget {
+  WelcomeBackPage_back({Key key}) : super(key: key);
   @override
-  _WelcomeBackPageState createState() => _WelcomeBackPageState();
+  _WelcomeBackPageState_back createState() => _WelcomeBackPageState_back();
 }
 
-class _WelcomeBackPageState extends State<WelcomeBackPage> {
+class _WelcomeBackPageState_back extends State<WelcomeBackPage_back> {
   IconData get icon => null;
   final _key = GlobalKey<ScaffoldState>();
   @override
@@ -51,7 +51,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
-      '\nME PLUS',
+      'ME PLUS',
       style: TextStyle(
           color: Colors.white,
           fontSize: 34.0,
@@ -61,7 +61,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
               color: Color.fromRGBO(0, 0, 0, 0.15),
               offset: Offset(0, 5),
               blurRadius: 10.0,
-            ),
+            )
           ]),
     );
 
@@ -355,62 +355,6 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     );
 
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        // color: Colors.grey,
-        child: Stack(
-          // alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/background.jpg'),
-                        fit: BoxFit.cover)),
-              ),
-            ),
-            Padding(
-              //padding: EdgeInsets.only(
-              //    bottom: MediaQuery.of(context).viewInsets.bottom),
-              padding: const EdgeInsets.only(left: 28.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    welcomeBack,
-                    subTitle,
-                    loginForm,
-                    //forgotPassword
-                  ],
-                ),
-              ),
-            ),
-            /*
-            Positioned(
-              //top: 5,
-              //left: 0.0,
-              child: Container(
-                //width: MediaQuery.of(context).size.width,
-                //height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  color: transparentYellow,
-                ),
-
-                
-              ),
-            ),
-            */
-          ],
-        ),
-      ),
-    );
-
-    // ---- End Scaffold ----
-  }
-
-  /*
-return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
@@ -445,7 +389,7 @@ return Scaffold(
         ],
       ),
     );
-  */
+  }
 
   void showModalAlertDialog(BuildContext context) {
     showModalBottomSheet(
@@ -499,7 +443,7 @@ return Scaffold(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        WelcomeBackPage()));
+                                        WelcomeBackPage_back()));
                           } else {
                             userObj.signOut();
                           }
@@ -541,7 +485,7 @@ return Scaffold(
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => WelcomeBackPage()));
+                    builder: (BuildContext context) => WelcomeBackPage_back()));
           } else {
             userObj.signOut();
           }
