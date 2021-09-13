@@ -178,6 +178,7 @@ class ExpansionTileList extends StatelessWidget {
           //picurl: doc['picurl'],
           getdocuments: doc,
           count: doc['tradecount'],
+          desc: doc['desc'],
           firestore: firestore,
         ),
       );
@@ -207,6 +208,7 @@ class ProjectsExpansionTile extends StatelessWidget {
     // this.dateCreated,
     this.getdocuments,
     this.count,
+    this.desc,
     this.firestore,
   });
 
@@ -215,6 +217,7 @@ class ProjectsExpansionTile extends StatelessWidget {
   final String bankname;
   final String bankaccount;
   final String caldate;
+  final String desc;
   var datequery;
   var calpayment;
   var count;
@@ -258,7 +261,9 @@ class ProjectsExpansionTile extends StatelessWidget {
                 " \n " +
                 bankname +
                 " / เลขบัญชี : " +
-                bankaccount,
+                bankaccount +
+                " \n " +
+                desc,
             style: TextStyle(fontSize: 15.0),
           ),
           trailing: new Switch(

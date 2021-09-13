@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:meplus/components/notification.dart';
-import 'package:meplus/components/show_notification.dart';
-import 'package:meplus/providers/add_money_service.dart';
+//import 'package:meplus/components/show_notification.dart';
+
+//import 'package:meplus/providers/add_money_service.dart';
 import 'package:meplus/providers/logger_service.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:meplus/providers/login_provider.dart';
@@ -22,7 +23,7 @@ import 'dart:async';
 import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/models/useritem.dart';
 import 'package:meplus/screens/authen/register_page.dart';
-
+import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
 //import 'forgot_password_page.dart';
 
 class Package extends StatefulWidget {
@@ -496,7 +497,8 @@ class _Package extends State<Package> {
                   "datestamp": formatdate,
                   "dateint": formatdate,
                   "picurl": imageUrl,
-                  "paytype": 1, // 1 = ฝาก , 2 = ถอน
+                  "paytype": 1, // 1 = ฝาก , 2 = ถอน , 3 ลงทุน , 4 แนะนำเพื่อน
+                  "mobile": data['mobile'],
                 },
                 userID);
             tradeamount.text = "";

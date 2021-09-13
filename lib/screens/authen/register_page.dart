@@ -599,6 +599,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       key: formKey,
       body: Stack(
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
@@ -647,6 +648,7 @@ class _RegisterPageState extends State<RegisterPage> {
           )
         ],
       ),
+
       // ),
     );
   }
@@ -676,6 +678,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     String bankname_refer;
     String bankacct;
+    String namexx;
 
     QuerySnapshot querySnapshotuser =
         await Firestore.instance.collection("users").getDocuments();
@@ -688,6 +691,7 @@ class _RegisterPageState extends State<RegisterPage> {
         userid_refer = userphongap.data["uid"];
         bankname_refer = userphongap.data["bankname"];
         bankacct = userphongap.data["bankaccount"];
+        namexx = userphongap.data["name"];
       } else {
         phoneUser = "";
       }
@@ -720,11 +724,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (checkphoneExist == getphone) {
         phoneExistPrimary = checkphoneExist;
-        userid_new = phongap.data["uid"];
+        //userid_new = phongap.data["uid"];
         checkstate = true;
       } else {
         phoneExist = "";
-        userid_new = phongap.data["uid"];
+        //userid_new = phongap.data["uid"];
         checkstate = false;
       }
       print(phongap.documentID);
@@ -763,6 +767,21 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       showModalAlertDialog(context);
     }
+
+    String checknewuid;
+    QuerySnapshot querySnapshotNewUser =
+        await Firestore.instance.collection("users").getDocuments();
+    for (int i = 0; i < querySnapshotNewUser.documents.length; i++) {
+      var newusersnap = querySnapshotNewUser.documents[i];
+      checknewuid = newusersnap.data["mobile"];
+
+      if (checknewuid == getphone) {
+        userid_new = newusersnap.data["uid"];
+      } else {
+        //userid_new = phongap.data["uid"];
+      }
+      print(newusersnap.documentID);
+    }
     if (phoneUserRefer != null && phoneExistPrimary == null) {
       addReferFriend(
         context,
@@ -773,6 +792,7 @@ class _RegisterPageState extends State<RegisterPage> {
           "mobile_refer": disrefer,
           "bankname_refer": bankname_refer,
           "bankaccount_refer": bankacct,
+          "name": namexx,
           "paytype": 4, // แนะนำเพื่อน
           "payment": false,
           "active": false,

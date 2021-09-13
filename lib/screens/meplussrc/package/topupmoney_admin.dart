@@ -285,11 +285,13 @@ class ProjectsExpansionTile extends StatelessWidget {
     );
   }
 
-  void handleSwitch(bool value, String docid, DocumentSnapshot documents,
-      BuildContext context) {
+  Future<void> handleSwitch(bool value, String docid,
+      DocumentSnapshot documents, BuildContext context) async {
     //setState(() {
     //isSwitch = value;
     //dynamicSwitch = value;
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     var attendanceCollection = Firestore.instance
         .collection('moneytrans')
@@ -307,6 +309,7 @@ class ProjectsExpansionTile extends StatelessWidget {
     });
     // --- insert data รายการ trade ---
     generateData(context, docid, documents);
+    generateReferFriend(context, docid, user.uid, documents);
   }
 
   updateTotal(String docid) {
