@@ -10,6 +10,7 @@ import 'package:meplus/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
+//import 'package:meplus/screens/meplussrc/package/components/refer_control.dart';
 
 class Topupmoney extends StatefulWidget {
   @override
@@ -308,8 +309,10 @@ class ProjectsExpansionTile extends StatelessWidget {
       await updateTotal(snapshot.data['uid']);
     });
     // --- insert data รายการ trade ---
+
     generateData(context, docid, documents);
     generateReferFriend(context, docid, user.uid, documents);
+    // genReferFriend(context, docid, user.uid, documents);
   }
 
   updateTotal(String docid) {

@@ -73,6 +73,14 @@ Future<void> generateData(
   double calpay;
   bool paym;
 
+  String phoneUserPrimaryn;
+  String phoneUserRefern;
+  String userid_refern;
+  String bankname_refern;
+  String bankacctn;
+  String phoneUsern;
+  String namexxn;
+
   double tempTotal = 0;
   String sumtotal;
   var getdocid = docid;
@@ -129,6 +137,26 @@ Future<void> generateData(
   calpay = (getamount * percentcal) / 100;
 
   DateTime serverdate = await NTP.now();
+  String getPhoneNewn = documents['mobile'];
+
+  QuerySnapshot querySnapshotuser =
+      await Firestore.instance.collection("referfriend").getDocuments();
+  for (int i = 0; i < querySnapshotuser.documents.length; i++) {
+    var userphongapn = querySnapshotuser.documents[i];
+    phoneUserPrimaryn = userphongapn.data["mobile"];
+
+    if (phoneUserPrimaryn == getPhoneNewn) {
+      phoneUsern = userphongapn.data["mobile"];
+      phoneUserRefern = userphongapn.data["mobile_refer"];
+      userid_refern = userphongapn.data["uid_refer"];
+      bankname_refern = userphongapn.data["bankname"];
+      bankacctn = userphongapn.data["bankaccount"];
+      namexxn = userphongapn.data["name"];
+    } else {
+      phoneUsern = "";
+    }
+    print(userphongapn.documentID);
+  }
 
   // --- คำนวณวัน ---
   for (int ii = 1; ii <= count; ii++) {
@@ -285,7 +313,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
 
   var getamount = documents['amount'];
   DateTime serverdate = await NTP.now();
-  var today = serverdate; // DateTime.now();
+  //var today = serverdate; // DateTime.now();
   //var fiftyDaysFromNow = today.add(Duration(days: i));
   int d = 1;
   var toooday = DateTime.now();
@@ -295,7 +323,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   String formatdatex = DateFormat('ddMMyyyy').format(serverdate);
   double convertdate = double.parse(formatdatex);
 
-  if (userid != userid_refer) {
+  if (userid != userid_refer && userid_refer != null) {
     if (countReferFriend <= fcount) {
       calpay = (getamount * fcount_refer) / 100;
 
@@ -409,7 +437,7 @@ Future<void> addPaymentItemRefer(
       ":" +
       now.second.toString());
   //String autodoc = docid + txttime + countdoc.toString();
-  String autodoc = docid + 'docid' + countdoc.toString();
+  String autodoc = docid + 'docid' + countdoc.toString() + 'refer';
 
   //double getcount = double.parse(count);
   //for (int i = 0; i < getcount; i++) {
