@@ -53,6 +53,10 @@ class _Meplusmain extends State<Meplusmain> {
   String userID = "";
   Firestore _db = Firestore.instance;
   TabController tabController;
+  var sumtotal;
+  var sumpayment;
+  var sumdibpayment;
+  var sumdibpaymentn;
   @override
   void initState() {
     // initLineSdk();
@@ -62,7 +66,12 @@ class _Meplusmain extends State<Meplusmain> {
         userID = user.uid;
       });
     });
-    getUsername();
+    //getUsername();
+    userNameGet();
+    queryValues();
+    queryPayment();
+    queryDibPayment();
+    //getSumtotalValue();
   }
 
   Future<dynamic> getUsername() async {
@@ -74,6 +83,112 @@ class _Meplusmain extends State<Meplusmain> {
         .listen((snapshot) {
       namedis = snapshot.data['name'];
       return namedis;
+    });
+  }
+
+  dynamic userdesc;
+  Future userNameGet() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final DocumentReference getpackage =
+        Firestore.instance.collection("users").document(user.uid);
+
+    await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
+      setState(() {
+        userdesc = getsnapshot.data;
+        namedis = userdesc['name'];
+      });
+    });
+  }
+
+  dynamic getsumtotal;
+  Future getSumtotalValue() async {
+    bool gettype;
+    double tempTotal = 0;
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final DocumentReference getpacksum =
+        Firestore.instance.collection("moneytrans").document();
+
+    await getpacksum
+        .get()
+        .then<dynamic>((DocumentSnapshot getsnapshotsum) async {
+      setState(() {
+        getsumtotal = getsnapshotsum.data;
+        sumtotal = getsumtotal['amount'];
+        gettype = getsumtotal['active'];
+
+        //for (int i = 1; i <= getsumtotal['uid'].lenght; i++) {
+        //  sumtotal += getsumtotal['amount'][i]; // + sumtotal;
+        //}
+
+        // gettype = getsumtotal['active'];
+        // if (gettype == true) {
+      });
+    });
+  }
+
+  Future<dynamic> queryValues() async {
+    var getuid;
+
+    double tempTotal = 0;
+    sumtotal = 0;
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('moneytrans')
+        .where("uid", isEqualTo: user.uid)
+        .where("active", isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      tempTotal =
+          snapshot.documents.fold(0, (tot, doc) => tot + doc.data['amount']);
+
+      sumtotal = tempTotal.toString();
+
+      return sumtotal;
+    });
+  }
+
+  Future<dynamic> queryPayment() async {
+    var getuid;
+
+    double tempTotal = 0;
+    double sumdib = 0;
+    sumtotal = 0;
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    Firestore.instance
+        .collection('trademoney')
+        .where("uid", isEqualTo: user.uid)
+        //.where("active", isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      tempTotal = snapshot.documents
+          .fold(0, (tot, doc) => tot + doc.data['calpayment']);
+
+      sumdib = tempTotal;
+      sumpayment = sumdib.toString(); //tempTotal.toString();
+
+      return sumpayment;
+    });
+  }
+
+  Future<dynamic> queryDibPayment() async {
+    var getuid;
+
+    double tempTotal = 0;
+    sumtotal = 0;
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('trademoney')
+        .where("uid", isEqualTo: user.uid)
+        .where("active", isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      tempTotal = snapshot.documents
+          .fold(0, (tot, doc) => tot + doc.data['calpayment']);
+      sumdibpayment = tempTotal.toString();
+
+      return sumdibpayment;
     });
   }
 
@@ -167,41 +282,59 @@ class _Meplusmain extends State<Meplusmain> {
           Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             Align(
               alignment: Alignment.topLeft,
-              child: Text("   คุณ : " + displayname),
+              child: Text("   คุณ : " +
+                  displayname +
+                  "  ยอดเงินลงทุน : " +
+                  sumtotal.toString()),
             ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text("   "),
+            ),
+            //Align(
+            //  alignment: Alignment.topLeft,
+            //  child: Text("   "),
+            //),
+            //Align(
+            //  alignment: Alignment.topLeft,
+            //  child: Text("   ยอดเงินลงทุน"),
+            //),
+            //Align(
+            //  alignment: Alignment.topLeft,
+            //  child: Text("     " + sumtotal.toString()),
+            //),
             Align(
               alignment: Alignment.topLeft,
               child: Text("   "),
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: Text("   "),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   ยอดเงินลงทุน"),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   50000"),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   "),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   ยอดเงินที่ได้รับ"),
+              child: Text("   ยอดเงินที่จะได้รับ"),
             ),
             Align(
               alignment: Alignment.topLeft,
               child: Text(
-                "   30000",
+                "       " + sumpayment.toString(),
                 style: (TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
                     color: Colors.pinkAccent)),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text("   ยอดเงินที่โอนแล้ว"),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "       " + sumdibpayment.toString(),
+                style: (TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.cyan)),
               ),
             ),
           ])

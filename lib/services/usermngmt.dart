@@ -8,15 +8,18 @@ import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 //import 'package:meplus/screen/firstpage.dart';
 import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
+import 'package:meplus/components/show_notification.dart';
 //import '../loginpage.dart';
 //import '../dashboard.dart';
 import 'package:meplus/screens/adminpage/dashboard.dart';
+import 'package:meplus/screens/meplussrc/adminpage/admin_only.dart';
+import 'package:meplus/providers/logger_service.dart';
 //import '../adminonly.dart';
 /*
 import 'package:meplus/screen/configapps.dart';
 import 'package:meplus/screen/picqr.dart';
 import 'package:meplus/components/show_notification.dart';
-import 'package:meplus/providers/logger_service.dart';
+
 */
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
@@ -46,7 +49,6 @@ class UserManagement {
     //FirebaseAuth.instance.signOut();
   }
 
-  /*
   authorizeAdmin(BuildContext context) {
     FirebaseAuth.instance.currentUser().then((user) {
       Firestore.instance
@@ -72,6 +74,7 @@ class UserManagement {
     });
   }
 
+/*
   authorizePic(BuildContext context) {
     FirebaseAuth.instance.currentUser().then((user) {
       Firestore.instance

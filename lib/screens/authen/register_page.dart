@@ -803,7 +803,10 @@ return Scaffold(
         "mobile": getphone,
         "mobilerefer": getrefer,
         "createdAt": FieldValue.serverTimestamp(),
-        "updatedAt": FieldValue.serverTimestamp()
+        "updatedAt": FieldValue.serverTimestamp(),
+        "sumtotal": 0,
+        "sumpayment": 0,
+        "sumwithdraw": 0,
       }).catchError((response) {
         print('response = ${response.toString()}');
         //String title = response.code;

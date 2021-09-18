@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meplus/screens/meplussrc/products/meproduct.dart';
+import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 import 'package:meplus/screens/meplussrc/package/package.dart';
 
 //import 'package:happymoney/ui/auth/sign_in_screen.dart';
@@ -20,7 +20,7 @@ class Routes {
 
   static final routes = <String, WidgetBuilder>{
     //  splash: (BuildContext context) => SplashScreen(),
-    meproduct: (BuildContext context) => Meproduct(),
+    meproduct: (BuildContext context) => Meproducts(),
     package: (BuildContext context) => Package(),
     //  home: (BuildContext context) => TodosScreen(),
     // setting: (BuildContext context) => SettingScreen(),

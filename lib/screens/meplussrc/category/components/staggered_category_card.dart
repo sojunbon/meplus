@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meplus/screens/meplussrc/products/meproduct.dart';
+import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 
 class CategoryCard extends StatelessWidget {
   final Color begin;
@@ -165,10 +165,10 @@ class _StaggeredCardCardState extends State<StaggeredCardCard>
       onTap: () {
         if (getkey == "สินค้า") {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => Meproduct()));
+              .push(MaterialPageRoute(builder: (_) => Meproducts()));
         } else if (getkey == "การลงทุน") {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => Meproduct()));
+              .push(MaterialPageRoute(builder: (_) => Meproducts()));
         }
         /*
         if (isActive) {

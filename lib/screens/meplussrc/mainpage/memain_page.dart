@@ -4,7 +4,7 @@ import 'package:meplus/models/product.dart';
 import 'package:meplus/screens/shopping/category/category_list_page.dart';
 import 'package:meplus/screens/shopping/notifications_page.dart';
 import 'package:meplus/screens/shopping/search_page.dart';
-import 'package:meplus/screens/shopping/profile/profile_page.dart';
+//import 'package:meplus/screens/shopping/profile/profile_page.dart';
 import 'package:meplus/screens/shopping/shop/check_out_page.dart';
 import 'package:meplus/screens/shopping/tracking_page.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,11 @@ import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/category/meplusmain.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:meplus/screens/meplussrc/package/topupmoney_admin.dart';
-import 'package:meplus/screens/meplussrc/package/paymentlist.dart';
+import 'package:meplus/screens/meplussrc/package/paymentlist_admin.dart';
+import 'package:meplus/screens//meplussrc/profilepage/profile_page.dart';
+import 'package:meplus/screens/meplussrc/products/product_page.dart';
+
+import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 
 class MemainPage extends StatefulWidget {
   final FirebaseUser user;
@@ -244,7 +248,7 @@ class _MainPageState extends State<MemainPage>
           children: <Widget>[
             Meplusmain(), //Melink(), //MeCategoryListPage(),
             Topuplist(), //CategoryListPage(),
-            Topupmoney(), //CategoryListPage(),
+            Meproducts(), //CategoryListPage(),
             Paymentlist(), //CheckOutPage(),
             ProfilePage()
           ],

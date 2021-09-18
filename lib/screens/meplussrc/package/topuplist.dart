@@ -52,7 +52,7 @@ class _Topuplist extends State<Topuplist> {
         ],
         //title: Text("รายการ"),
         title: Text(
-          'รายการ',
+          'รายการฝากเงิน',
           style: TextStyle(
               color: darkGrey, fontWeight: FontWeight.w500, fontSize: 18.0),
         ),
