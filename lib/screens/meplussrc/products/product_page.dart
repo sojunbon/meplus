@@ -1,25 +1,27 @@
 import 'package:meplus/app_properties.dart';
-import 'package:meplus/models/product.dart';
+//import 'package:meplus/models/product.dart';
 //import 'package:meplus/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'components/product_display.dart';
 import 'view_product_page.dart';
+import 'package:meplus/screens/meplussrc/products/components/product_options.dart';
+import 'package:meplus/models/newproduct.dart';
 
 class ProductPage extends StatefulWidget {
-  final Product product;
+  final Newproduct newproduct;
 
-  ProductPage({Key key, this.product}) : super(key: key);
+  ProductPage({Key key, this.newproduct}) : super(key: key);
 
   @override
-  _ProductPageState createState() => _ProductPageState(product);
+  _ProductPageState createState() => _ProductPageState(newproduct);
 }
 
 class _ProductPageState extends State<ProductPage> {
-  final Product product;
+  final Newproduct newproduct;
 
-  _ProductPageState(this.product);
+  _ProductPageState(this.newproduct);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class _ProductPageState extends State<ProductPage> {
     Widget viewProductButton = InkWell(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => ViewProductPage(
-                product: product,
+                newproduct: newproduct,
               ))),
       child: Container(
         height: 80,
@@ -88,16 +90,16 @@ class _ProductPageState extends State<ProductPage> {
                 SizedBox(
                   height: 80.0,
                 ),
-                ProductDisplay(
-                  product: product,
-                ),
+                //ProductDisplay(
+                //  newproduct: newproduct,
+                //),
                 SizedBox(
                   height: 16.0,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20.0, right: 16.0),
                   child: Text(
-                    product.name,
+                    newproduct.productdesc,
                     style: const TextStyle(
                         color: const Color(0xFFFEFEFE),
                         fontWeight: FontWeight.w600,
@@ -138,7 +140,7 @@ class _ProductPageState extends State<ProductPage> {
                 Padding(
                     padding:
                         EdgeInsets.only(left: 20.0, right: 40.0, bottom: 130),
-                    child: new Text(product.description,
+                    child: new Text(newproduct.productdesc,
                         style: const TextStyle(
                             color: const Color(0xfefefefe),
                             fontWeight: FontWeight.w800,

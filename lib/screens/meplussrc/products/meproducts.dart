@@ -12,13 +12,20 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
 //import 'package:meplus/screens/meplussrc/package/components/refer_control.dart';
+import 'package:meplus/screens/meplussrc/products/product_detail.dart';
+import 'package:meplus/models/newproduct.dart';
 
 class Meproducts extends StatefulWidget {
+  final Newproduct newproduct;
+  Meproducts({Key key, this.newproduct}) : super(key: key);
   @override
-  _Meproducts createState() => _Meproducts();
+  _Meproducts createState() => _Meproducts(newproduct);
 }
 
 class _Meproducts extends State<Meproducts> {
+  final Newproduct newproduct;
+
+  _Meproducts(this.newproduct);
   String userID = "";
   //bool _value = false;
   bool isSwitch = false;
@@ -141,7 +148,13 @@ class ExpansionTileList extends StatelessWidget {
 
   List<Widget> _getChildren() {
     List<Widget> children = [];
+
+    List<Widget> product = [];
+    List<Newproduct> newproduct = [];
+
     documents.forEach((doc) {
+      newproduct
+          .add(Newproduct(doc['picurl'], doc['productdesc'], doc['price']));
       children.add(
         ProjectsExpansionTile(
           name: doc['productdesc'],
@@ -150,6 +163,7 @@ class ExpansionTileList extends StatelessWidget {
           picurl: doc['picurl'],
           getdocuments: doc,
           firestore: firestore,
+          newproduct: newproduct,
         ),
       );
     });
@@ -171,10 +185,13 @@ class ProjectsExpansionTile extends StatelessWidget {
       this.amount,
       this.picurl,
       this.getdocuments,
-      this.firestore});
+      this.firestore,
+      this.newproduct});
 
   final String projectKey;
   final String name;
+  final List newproduct;
+  //List<Newproduct> newproduct;
 
   final String picurl;
   var amount;
@@ -193,280 +210,58 @@ class ProjectsExpansionTile extends StatelessWidget {
     PageStorageKey _projectKey = PageStorageKey('$projectKey');
     var getprjkey = _projectKey;
 
-/*
-    return Padding(
-      // padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
-      padding: const EdgeInsets.only(right: 10.0),
-      child: SizedBox(
-        width: 100,
-        //child: GestureDetector(
-        //onTap: () => Navigator.pushNamed(
-        //  context,
-        //  DetailsScreen.routeName,
-        //  arguments: ProductDetailsArguments(product: product),
-        //),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 1.02,
-              child: Container(
-                padding: EdgeInsets.all(100),
-                decoration: BoxDecoration(
-                  //  color: kSecondaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Hero(
-                  tag: name.toString(), // .id.toString(),
-                  //child: Image.asset(product.images[0]),
-                  child: Ink.image(
-                    image: NetworkImage(picurl),
-
-                    //width: 150,
-                    //height: 150,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              name,
-              style: TextStyle(color: Colors.black),
-              maxLines: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "\บาท ${amount}",
-                  style: TextStyle(
-                    //fontSize: getProportionateScreenWidth(18),
-                    fontWeight: FontWeight.w600,
-                    //color: kPrimaryColor,
-                  ),
-                ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(50),
-                  onTap: () {},
-                  child: Container(
-                    //  padding: EdgeInsets.all(getProportionateScreenWidth(8)),
-                    //  height: getProportionateScreenWidth(28),
-                    //  width: getProportionateScreenWidth(28),
-                    decoration: BoxDecoration(
-                      // color: product.isFavourite
-                      //     ? kPrimaryColor.withOpacity(0.15)
-                      //     : kSecondaryColor.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    //child: SvgPicture.asset(
-                    //  "assets/icons/Heart Icon_2.svg",
-                    //  color: product.isFavourite
-                    //      ? Color(0xFFFF4848)
-                    //      : Color(0xFFDBDEE4),
-                    //),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-   */
-
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 20,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              IntrinsicHeight(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 16.0, right: 8.0),
-                  width: 4,
-                  color: mediumYellow,
-                ),
-              ),
-              Center(
+    return InkWell(
+      onTap: () {
+        //Navigator.push(
+        //    context,
+        //    MaterialPageRoute(
+        //       builder: (context) => Product_detail(
+        //             key: getprjkey,
+        // newproduct: newproduct,
+        //          )));
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+              height: 300,
+              width: 300,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  image: DecorationImage(
+                      fit: BoxFit.cover, image: NetworkImage(picurl)))),
+          FractionalTranslation(
+            translation: Offset(0, -0.5),
+            child: Container(
+              width: 160,
+              height: 70,
+              child: Center(
                   child: Text(
-                'Recommended',
+                amount.toString() + ' ฿',
                 style: TextStyle(
-                    color: darkGrey,
-                    fontSize: 16.0,
+                    fontSize: 24,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold),
               )),
-            ],
-          ),
-        ),
-        Flexible(
-          child: Container(
-            //padding: EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
-            // child: StaggeredGridView.countBuilder(
-            // physics: NeverScrollableScrollPhysics(),
-            // padding: EdgeInsets.zero,
-            // crossAxisCount: 4,
-            // itemCount: name.length, //products.length,
-            // itemBuilder: (BuildContext context, int index) => new ClipRRect(
-            //  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            child: InkWell(
-              //  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              //    builder: (_) => ProductPage(product: products[index]))),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                      colors: [Colors.grey[500], Colors.grey[700]],
-                      center: Alignment(0, 0),
-                      radius: 0.6,
-                      focal: Alignment(0, 0),
-                      focalRadius: 0.1),
-                ),
-                child: Hero(
-                  tag: name, //products[index].image,
-                  // child: Image.asset(products[index].image))),
-                  //child: Ink.image(
-                  //  image: NetworkImage(picurl),
-
-                  //width: 150,
-                  //height: 150,
-
-                  child: Card(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          height: 110,
-                          width: 110,
-                          decoration: BoxDecoration(
-                              image:
-                                  DecorationImage(image: NetworkImage(picurl))),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              // ),
-              //   ),
-              //staggeredTileBuilder: (int index) =>
-              //    new StaggeredTile.count(2, index.isEven ? 3 : 2),
-              //mainAxisSpacing: 4.0,
-              //crossAxisSpacing: 4.0,
+              decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(width: 5, color: Colors.white)),
             ),
           ),
-        ),
-      ],
-    );
-
-/*
-    return InkWell(
-        //onTap: () => Navigator.of(context).push(
-        //MaterialPageRoute(builder: (_) => ProductPage(product: product))),
-        child: Container(
-            height: 250,
-            width: MediaQuery.of(context).size.width / 2 - 29,
-            //decoration: BoxDecoration(
-            //    borderRadius: BorderRadius.all(Radius.circular(10)),
-            //    color: Color(0xfffbd085).withOpacity(0.46)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    width: MediaQuery.of(context).size.width / 2 - 64,
-                    height: MediaQuery.of(context).size.width / 2 - 64,
-                    child: Ink.image(
-                      image: NetworkImage(picurl),
-                      //fit: BoxFit.cover,
-                      width: 150,
-                      height: 150,
-                    ),
-                  ),
-                ),
-                Flexible(
-                  child: Align(
-                    alignment: Alignment(1, 0.5),
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 16.0),
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                            color: Color(0xffe0450a).withOpacity(0.51),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                bottomLeft: Radius.circular(10))),
-                        child: Text(
-                          name,
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white,
-                          ),
-                        )),
-                  ),
-                )
-              ],
-            )));
-            */
-
-    /*
-    return InkWell(
-      //onTap: () => Navigator.of(context).push(
-      //    MaterialPageRoute(builder: (_) => ProductPage(product: product))),
-      child: Ink.image(
-        image: NetworkImage(picurl),
-        //fit: BoxFit.cover,
-        width: 150,
-        height: 150,
-      ),
-    );
-    */
-
-    /*
-    return Card(
-      child: ExpansionTile(
-        key: _projectKey,
-        title: Text(
-          "รายละเอียด : " + name,
-          style: TextStyle(fontSize: 15.0),
-        ),
-        subtitle: Text(
-          " ราคา : " + amount.toString(),
-          style: TextStyle(fontSize: 15.0),
-        ),
-        children: <Widget>[
-          //ListTile(
-          //  title: Text(
-          //    bankname + " / เลขบัญชี : " + bankaccount,
-          //    style: TextStyle(fontWeight: FontWeight.w700),
-          //  ),
-          //),
-          InkWell(
-            onTap: () {},
-            child: Ink.image(
-              image: NetworkImage(picurl),
-              // fit: BoxFit.cover,
-              width: 350,
-              height: 350,
-            ),
-          ),
-          ListTile(
-            trailing: new Switch(
-              activeTrackColor: Colors.green,
-              activeColor: Colors.white,
-              inactiveTrackColor: Colors.grey,
-              value: dynamicSwitch == null ? false : dynamicSwitch,
-              onChanged: (bool value) {
-                var isSwitch = value;
-                handleSwitch(isSwitch, projectKey, getdocuments, context);
-              },
+          FractionalTranslation(
+            translation: Offset(0, -1),
+            child: Text(
+              name,
+              style: TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28),
             ),
           ),
         ],
       ),
-      
-    );*/
+    );
   }
 
   Future<void> handleSwitch(bool value, String docid,

@@ -1,4 +1,5 @@
 import 'package:meplus/app_properties.dart';
+import 'package:meplus/models/newproduct.dart';
 import 'package:meplus/models/product.dart';
 import 'package:meplus/screens/shopping/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,8 @@ import 'shop_bottomSheet.dart';
 
 class ProductOption extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
-  final Product product;
-  const ProductOption(this.scaffoldKey, {Key key, this.product})
+  final Newproduct newproduct;
+  const ProductOption(this.scaffoldKey, {Key key, this.newproduct})
       : super(key: key);
 
   @override
@@ -20,7 +21,7 @@ class ProductOption extends StatelessWidget {
           Positioned(
             left: 16.0,
             child: Image.asset(
-              product.image,
+              newproduct.picurl,
               height: 200,
               width: 200,
             ),
@@ -36,7 +37,7 @@ class ProductOption extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Text(product.name,
+                    child: Text(newproduct.productdesc,
                         textAlign: TextAlign.right,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,

@@ -9,20 +9,23 @@ import 'package:meplus/app_properties.dart';
 import 'components/color_list.dart';
 import 'components/more_products.dart';
 import 'components/product_options.dart';
+import 'package:meplus/models/newproduct.dart';
 
-class ViewProductPage extends StatefulWidget {
-  final Product product;
+class Product_detail extends StatefulWidget {
+  //final Product product;
+  final Newproduct newproduct;
 
-  ViewProductPage({Key key, this.product}) : super(key: key);
+  Product_detail({Key key, this.newproduct}) : super(key: key);
 
   @override
-  _ViewProductPageState createState() => _ViewProductPageState(product);
+  _Product_detail createState() => _Product_detail(newproduct);
 }
 
-class _ViewProductPageState extends State<ViewProductPage> {
-  final Product product;
+class _Product_detail extends State<Product_detail> {
+  //final Product product;
+  final Newproduct newproduct;
 
-  _ViewProductPageState(this.product);
+  _Product_detail(this.newproduct);
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -64,7 +67,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
     Widget description = Padding(
       padding: const EdgeInsets.all(24.0),
       child: Text(
-        product.description,
+        newproduct.productdesc,
         maxLines: 5,
         semanticsLabel: '...',
         overflow: TextOverflow.ellipsis,
@@ -107,9 +110,9 @@ class _ViewProductPageState extends State<ViewProductPage> {
               children: <Widget>[
                 ProductOption(
                   _scaffoldKey,
-                  product: product,
+                  newproduct: newproduct,
                 ),
-                description,
+                //  description,
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -143,7 +146,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                     ),
                   ]),
                 ),
-                MoreProducts()
+                // MoreProducts()
               ],
             ),
           ),

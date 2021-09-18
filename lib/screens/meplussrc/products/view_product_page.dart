@@ -1,4 +1,3 @@
-import 'package:meplus/models/product.dart';
 import 'package:meplus/screens/shopping/product/components/rating_bottomSheet.dart';
 //import 'package:meplus/screens/search_page.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +7,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meplus/app_properties.dart';
 import 'components/color_list.dart';
 import 'components/more_products.dart';
-import 'components/product_options.dart';
+import 'package:meplus/screens/meplussrc/products/components/product_options.dart';
+import 'package:meplus/models/newproduct.dart';
 
 class ViewProductPage extends StatefulWidget {
-  final Product product;
+  final Newproduct newproduct;
 
-  ViewProductPage({Key key, this.product}) : super(key: key);
+  ViewProductPage({Key key, this.newproduct}) : super(key: key);
 
   @override
-  _ViewProductPageState createState() => _ViewProductPageState(product);
+  _ViewProductPageState createState() => _ViewProductPageState(newproduct);
 }
 
 class _ViewProductPageState extends State<ViewProductPage> {
-  final Product product;
+  final Newproduct newproduct;
 
-  _ViewProductPageState(this.product);
+  _ViewProductPageState(this.newproduct);
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -64,7 +64,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
     Widget description = Padding(
       padding: const EdgeInsets.all(24.0),
       child: Text(
-        product.description,
+        newproduct.productdesc,
         maxLines: 5,
         semanticsLabel: '...',
         overflow: TextOverflow.ellipsis,
@@ -107,7 +107,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
               children: <Widget>[
                 ProductOption(
                   _scaffoldKey,
-                  product: product,
+                  newproduct: newproduct,
                 ),
                 description,
                 Padding(
@@ -143,7 +143,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                     ),
                   ]),
                 ),
-                MoreProducts()
+                //MoreProducts()
               ],
             ),
           ),
