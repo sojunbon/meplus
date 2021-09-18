@@ -321,18 +321,51 @@ class _Product_detail extends State<Product_detail> {
                     border: Border.all(width: 5, color: Colors.white)),
               ),
             ),
-            /*
             FractionalTranslation(
               translation: Offset(0, -1),
               child: Text(
-                desc,
+                "     ",
                 style: TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
                     fontSize: 28),
               ),
             ),
-            */
+          ],
+        ),
+      ),
+    );
+
+    Widget showbank = Positioned(
+      //padding: const EdgeInsets.only(right: 56.0),
+      bottom: 0,
+      left: MediaQuery.of(context).size.width / 4,
+      child: InkWell(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FractionalTranslation(
+              translation: Offset(0, -0.5),
+              child: Container(
+                width: 500,
+                height: 100,
+                child: Center(
+                    child: Text(
+                  'สั่งซื้อสินค้า กรุณาโอนเข้าบัญชี \n' +
+                      bankname_trans +
+                      '\n' +
+                      bankacct_trans,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                )),
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(width: 5, color: Colors.white)),
+              ),
+            ),
           ],
         ),
       ),
@@ -596,6 +629,7 @@ class _Product_detail extends State<Product_detail> {
                     title,
                     subTitle,
                     picProduct,
+                    showbank,
                     registerForm,
                   ],
                 ),

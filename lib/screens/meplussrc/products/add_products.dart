@@ -505,6 +505,28 @@ class _Addproducts extends State<Addproducts> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.grey,
+      appBar: AppBar(
+        backgroundColor: Colors.amber, // Colors.transparent,
+        //shape: CustomShapeBorder(),
+
+        elevation: 0.0,
+        //leading: Icon(Icons.menu),
+        iconTheme: IconThemeData(color: darkGrey),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/icons/denied_wallet.png'),
+            // onPressed: () => Navigator.of(context)
+            // .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
+          )
+        ],
+        //title: Text("รายการ"),
+        title: Text(
+          '',
+          style: TextStyle(
+              color: darkGrey, fontWeight: FontWeight.w500, fontSize: 18.0),
+        ),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

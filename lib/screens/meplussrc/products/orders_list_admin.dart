@@ -263,13 +263,19 @@ class ProjectsExpansionTile extends StatelessWidget {
               height: 250,
             ),
           ),
+          ListTile(
+            title: Text(
+              "",
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
           InkWell(
             onTap: () {},
             child: Ink.image(
               image: NetworkImage(productpic),
               // fit: BoxFit.cover,
-              width: 150,
-              height: 150,
+              width: 250,
+              height: 250,
             ),
           ),
           ListTile(

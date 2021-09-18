@@ -10,6 +10,7 @@ import 'package:meplus/screens/meplussrc/package/paymentlist_admin.dart';
 import 'package:meplus/screens/meplussrc/adminpage/configtab.dart';
 import 'package:meplus/screens/meplussrc/products/add_products.dart';
 import 'package:meplus/screens/meplussrc/products/orders_list_admin.dart';
+import 'package:meplus/screens/meplussrc/adminpage/admin_mainpage.dart';
 
 class AdminPage extends StatefulWidget {
   //final FirebaseUser user;
@@ -50,9 +51,10 @@ class _AdminPage extends State<AdminPage> {
             setState(() => _currentIndex = index);
           },
           children: <Widget>[
+            Admin_mainpage(), //Topupmoney(),
             Topupmoney(),
             Paymentlist(),
-            Addproducts(), //Topupmoney(),
+            //Addproducts(), //Topupmoney(),
             OrderlistAdmin(), //Topupmoney(),
             Configtab(),
 
@@ -76,14 +78,12 @@ class _AdminPage extends State<AdminPage> {
           _pageController.jumpToPage(index);
         },
         items: <BottomNavyBarItem>[
+          BottomNavyBarItem(title: Text('เมนู'), icon: Icon(Icons.menu)),
           BottomNavyBarItem(
               title: Text('เติมเงิน'),
               icon: Icon(Icons.account_balance_wallet)),
           BottomNavyBarItem(
-              title: Text('จ่ายเงิน'),
-              icon: Icon(Icons.account_balance_wallet)),
-          BottomNavyBarItem(
-              title: Text('เพิ่มสินค้า'), icon: Icon(Icons.assessment)),
+              title: Text('จ่ายเงิน'), icon: Icon(Icons.assessment)),
           BottomNavyBarItem(
               title: Text('คำสั่งซื้อ'), icon: Icon(Icons.accessibility)),
           BottomNavyBarItem(
