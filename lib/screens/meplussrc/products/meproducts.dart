@@ -87,9 +87,10 @@ class _Meproducts extends State<Meproducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromRGBO(0, 0, 0, 128), //Colors.amber,
       appBar: AppBar(
-        backgroundColor: Colors.amber, // Colors.transparent,
+        backgroundColor: Colors.amber,
+        // backgroundColor: Colors.white, // Colors.transparent,
         shape: CustomShapeBorder(),
 
         elevation: 0.0,
@@ -151,6 +152,7 @@ class ExpansionTileList extends StatelessWidget {
 
     List<Widget> product = [];
     List<Newproduct> newproduct = [];
+    //final Newproduct newproduct ;
 
     documents.forEach((doc) {
       newproduct
@@ -191,6 +193,7 @@ class ProjectsExpansionTile extends StatelessWidget {
   final String projectKey;
   final String name;
   final List newproduct;
+  //final Newproduct newproduct;
   //List<Newproduct> newproduct;
 
   final String picurl;
@@ -209,16 +212,25 @@ class ProjectsExpansionTile extends StatelessWidget {
 
     PageStorageKey _projectKey = PageStorageKey('$projectKey');
     var getprjkey = _projectKey;
+    String dockid = projectKey;
+    String getpic;
+
+    //  child: Image.asset('assets/icons/10 usd.png'),
+    if (picurl == null) {
+      getpic = "assets/whitepaper.png";
+    } else {
+      getpic = picurl;
+    }
 
     return InkWell(
       onTap: () {
-        //Navigator.push(
-        //    context,
-        //    MaterialPageRoute(
-        //       builder: (context) => Product_detail(
-        //             key: getprjkey,
-        // newproduct: newproduct,
-        //          )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Product_detail(
+                      dockid,
+                      //newproduct: newproduct,
+                    )));
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -229,7 +241,7 @@ class ProjectsExpansionTile extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
                   image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage(picurl)))),
+                      fit: BoxFit.cover, image: NetworkImage(getpic)))),
           FractionalTranslation(
             translation: Offset(0, -0.5),
             child: Container(

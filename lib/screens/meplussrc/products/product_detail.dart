@@ -1,155 +1,636 @@
-import 'package:meplus/models/product.dart';
-import 'package:meplus/screens/shopping/product/components/rating_bottomSheet.dart';
-//import 'package:meplus/screens/search_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-//import '../../app_properties.dart';
+import 'package:intl/intl.dart';
 import 'package:meplus/app_properties.dart';
-import 'components/color_list.dart';
-import 'components/more_products.dart';
-import 'components/product_options.dart';
-import 'package:meplus/models/newproduct.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:meplus/components/notification.dart';
+//import 'package:meplus/components/show_notification.dart';
+
+//import 'package:meplus/providers/add_money_service.dart';
+import 'package:meplus/providers/logger_service.dart';
+import 'package:nice_button/nice_button.dart';
+import 'package:meplus/providers/login_provider.dart';
+import 'package:ntp/ntp.dart';
+import 'package:provider/provider.dart';
+import 'package:styled_widget/styled_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker_modern/image_picker_modern.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'dart:async';
+import 'package:meplus/services/usermngmt.dart';
+import 'package:meplus/models/useritem.dart';
+import 'package:meplus/screens/authen/register_page.dart';
+import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
+//import 'forgot_password_page.dart';
 
 class Product_detail extends StatefulWidget {
-  //final Product product;
-  final Newproduct newproduct;
+  FirebaseUser user;
+  final String dockey;
 
-  Product_detail({Key key, this.newproduct}) : super(key: key);
-
+  //Product_detail({Key key, this.dockey}) : super(key: key);
+  Product_detail(this.dockey);
   @override
-  _Product_detail createState() => _Product_detail(newproduct);
+  _Product_detail createState() => _Product_detail(dockey);
 }
 
 class _Product_detail extends State<Product_detail> {
-  //final Product product;
-  final Newproduct newproduct;
+  UserManagement userObj = new UserManagement();
 
-  _Product_detail(this.newproduct);
+  final String dockey;
+  _Product_detail(this.dockey);
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  File _imageFile;
 
-  int active;
+  final picker = ImagePicker();
 
-  ///list of product colors
-  List<Widget> colors() {
-    List<Widget> list = [];
-    for (int i = 0; i < 5; i++) {
-      list.add(
-        InkWell(
-          onTap: () {
-            setState(() {
-              active = i;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-            child: Transform.scale(
-              scale: active == i ? 1.2 : 1,
-              child: Card(
-                elevation: 3,
-                color: Colors.primaries[i],
-                child: SizedBox(
-                  height: 32,
-                  width: 32,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    return list;
+  //String docid =  "${widget.dockey}";
+
+  TextEditingController tradeamount = TextEditingController();
+
+  String userID = "";
+
+  String namedis;
+  Firestore _db = Firestore.instance;
+  TabController tabController;
+  var percent;
+  var count;
+  var percenta;
+  var percentb;
+  var percentc;
+  var percentd;
+  var perday;
+
+  var desca;
+  var descb;
+  var descc;
+  var descd;
+
+  var price;
+  var desc;
+  var picurl;
+
+  String formatdate;
+
+  String imageUrl;
+  Future pickImage(context) async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
+    uploadImageToFirebase(context);
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    taskSnapshot.ref.getDownloadURL().then(
+          (value) => imageUrl = value,
+        );
+  }
+
+  dynamic data;
+  Future<dynamic> getData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    final DocumentReference document =
+        Firestore.instance.collection("users").document(user.uid);
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      setState(() {
+        data = snapshot.data;
+      });
+    });
+  }
+
+  Future<dynamic> getUsername() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection("users")
+        .document(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+      namedis = snapshot.data['name'];
+      return namedis;
+    });
+  }
+
+  dynamic datadesc;
+  Future getDescription() async {
+    final DocumentReference getpackage =
+        Firestore.instance.collection("packagedesc").document('desc');
+
+    await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
+      setState(() {
+        datadesc = getsnapshot.data;
+        desca = datadesc['desca'];
+        descb = datadesc['descb'];
+        descc = datadesc['descc'];
+        descd = datadesc['descd'];
+      });
+    });
+  }
+
+  dynamic picdat;
+  Future getPicture() async {
+    final DocumentReference getpack = Firestore.instance
+        .collection("products") //.document(dockey.toString());
+        .document(dockey);
+
+    await getpack.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
+      setState(() {
+        picdat = getsnapshot.data;
+
+        picurl = picdat['picurl'];
+        desc = picdat['productdesc'];
+        price = picdat['price'];
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      setState(() {
+        userID = user.uid;
+      });
+    });
+
+    getData();
+    getPicture();
+    //getDesc();
+    getCal();
+    getDescription();
+    // getUsername();
+  }
+
+  void getCal() async {
+    final db = Firestore.instance;
+    await db
+        .collection('conftab')
+        .document('conf')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      count = documentSnapshot.data['count'];
+      percenta = documentSnapshot.data['percenta'];
+      percentb = documentSnapshot.data['percentb'];
+      percentc = documentSnapshot.data['percentc'];
+      percentd = documentSnapshot.data['percentd'];
+      perday = documentSnapshot.data['perday'];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget description = Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Text(
-        newproduct.productdesc,
-        maxLines: 5,
-        semanticsLabel: '...',
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.6)),
+    String displayname;
+    String desc1;
+    String desc2;
+    String desc3;
+    String desc4;
+
+    if (namedis == null) {
+      displayname = "-";
+    } else {
+      displayname = namedis;
+    }
+
+    if (desca == null) {
+      desc1 = " ";
+    } else {
+      desc1 = desca;
+    }
+
+    if (descb == null) {
+      desc2 = " ";
+    } else {
+      desc2 = descb;
+    }
+
+    if (descc == null) {
+      desc3 = " ";
+    } else {
+      desc3 = descc;
+    }
+
+    if (descd == null) {
+      desc4 = " ";
+    } else {
+      desc4 = descd;
+    }
+
+    String getpic;
+
+    //  child: Image.asset('assets/icons/10 usd.png'),
+    if (picurl == null) {
+      getpic = "assets/whitepaper.png";
+    } else {
+      getpic = picurl;
+    }
+
+    Widget title = Text(
+      '\n' + '\nรายละเอียดสินค้า',
+      style: TextStyle(
+          color: Colors.white,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+          shadows: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.15),
+              offset: Offset(0, 5),
+              blurRadius: 10.0,
+            )
+          ]),
+    );
+
+    Widget subTitle = Padding(
+        padding: const EdgeInsets.only(right: 56.0),
+        child: Text(
+          '',
+          //dockey ,
+          // widget.dockey,
+          // "${widget.dockey}",
+          //data['name'] +
+          //' รายละเอียดการลงทุน \n ฝาก 100 ปันผล 3.5 บาท/วัน \n ฝาก 1,000 ปันผล 35 บาท/วัน \n ฝาก 10,000 ปันผล 350 บาท/วัน \n ฝาก 100,000 ปันผล 3,500 บาท/วัน '
+
+          //'รายละเอียดการลงทุน \n' +
+          //    desc1 +
+          //    '\n' +
+          //    desc2 +
+          //    '\n' +
+          //    desc3 +
+          //    '\n' +
+          //    desc4,
+
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16.0,
+          ),
+        ));
+
+    Widget picProduct = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+
+      //bottom: 190,
+      child: InkWell(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+                height: 300,
+                width: 300,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: NetworkImage(getpic)))),
+            FractionalTranslation(
+              translation: Offset(0, -0.5),
+              child: Container(
+                width: 160,
+                height: 70,
+                child: Center(
+                    child: Text(
+                  price.toString() + ' ฿',
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                )),
+                decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(width: 5, color: Colors.white)),
+              ),
+            ),
+            /*
+            FractionalTranslation(
+              translation: Offset(0, -1),
+              child: Text(
+                desc,
+                style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28),
+              ),
+            ),
+            */
+          ],
+        ),
       ),
     );
 
-    return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: yellow,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: darkGrey),
-          actions: <Widget>[
-            /*
-            IconButton(
-              icon: new SvgPicture.asset(
-                'assets/icons/search_icon.svg',
-                fit: BoxFit.scaleDown,
-              ),
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => SearchPage())),
-            )
-            */
-          ],
-          title: Text(
-            'Headphones xxx',
-            style: const TextStyle(
-                color: darkGrey,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Montserrat",
-                fontSize: 18.0),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
+    Widget picView = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 190,
+      child: InkWell(
+        //onTap: () => pickImage(context),
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          //height: 80,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                ProductOption(
-                  _scaffoldKey,
-                  newproduct: newproduct,
+                Column(
+                  children: <Widget>[
+                    Text(''),
+                    _imageFile != null
+                        ? Image.file(
+                            _imageFile,
+                            // height: 150,
+                            height: 150,
+                            width: 150,
+                          )
+                        : Container(
+                            child: Center(
+                              child: Text(
+                                "",
+                              ),
+                            ),
+                            height: 150,
+                          ),
+                  ],
                 ),
-                //  description,
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                    Flexible(
-                      child: ColorList([
-                        Colors.red,
-                        Colors.blue,
-                        Colors.purple,
-                        Colors.green,
-                        Colors.yellow
-                      ]),
-                    ),
-                    RawMaterialButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return RatingBottomSheet();
-                          },
-                          //elevation: 0,
-                          //backgroundColor: Colors.transparent
-                        );
-                      },
-                      constraints:
-                          const BoxConstraints(minWidth: 45, minHeight: 45),
-                      child: Icon(Icons.favorite,
-                          color: Color.fromRGBO(255, 137, 147, 1)),
-                      elevation: 0.0,
-                      shape: CircleBorder(),
-                      fillColor: Color.fromRGBO(255, 255, 255, 0.4),
-                    ),
-                  ]),
-                ),
-                // MoreProducts()
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
+
+    Widget uploadButton = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 100,
+      child: InkWell(
+        // onTap: () => pickImage(context);
+
+        onTap: () => pickImage(context),
+
+        //onTap: () {
+        //  Navigator.of(context)
+        //   .push(MaterialPageRoute(builder: (_) => chooseFile));
+        //},
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          height: 90,
+          child: Center(
+              child: new Text("ส่งสลิปโอนเงิน",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: mainButton,
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              borderRadius: BorderRadius.circular(9.0)),
+        ),
+      ),
+    );
+
+    Widget saveButton = Positioned(
+      left: MediaQuery.of(context).size.width / 4,
+      bottom: 1,
+      child: InkWell(
+        onTap: () async {
+          //Navigator.of(context)
+          //    .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          //onPressed: () {
+
+          if (data['bankaccount'] == "") {
+            showMessageBox(
+                context, "Error", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
+                actions: [dismissButton(context)]);
+            logger.e("bank account can't be null");
+          } else if (tradeamount.text == null) {
+            showMessageBox(context, "Error", "กรูณากรอกจำนวนเงิน",
+                actions: [dismissButton(context)]);
+            logger.e("amount can't be null");
+          } else if (double.parse(tradeamount.text) < 100) {
+            showMessageBox(context, "Error", "ลงทุนขั้นต่ำ 100 บาท",
+                actions: [dismissButton(context)]);
+            logger.e("amount over 100");
+          } else if (imageUrl == null) {
+            showMessageBox(context, "Error", "กรุณา upload สลิปโอนเงิน",
+                actions: [dismissButton(context)]);
+            logger.e("Transfer money slip");
+          } else {
+            //var myDouble = double.parse('amount');
+            //amtval = myDouble;
+            var myamt = double.parse(tradeamount.text);
+            bool active = false;
+            //String covertdate = getdate.toString();
+            //var inputDate = outputDateFormat.parse(covertdate);
+            DateTime now = DateTime.now();
+            DateTime serverdate = await NTP.now();
+            String formatdate = DateFormat('dd/MM/yyyy').format(serverdate);
+
+            // if formatdate.compareTo(now);
+            /*
+            DateTime startDate = DateTime.parse(service_start_date);
+            DateTime endDate = DateTime.parse(service_end_date);
+            DateTime now = DateTime.now();
+  
+            print('now: $now');
+            print('startDate: $startDate');
+            print('endDate: $endDate');
+            print(startDate.isBefore(now));
+            print(endDate.isAfter(now));
+            */
+
+            addMoneyItem(
+                context,
+                {
+                  "name": data['name'], //nametxt,
+                  "amount": myamt, //amount.text,
+                  "active": active, //"false",
+                  "bankname": data['bankname'], //banknamedis,
+                  "bankaccount": data['bankaccount'], //bankaccountdis,
+                  "uid": userID,
+                  "createdAt": FieldValue.serverTimestamp(),
+                  "updatedAt": FieldValue.serverTimestamp(),
+                  "paymentamt": 0,
+                  "payment": false,
+                  "sumtotal": myamt,
+                  "datestamp": formatdate,
+                  "dateint": formatdate,
+                  "picurl": imageUrl,
+                  "paytype": 1, // 1 = ฝาก , 2 = ถอน , 3 ลงทุน , 4 แนะนำเพื่อน
+                  "mobile": data['mobile'],
+                },
+                userID);
+            tradeamount.text = "";
+            //--- Update total ----
+            //updateTotal();
+
+          }
+        }, //},
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          height: 80,
+          child: Center(
+              child: new Text("สั่งสินค้า",
+                  style: const TextStyle(
+                      color: const Color(0xfffefefe),
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20.0))),
+          decoration: BoxDecoration(
+              gradient: mainButton,
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
+                  offset: Offset(0, 5),
+                  blurRadius: 10.0,
+                )
+              ],
+              borderRadius: BorderRadius.circular(9.0)),
+        ),
+      ),
+    );
+
+    Widget registerForm = Container(
+      height: 400,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: 280,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 0.8),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: tradeamount,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(hintText: 'กรอกยอดเงินโอน'),
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+
+                /*
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: password,
+                    style: TextStyle(fontSize: 16.0),
+                    obscureText: true,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: cmfPassword,
+                    style: TextStyle(fontSize: 16.0),
+                    obscureText: true,
+                  ),
+                ),
+                */
+              ],
+            ),
+          ),
+          picView,
+          uploadButton,
+          saveButton,
+        ],
+      ),
+    );
+
+    Widget socialRegister = Column(
+      children: <Widget>[
+        Text(
+          'You can sign in with',
+          style: TextStyle(
+              fontSize: 12.0, fontStyle: FontStyle.italic, color: Colors.white),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.find_replace),
+              onPressed: () {},
+              color: Colors.white,
+            ),
+            IconButton(
+                icon: Icon(Icons.find_replace),
+                onPressed: () {},
+                color: Colors.white),
+          ],
+        )
+      ],
+    );
+
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        // color: Colors.grey,
+        child: Stack(
+          // alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/background.jpg'),
+                        fit: BoxFit.cover)),
+              ),
+            ),
+            Padding(
+              //padding: EdgeInsets.only(
+              //    bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: const EdgeInsets.only(left: 28.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    title,
+                    subTitle,
+                    picProduct,
+                    registerForm,
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 35,
+              left: 5,
+              child: IconButton(
+                color: Colors.white,
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
+}
+
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  throw UnimplementedError();
 }
