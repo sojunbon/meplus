@@ -1,4 +1,3 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/providers/add_money_service.dart';
@@ -12,20 +11,13 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
 //import 'package:meplus/screens/meplussrc/package/components/refer_control.dart';
-import 'package:meplus/screens/meplussrc/products/product_detail.dart';
-import 'package:meplus/models/newproduct.dart';
 
-class Meproducts extends StatefulWidget {
-  final Newproduct newproduct;
-  Meproducts({Key key, this.newproduct}) : super(key: key);
+class OrderlistAdmin extends StatefulWidget {
   @override
-  _Meproducts createState() => _Meproducts(newproduct);
+  _OrderlistAdmin createState() => _OrderlistAdmin();
 }
 
-class _Meproducts extends State<Meproducts> {
-  final Newproduct newproduct;
-
-  _Meproducts(this.newproduct);
+class _OrderlistAdmin extends State<OrderlistAdmin> {
   String userID = "";
   //bool _value = false;
   bool isSwitch = false;
@@ -46,9 +38,6 @@ class _Meproducts extends State<Meproducts> {
   var fcount_percent;
   var fcount_refer;
   var fcount;
-
-  var bankname_trans;
-  var bankacct_trans;
 
   FirebaseUser currentUser;
 
@@ -90,11 +79,9 @@ class _Meproducts extends State<Meproducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Colors.white, //Color.fromRGBO(0, 0, 0, 128), //Colors.amber,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.amber,
-        // backgroundColor: Colors.white, // Colors.transparent,
+        backgroundColor: Colors.amber, // Colors.transparent,
         shape: CustomShapeBorder(),
 
         elevation: 0.0,
@@ -109,7 +96,7 @@ class _Meproducts extends State<Meproducts> {
         ],
         //title: Text("รายการ"),
         title: Text(
-          'รายการสินค้า',
+          'รายการ สั่งซื้อสินค้า',
           style: TextStyle(
               color: darkGrey, fontWeight: FontWeight.w500, fontSize: 18.0),
         ),
@@ -129,8 +116,8 @@ class ProjectList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection('products')
-          .where("active", isEqualTo: true)
+          .collection('orders')
+          //.where("active", isEqualTo: false)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
@@ -153,23 +140,27 @@ class ExpansionTileList extends StatelessWidget {
 
   List<Widget> _getChildren() {
     List<Widget> children = [];
-
-    List<Widget> product = [];
-    List<Newproduct> newproduct = [];
-    //final Newproduct newproduct ;
-
     documents.forEach((doc) {
-      newproduct
-          .add(Newproduct(doc['picurl'], doc['productdesc'], doc['price']));
+      if (doc['paytype'] == 5) {
+        displayType = 'สั่งสินค้า';
+      } else {
+        displayType = 'กำลังส่งสินค้า';
+      }
+
       children.add(
         ProjectsExpansionTile(
-          name: doc['productdesc'],
+          name: doc['name'],
+          address: doc['address'],
           projectKey: doc.documentID,
-          amount: doc['price'],
+          amount: doc['amount'],
+          gettype: displayType,
+          bankname: doc['bankname'],
+          bankaccount: doc['bankaccount'],
           picurl: doc['picurl'],
+          productpicurl: doc['productpicurl'],
+          mobile: doc['mobile'],
           getdocuments: doc,
           firestore: firestore,
-          newproduct: newproduct,
         ),
       );
     });
@@ -188,19 +179,25 @@ class ProjectsExpansionTile extends StatelessWidget {
   ProjectsExpansionTile(
       {this.projectKey,
       this.name,
+      this.address,
       this.amount,
+      this.gettype,
+      this.bankname,
+      this.bankaccount,
       this.picurl,
+      this.productpicurl,
+      this.mobile,
       this.getdocuments,
-      this.firestore,
-      this.newproduct});
+      this.firestore});
 
   final String projectKey;
   final String name;
-  final List newproduct;
-  //final Newproduct newproduct;
-  //List<Newproduct> newproduct;
-
+  final String address;
+  final String bankname;
+  final String bankaccount;
   final String picurl;
+  final String productpicurl;
+  final String mobile;
   var amount;
   var gettype;
   final FirebaseAuth firestore;
@@ -216,8 +213,9 @@ class ProjectsExpansionTile extends StatelessWidget {
 
     PageStorageKey _projectKey = PageStorageKey('$projectKey');
     var getprjkey = _projectKey;
-    String dockid = projectKey;
+
     String getpic;
+    String productpic;
 
     //  child: Image.asset('assets/icons/10 usd.png'),
     if (picurl == null) {
@@ -226,53 +224,64 @@ class ProjectsExpansionTile extends StatelessWidget {
       getpic = picurl;
     }
 
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Product_detail(
-                      dockid,
-                      //newproduct: newproduct,
-                    )));
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    if (productpicurl == null) {
+      productpic = "assets/whitepaper.png";
+    } else {
+      productpic = productpicurl;
+    }
+
+    return Card(
+      child: ExpansionTile(
+        key: _projectKey,
+        title: Text(
+          "ชื่อ : " + name,
+          style: TextStyle(fontSize: 15.0),
+        ),
+        subtitle: Text(
+          gettype + " ราคา : " + amount.toString(),
+          style: TextStyle(fontSize: 15.0),
+        ),
         children: <Widget>[
-          Container(
-              height: 300,
-              width: 300,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage(getpic)))),
-          FractionalTranslation(
-            translation: Offset(0, -0.5),
-            child: Container(
-              width: 160,
-              height: 70,
-              child: Center(
-                  child: Text(
-                amount.toString() + ' ฿',
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              )),
-              decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(width: 5, color: Colors.white)),
+          ListTile(
+            title: Text(
+              "ที่อยู่ : " + address,
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
-          FractionalTranslation(
-            translation: Offset(0, -1),
-            child: Text(
-              name,
-              style: TextStyle(
-                  color: Colors.redAccent,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28),
+          ListTile(
+            title: Text(
+              "เบอร์โทรศัพท์ : " + mobile,
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Ink.image(
+              image: NetworkImage(getpic),
+              // fit: BoxFit.cover,
+              width: 250,
+              height: 250,
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Ink.image(
+              image: NetworkImage(productpic),
+              // fit: BoxFit.cover,
+              width: 150,
+              height: 150,
+            ),
+          ),
+          ListTile(
+            trailing: new Switch(
+              activeTrackColor: Colors.green,
+              activeColor: Colors.white,
+              inactiveTrackColor: Colors.grey,
+              value: dynamicSwitch == null ? false : dynamicSwitch,
+              onChanged: (bool value) {
+                var isSwitch = value;
+                handleSwitch(isSwitch, projectKey, getdocuments, context);
+              },
             ),
           ),
         ],
@@ -289,7 +298,7 @@ class ProjectsExpansionTile extends StatelessWidget {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     var attendanceCollection = Firestore.instance
-        .collection('moneytrans')
+        .collection('orders')
         .document(docid)
         .collection(docid);
     var documentId = docid.toString();
@@ -300,12 +309,12 @@ class ProjectsExpansionTile extends StatelessWidget {
     Firestore.instance.runTransaction((transaction) async {
       DocumentSnapshot snapshot = await transaction.get(documents.reference);
       await transaction.update(snapshot.reference, {"active": value});
-      await updateTotal(snapshot.data['uid']);
+      //await updateTotal(snapshot.data['uid']);
     });
     // --- insert data รายการ trade ---
 
-    generateData(context, docid, documents);
-    generateReferFriend(context, docid, user.uid, documents);
+    //generateData(context, docid, documents);
+    //generateReferFriend(context, docid, user.uid, documents);
     // genReferFriend(context, docid, user.uid, documents);
   }
 

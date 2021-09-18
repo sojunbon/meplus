@@ -6,6 +6,35 @@ import 'package:meplus/providers/logger_service.dart';
 import 'package:ntp/ntp.dart';
 import 'package:meplus/components/show_notification.dart';
 
+// ----- Add  -------
+Future<void> addProductItem(
+    BuildContext context, Map<String, dynamic> data, String documentName) {
+  //var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
+
+  DateTime now = DateTime.now();
+  //String formattedDate = DateFormat('kk:mm:ss').format(now);
+  String txttime = (now.hour.toString() +
+      ":" +
+      now.minute.toString() +
+      ":" +
+      now.second.toString());
+  //String autodoc = documentName + txttime;
+  return Firestore.instance
+      .collection("orders")
+      .document()
+      //.document(autodoc)
+      //.collection("users")
+      //.document()
+      //.document(autodoc)
+      .setData(data)
+      .then((returnData) {
+    showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
+    logger.i("setData success");
+  }).catchError((e) {
+    logger.e(e);
+  });
+}
+
 // ----- Add moneytrans PACKAGE -------
 Future<void> addItem(
     BuildContext context, Map<String, dynamic> data, String documentName) {

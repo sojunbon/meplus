@@ -23,8 +23,10 @@ import 'dart:async';
 import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/models/useritem.dart';
 import 'package:meplus/screens/authen/register_page.dart';
-import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
+//import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
 //import 'forgot_password_page.dart';
+
+import 'package:meplus/screens/meplussrc/products/components/product_control.dart';
 
 class Product_detail extends StatefulWidget {
   FirebaseUser user;
@@ -70,7 +72,10 @@ class _Product_detail extends State<Product_detail> {
 
   var price;
   var desc;
-  var picurl;
+  var picurlitem;
+
+  var bankname_trans;
+  var bankacct_trans;
 
   String formatdate;
 
@@ -133,6 +138,8 @@ class _Product_detail extends State<Product_detail> {
         descb = datadesc['descb'];
         descc = datadesc['descc'];
         descd = datadesc['descd'];
+        bankname_trans = datadesc['bankname'];
+        bankacct_trans = datadesc['bankaccount'];
       });
     });
   }
@@ -147,7 +154,7 @@ class _Product_detail extends State<Product_detail> {
       setState(() {
         picdat = getsnapshot.data;
 
-        picurl = picdat['picurl'];
+        picurlitem = picdat['picurl'];
         desc = picdat['productdesc'];
         price = picdat['price'];
       });
@@ -228,14 +235,14 @@ class _Product_detail extends State<Product_detail> {
     String getpic;
 
     //  child: Image.asset('assets/icons/10 usd.png'),
-    if (picurl == null) {
+    if (picurlitem == null) {
       getpic = "assets/whitepaper.png";
     } else {
-      getpic = picurl;
+      getpic = picurlitem;
     }
 
     Widget title = Text(
-      '\n' + '\nรายละเอียดสินค้า',
+      '\n' + '\nสั่งซื้อสินค้า',
       style: TextStyle(
           color: Colors.white,
           fontSize: 30.0,
@@ -283,10 +290,16 @@ class _Product_detail extends State<Product_detail> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-                height: 300,
-                width: 300,
+                height: 280,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 32.0, right: 12.0),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
+                    color: Color.fromRGBO(255, 255, 255, 0.8),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10)),
+                    //decoration: BoxDecoration(
+                    //    borderRadius: BorderRadius.circular(25),
                     image: DecorationImage(
                         fit: BoxFit.cover, image: NetworkImage(getpic)))),
             FractionalTranslation(
@@ -405,31 +418,18 @@ class _Product_detail extends State<Product_detail> {
       bottom: 1,
       child: InkWell(
         onTap: () async {
-          //Navigator.of(context)
-          //    .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-          //onPressed: () {
-
-          if (data['bankaccount'] == "") {
-            showMessageBox(
-                context, "Error", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
-                actions: [dismissButton(context)]);
-            logger.e("bank account can't be null");
-          } else if (tradeamount.text == null) {
-            showMessageBox(context, "Error", "กรูณากรอกจำนวนเงิน",
-                actions: [dismissButton(context)]);
-            logger.e("amount can't be null");
-          } else if (double.parse(tradeamount.text) < 100) {
-            showMessageBox(context, "Error", "ลงทุนขั้นต่ำ 100 บาท",
-                actions: [dismissButton(context)]);
-            logger.e("amount over 100");
-          } else if (imageUrl == null) {
+          if (imageUrl == null) {
             showMessageBox(context, "Error", "กรุณา upload สลิปโอนเงิน",
                 actions: [dismissButton(context)]);
             logger.e("Transfer money slip");
+          } else if (data['address'] == null) {
+            showMessageBox(context, "Error", "กรุณา กรอกที่อยู่ จัดส่งสินค้า",
+                actions: [dismissButton(context)]);
+            logger.e("Transfer product");
           } else {
             //var myDouble = double.parse('amount');
             //amtval = myDouble;
-            var myamt = double.parse(tradeamount.text);
+            //var myamt = double.parse(tradeamount.text);
             bool active = false;
             //String covertdate = getdate.toString();
             //var inputDate = outputDateFormat.parse(covertdate);
@@ -437,41 +437,30 @@ class _Product_detail extends State<Product_detail> {
             DateTime serverdate = await NTP.now();
             String formatdate = DateFormat('dd/MM/yyyy').format(serverdate);
 
-            // if formatdate.compareTo(now);
-            /*
-            DateTime startDate = DateTime.parse(service_start_date);
-            DateTime endDate = DateTime.parse(service_end_date);
-            DateTime now = DateTime.now();
-  
-            print('now: $now');
-            print('startDate: $startDate');
-            print('endDate: $endDate');
-            print(startDate.isBefore(now));
-            print(endDate.isAfter(now));
-            */
-
-            addMoneyItem(
+            addProductItem(
                 context,
                 {
                   "name": data['name'], //nametxt,
-                  "amount": myamt, //amount.text,
+                  "address": data['address'],
+                  "amount": price,
                   "active": active, //"false",
                   "bankname": data['bankname'], //banknamedis,
                   "bankaccount": data['bankaccount'], //bankaccountdis,
                   "uid": userID,
                   "createdAt": FieldValue.serverTimestamp(),
                   "updatedAt": FieldValue.serverTimestamp(),
-                  "paymentamt": 0,
+                  "productid": dockey,
                   "payment": false,
-                  "sumtotal": myamt,
                   "datestamp": formatdate,
                   "dateint": formatdate,
                   "picurl": imageUrl,
-                  "paytype": 1, // 1 = ฝาก , 2 = ถอน , 3 ลงทุน , 4 แนะนำเพื่อน
+                  "productpicurl": getpic,
+                  "paytype":
+                      5, // 1 = ฝาก , 2 = ถอน , 3 ลงทุน , 4 แนะนำเพื่อน , 5 สั่งซื้อสินค้า
                   "mobile": data['mobile'],
                 },
                 userID);
-            tradeamount.text = "";
+            //tradeamount.text = "";
             //--- Update total ----
             //updateTotal();
 
@@ -517,6 +506,7 @@ class _Product_detail extends State<Product_detail> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                /*
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
@@ -526,7 +516,7 @@ class _Product_detail extends State<Product_detail> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ),
-
+                */
                 /*
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),

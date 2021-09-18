@@ -38,6 +38,7 @@ import 'package:meplus/screens//meplussrc/profilepage/profile_page.dart';
 import 'package:meplus/screens/meplussrc/products/product_page.dart';
 
 import 'package:meplus/screens/meplussrc/products/meproducts.dart';
+import 'package:meplus/screens/meplussrc/products/orders_list.dart';
 
 class MemainPage extends StatefulWidget {
   final FirebaseUser user;
@@ -249,7 +250,7 @@ class _MainPageState extends State<MemainPage>
             Meplusmain(), //Melink(), //MeCategoryListPage(),
             Topuplist(), //CategoryListPage(),
             Meproducts(), //CategoryListPage(),
-            Paymentlist(), //CheckOutPage(),
+            Orderlist(), //Paymentlist(), //CheckOutPage(),
             ProfilePage()
           ],
         ),

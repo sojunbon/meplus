@@ -12,6 +12,8 @@ import 'package:meplus/services/usermngmt.dart';
 import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 
+import 'package:meplus/screens/meplussrc/profilepage/address_name.dart';
+
 class SettingsPage extends StatelessWidget {
   UserManagement userObj = new UserManagement();
 
@@ -45,7 +47,7 @@ class SettingsPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Padding(
+                            /*Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: Text(
                                 'General',
@@ -90,6 +92,7 @@ class SettingsPage extends StatelessWidget {
                               leading: Image.asset('assets/icons/about_us.png'),
                               onTap: () {},
                             ),
+                            */
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -102,6 +105,14 @@ class SettingsPage extends StatelessWidget {
                               ),
                             ),
                             ListTile(
+                              title: Text('ที่อยู่'),
+                              leading: Image.asset('assets/icons/address.png'),
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) => Address_name())),
+                            ),
+                            /*
+                            ListTile(
                               title: Text('Change Password'),
                               leading:
                                   Image.asset('assets/icons/change_pass.png'),
@@ -109,6 +120,7 @@ class SettingsPage extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (_) => ChangePasswordPage())),
                             ),
+                            */
                             ListTile(
                               title: Text('Sign out'),
                               leading: Image.asset('assets/icons/sign_out.png'),

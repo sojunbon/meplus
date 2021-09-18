@@ -9,6 +9,7 @@ import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:meplus/screens/meplussrc/package/paymentlist_admin.dart';
 import 'package:meplus/screens/meplussrc/adminpage/configtab.dart';
 import 'package:meplus/screens/meplussrc/products/add_products.dart';
+import 'package:meplus/screens/meplussrc/products/orders_list_admin.dart';
 
 class AdminPage extends StatefulWidget {
   //final FirebaseUser user;
@@ -52,7 +53,7 @@ class _AdminPage extends State<AdminPage> {
             Topupmoney(),
             Paymentlist(),
             Addproducts(), //Topupmoney(),
-            Topupmoney(),
+            OrderlistAdmin(), //Topupmoney(),
             Configtab(),
 
             //Historyadmin(),
@@ -84,7 +85,7 @@ class _AdminPage extends State<AdminPage> {
           BottomNavyBarItem(
               title: Text('เพิ่มสินค้า'), icon: Icon(Icons.assessment)),
           BottomNavyBarItem(
-              title: Text('Payment history'), icon: Icon(Icons.accessibility)),
+              title: Text('คำสั่งซื้อ'), icon: Icon(Icons.accessibility)),
           BottomNavyBarItem(
               title: Text('เพิ่มข่าวสาร'),
               icon: Icon(Icons.business_center_rounded)),
