@@ -12,6 +12,7 @@ import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/my_app.dart';
 import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
+import 'package:nice_button/NiceButton.dart';
 import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
@@ -59,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String getMobile;
   DocumentSnapshot snapshotphone;
   String checkphoneExist;
-
+  var firstColor = Color(0xffCCCC00), secondColor = Color(0xffCCCC00);
   @override
   void initState() {
     super.initState();
@@ -241,67 +242,6 @@ class _RegisterPageState extends State<RegisterPage> {
           disphone = mobilestr.text;
           disrefer = phonereferstr.text;
 
-          // เช็คเบอร์ลงทะเบียนซ้ำ
-          //String checkphone = Referfriend_control();
-          //String checkphone =
-          //    (context.watch<Referfriend_control>().checkPhone(disphone));
-          //context.read<Referfriend>().checkMobile(disphone) as String;
-
-          /*
-          Firestore.instance
-              .collection('users')
-              .where("mobile", isEqualTo: disphone)
-              .snapshots()
-              .listen((snapshot) {
-            snapshot.documents.forEach((result) {
-              getmobile = result.data['mobile'];
-            });
-          });
-          */
-
-          /*
-          FutureBuilder(
-            future: getmobie(disphone),
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  getmobile = snapshot.data.documents[0].data['mobile'];
-                  //Center(child: Text('data loaded'));
-                }
-              } else if (snapshot.hasError) {
-                Text('no data');
-              }
-              return CircularProgressIndicator();
-            },
-          );
-          */
-
-          //if (data['mobile'] == disphone) {
-          //  showMessageBox(context, "Error", "หมายเลขนี้",
-          //      actions: [dismissButton(context)]);
-          //  logger.e("bank account can't be null");
-          //}
-          /*
-          if (getmobile == disphone) {
-            showAlertMobile(context);
-          } else {
-            registerThread(dismail, dispass, disname, disbank, disacct,
-                disphone, disrefer);
-          }
-          */
-
-          //FutureBuilder(builder: (BuildContext context, snapshot) {
-          //generateReferFriend(disphone, disrefer);
-          //});
-
-          // เช็คค่าซ้ำเบอร์โทรศัพท์
-          //getDataPhone(disphone);
-          //checkphoneExist = snapshotphone["mobile"];
-
           registerThread(
               dismail, dispass, disname, disbank, disacct, disphone, disrefer);
         },
@@ -315,6 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
                       fontSize: 20.0))),
+          /*
           decoration: BoxDecoration(
               gradient: mainButton,
               boxShadow: [
@@ -325,6 +266,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 )
               ],
               borderRadius: BorderRadius.circular(9.0)),
+              */
         ),
       ),
     );
@@ -405,7 +347,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: passwordString,
-                    decoration: InputDecoration(hintText: 'รหัสผ่าน'),
+                    decoration:
+                        InputDecoration(hintText: 'รหัสผ่าน 6 ตัวอักษร'),
                     style: TextStyle(fontSize: 16.0),
                     obscureText: true,
                   ),
@@ -560,6 +503,33 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                ),
+
+                NiceButton(
+                  radius: 40,
+                  padding: const EdgeInsets.all(8),
+                  text: "บันทึก",
+                  gradientColors: [secondColor, firstColor],
+                  onPressed: () {
+                    print(
+                        'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString , bankname = $selectbankname , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
+
+                    // --- convert TextEditingController ---
+                    disname = nameString.text;
+                    dismail = emailString.text;
+                    dispass = passwordString.text;
+                    disbank = selectbankname;
+                    //banknamestr.text;
+                    disacct = bankacctstr.text;
+                    disphone = mobilestr.text;
+                    disrefer = phonereferstr.text;
+
+                    registerThread(dismail, dispass, disname, disbank, disacct,
+                        disphone, disrefer);
+                  },
+                ),
               ],
             ),
           ),
@@ -596,6 +566,7 @@ class _RegisterPageState extends State<RegisterPage> {
     //  onWillPop: () async => false,
     // child: new Scaffold(
     // ปิดใช้งานหรือแทนที่ปุ่ม "ย้อนกลับ" ของ Android
+
     return Scaffold(
       key: formKey,
       body: Container(
@@ -627,10 +598,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     //subTitle,
                     //Spacer(flex: 2),
                     registerForm,
-                    //Spacer(flex: 1),
-                    registerButton,
-                    //DropDown,
-                    //Spacer(),
+                    //socialRegister,
+                    //registerButton,
                   ],
                 ),
               ),
@@ -639,6 +608,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+
     // ---- End Scaffold ----
   }
 
