@@ -33,6 +33,8 @@ import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:meplus/screens/meplussrc/package/withdraw_money.dart';
+import 'package:meplus/screens/meplussrc/products/meproducts.dart';
+import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -267,80 +269,88 @@ class _Meplusmain extends State<Meplusmain> {
     );
 
     Widget showDesc = Positioned(
-        child: new Container(
-      alignment: AlignmentDirectional.center,
-      child: Container(
-        width: 380,
         height: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(
-                image: AssetImage(
-                    'assets/card.jpg'), //NetworkImage("https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
-                fit: BoxFit.fill)),
-        child: ListView(children: <Widget>[
-          Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   คุณ : " +
-                  displayname +
-                  "  ยอดเงินลงทุน : " +
-                  sumtotal.toString()),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   "),
-            ),
-            //Align(
-            //  alignment: Alignment.topLeft,
-            //  child: Text("   "),
-            //),
-            //Align(
-            //  alignment: Alignment.topLeft,
-            //  child: Text("   ยอดเงินลงทุน"),
-            //),
-            //Align(
-            //  alignment: Alignment.topLeft,
-            //  child: Text("     " + sumtotal.toString()),
-            //),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   "),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   ยอดเงินที่จะได้รับ"),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "       " + sumpayment.toString(),
-                style: (TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.pinkAccent)),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("   ยอดเงินที่โอนแล้ว"),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "       " + sumdibpayment.toString(),
-                style: (TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.cyan)),
-              ),
-            ),
-          ])
-        ]),
-      ),
-    ));
+        width: 380,
+        left: 15,
+        //right: 0,
+        //bottom: 50,
+        top: 70,
+        child: new Container(
+          alignment: AlignmentDirectional.center,
+          child: Container(
+            width: 380,
+            height: 200,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage(
+                        'assets/card.jpg'), //NetworkImage("https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
+                    fit: BoxFit.fill)),
+            child: ListView(children: <Widget>[
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("   คุณ : " +
+                          displayname +
+                          "  ยอดเงินลงทุน : " +
+                          sumtotal.toString()),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("   "),
+                    ),
+                    //Align(
+                    //  alignment: Alignment.topLeft,
+                    //  child: Text("   "),
+                    //),
+                    //Align(
+                    //  alignment: Alignment.topLeft,
+                    //  child: Text("   ยอดเงินลงทุน"),
+                    //),
+                    //Align(
+                    //  alignment: Alignment.topLeft,
+                    //  child: Text("     " + sumtotal.toString()),
+                    //),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("   "),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("   ยอดเงินที่จะได้รับ"),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "       " + sumpayment.toString(),
+                        style: (TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.pinkAccent)),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("   ยอดเงินที่โอนแล้ว"),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "       " + sumdibpayment.toString(),
+                        style: (TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.cyan)),
+                      ),
+                    ),
+                  ])
+            ]),
+          ),
+        ));
 
     Widget packageLinkk = Positioned(
       child: InkWell(
@@ -439,6 +449,12 @@ class _Meplusmain extends State<Meplusmain> {
       ), // button third
     );
     Widget packageLink = Positioned(
+      //height: 200,
+      //width: 380,
+      left: 30,
+      //right: 0,
+      //bottom: 50,
+      top: 280,
       child: InkWell(
         //will break to another line on overflow
         //direction: Axis.horizontal, //use vertical to show  on vertical axis
@@ -492,6 +508,12 @@ class _Meplusmain extends State<Meplusmain> {
     );
 
     Widget showCard = Positioned(
+      //height: 200,
+      //width: 380,
+      left: 20,
+      //right: 0,
+      //bottom: 50,
+      top: 350,
       child: InkWell(
         //will break to another line on overflow
         //direction: Axis.horizontal, //use vertical to show  on vertical axis
@@ -499,7 +521,7 @@ class _Meplusmain extends State<Meplusmain> {
           child: Column(children: <Widget>[
             Container(
               //margin: const EdgeInsets.all(30.0),
-              //padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               //decoration: myBoxDecoration(),
               /*
               margin: EdgeInsets.symmetric(vertical: 16.0),
@@ -527,6 +549,7 @@ class _Meplusmain extends State<Meplusmain> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         new Container(
+                          width: MediaQuery.of(context).size.width / 4,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -538,15 +561,18 @@ class _Meplusmain extends State<Meplusmain> {
                                 BoxShadow(
                                     color: transparentYellow,
                                     blurRadius: 4,
-                                    spreadRadius: 1,
+                                    spreadRadius: 2,
                                     offset: Offset(0, 1))
                               ]),
                           height: 80,
-                          width: 80,
+                          //width: 80,
                           child: IconButton(
+                            //padding: EdgeInsets.zero,
+                            //padding: const EdgeInsets.all(16.0),
                             icon: Image.asset('assets/icons/carts.png'),
                             onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => MainPage())),
+                                MaterialPageRoute(
+                                    builder: (_) => Meproducts())),
                           ),
 
                           //Text(
@@ -564,10 +590,12 @@ class _Meplusmain extends State<Meplusmain> {
                         ),
                       ],
                     ),
+                    SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         new Container(
+                          width: MediaQuery.of(context).size.width / 4,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -579,12 +607,14 @@ class _Meplusmain extends State<Meplusmain> {
                                 BoxShadow(
                                     color: transparentYellow,
                                     blurRadius: 4,
-                                    spreadRadius: 1,
+                                    spreadRadius: 2,
                                     offset: Offset(0, 1))
                               ]),
                           height: 80,
-                          width: 80,
+                          //width: 80,
                           child: IconButton(
+                            //padding: EdgeInsets.zero,
+                            //padding: const EdgeInsets.all(16.0),
                             icon: Image.asset('assets/icons/exchange.png'),
                             onPressed: () => Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => Package())),
@@ -605,10 +635,12 @@ class _Meplusmain extends State<Meplusmain> {
                         ),
                       ],
                     ),
+                    SizedBox(width: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         new Container(
+                          width: MediaQuery.of(context).size.width / 4,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -620,15 +652,18 @@ class _Meplusmain extends State<Meplusmain> {
                                 BoxShadow(
                                     color: transparentYellow,
                                     blurRadius: 4,
-                                    spreadRadius: 1,
+                                    spreadRadius: 2,
                                     offset: Offset(0, 1))
                               ]),
                           height: 80,
-                          width: 80,
+
+                          //width: 80,
                           child: IconButton(
+                            //padding: EdgeInsets.zero,
+                            //padding: const EdgeInsets.all(16.0),
                             icon: Image.asset('assets/icons/checklist.png'),
                             onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => MainPage())),
+                                MaterialPageRoute(builder: (_) => Topuplist())),
                           ),
 
                           //Text(
@@ -659,48 +694,66 @@ class _Meplusmain extends State<Meplusmain> {
       color: Color(0xffF9F9F9),
       // กำหนด --scroll view ทั้งหน้า  SingleChildScrollView
       child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(top: kToolbarHeight),
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Align(
-                alignment: Alignment(-1, 0),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text(
-                    'ME PLUS',
-                    style: TextStyle(
-                      color: darkGrey,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+        //padding: EdgeInsets.all(10),
+        child: Stack(
+          // margin: const EdgeInsets.only(top: kToolbarHeight),
+          // padding: EdgeInsets.symmetric(horizontal: 16.0),
+          // child: Column(
+          //  mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+                //margin: const EdgeInsets.only(top: kToolbarHeight),
+                //padding: EdgeInsets.symmetric(horizontal: 16.0),
+                //Column(
+                // mainAxisSize: MainAxisSize.min
+                ),
+            /*
+            Align(
+              alignment: Alignment(-1, 0),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 350.0),
+                //padding: EdgeInsets.all(10),
+                child: Text(
+                  '\n' + ' ME PLUS',
+                  style: TextStyle(
+                    color: darkGrey,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-
-              Container(
-                padding: EdgeInsets.only(left: 16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.white,
-                ),
+            ),
+            */
+            Align(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 350.0),
               ),
+            ),
+            /*
+            Container(
+              //margin: const EdgeInsets.only(top: kToolbarHeight),
+              //padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.only(left: 16.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.white,
+              ),
+            ),
+            */
+            //Spacer(flex: 2),
+            //SizedBox(height: 20),
+            showDesc,
+            //Spacer(flex: 1),
+            //SizedBox(height: 20),
+            packageLink,
 
-              showDesc,
-              //Spacer(flex: 1),
-              SizedBox(height: 20),
-              //packageLinkk,
-              packageLink,
+            //SizedBox(height: 20),
+            showCard,
 
-              SizedBox(height: 20),
-              showCard,
-
-              //showname,
-            ],
-          ),
+            //showname,
+          ],
         ),
+        //  ),
       ),
     );
     /*
