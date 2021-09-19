@@ -87,7 +87,7 @@ class _AdminPage extends State<AdminPage> {
           BottomNavyBarItem(
               title: Text('คำสั่งซื้อ'), icon: Icon(Icons.accessibility)),
           BottomNavyBarItem(
-              title: Text('เพิ่มข่าวสาร'),
+              title: Text('เงื่อนไข'),
               icon: Icon(Icons.business_center_rounded)),
           //BottomNavyBarItem(
           //    title: Text('ข่าวสาร'), icon: Icon(Icons.chat_bubble)),

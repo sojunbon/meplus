@@ -596,7 +596,7 @@ class _Admin_mainpage extends State<Admin_mainpage> {
               Align(
                 alignment: Alignment(-1, 0),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  padding: EdgeInsets.symmetric(vertical: 100.0),
                   child: Text(
                     'ADMIN',
                     style: TextStyle(

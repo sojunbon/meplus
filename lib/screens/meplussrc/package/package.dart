@@ -303,6 +303,7 @@ class _Package extends State<Package> {
       desc4 = descd;
     }
 
+/*
     Widget title = Text(
       '\n' + '\nPACKAGE',
       style: TextStyle(
@@ -317,7 +318,39 @@ class _Package extends State<Package> {
             )
           ]),
     );
+*/
 
+    Widget title = Positioned(
+      //padding: const EdgeInsets.only(right: 56.0),
+      //bottom: 0,
+      height: 150,
+      width: 380,
+      top: 50,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
+      child: InkWell(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FractionalTranslation(
+              translation: Offset(0, -0.5),
+              child: Container(
+                width: 500,
+                height: 100,
+                child: Center(
+                    child: Text(
+                  '\n' + '\nPACKAGE',
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.amberAccent,
+                      fontWeight: FontWeight.bold),
+                )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
 /*
     Widget subTitle = Padding(
       padding: const EdgeInsets.only(right: 56.0),
@@ -346,9 +379,14 @@ class _Package extends State<Package> {
       //left: MediaQuery.of(context).size.width / 4,
       // padding: const EdgeInsets.only(right: 56.0),
       //bottom: 190,
+      height: 500,
+      width: 380,
+      top: 120,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
       child: InkWell(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FractionalTranslation(
               translation: Offset(0, -1),
@@ -397,8 +435,12 @@ class _Package extends State<Package> {
 
     Widget showbank = Positioned(
       //padding: const EdgeInsets.only(right: 56.0),
-      bottom: 0,
-      left: MediaQuery.of(context).size.width / 4,
+      //bottom: 0,
+      height: 100,
+      width: 380,
+      top: 300,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
       child: InkWell(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -422,7 +464,7 @@ class _Package extends State<Package> {
                 decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(50),
-                    border: Border.all(width: 5, color: Colors.white)),
+                    border: Border.all(width: 5, color: Colors.amber)),
               ),
             ),
           ],
@@ -627,8 +669,13 @@ class _Package extends State<Package> {
       ),
     );
 
-    Widget registerForm = Container(
+    Widget registerForm = Positioned(
       height: 400,
+
+      width: 380,
+      top: 400,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
       child: Stack(
         children: <Widget>[
           Container(
@@ -705,43 +752,61 @@ class _Package extends State<Package> {
       ],
     );
 
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        // color: Colors.grey,
+    //return Scaffold(
+    return Material(
+      color: Colors.white,
+      // body: Container(
+      //height: MediaQuery.of(context).size.height,
+      //width: MediaQuery.of(context).size.width,
+      // color: Colors.grey,
+      child: SingleChildScrollView(
         child: Stack(
           // alignment: Alignment.center,
           children: <Widget>[
-            Positioned(
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/background.jpg'),
-                        fit: BoxFit.cover)),
+            /*
+          Positioned(
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/background.jpg'),
+                      fit: BoxFit.cover)),
+            ),
+          ),
+          */
+
+            Container(),
+            Align(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 420.0),
               ),
             ),
-            Padding(
-              //padding: EdgeInsets.only(
-              //    bottom: MediaQuery.of(context).viewInsets.bottom),
-              padding: const EdgeInsets.only(left: 28.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    title,
-                    subTitle,
-                    showbank,
-                    registerForm,
-                  ],
-                ),
+            title,
+            subTitle,
+            showbank,
+            registerForm,
+
+            /*       
+          Padding(
+            //padding: EdgeInsets.only(
+            //    bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: const EdgeInsets.only(left: 28.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  title,
+                  //subTitle,
+                  showbank,
+                  //registerForm,
+                ],
               ),
             ),
+          ),*/
             Positioned(
               top: 35,
               left: 5,
               child: IconButton(
-                color: Colors.white,
+                color: Colors.amberAccent,
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);
