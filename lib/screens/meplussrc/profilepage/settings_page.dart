@@ -123,7 +123,7 @@ class SettingsPage extends StatelessWidget {
                             */
                             ListTile(
                               title: Text('Sign out'),
-                              leading: Image.asset('assets/icons/sign_out.png'),
+                              leading: Image.asset('assets/icons/sign-out.png'),
                               onTap: () {
                                 Navigator.of(context).pop();
 
