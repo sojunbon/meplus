@@ -73,7 +73,8 @@ class _Addproducts extends State<Addproducts> {
 
   String imageUrl;
   Future pickImage(context) async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    //final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imageFile = File(pickedFile.path);
