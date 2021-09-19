@@ -342,7 +342,7 @@ class _Package extends State<Package> {
                   '\n' + '\nPACKAGE',
                   style: TextStyle(
                       fontSize: 25,
-                      color: Colors.amberAccent,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold),
                 )),
               ),
@@ -754,7 +754,7 @@ class _Package extends State<Package> {
 
     //return Scaffold(
     return Material(
-      color: Colors.white,
+      color: Colors.amber,
       // body: Container(
       //height: MediaQuery.of(context).size.height,
       //width: MediaQuery.of(context).size.width,
@@ -764,16 +764,15 @@ class _Package extends State<Package> {
           // alignment: Alignment.center,
           children: <Widget>[
             /*
-          Positioned(
-            child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/background.jpg'),
-                      fit: BoxFit.cover)),
+            Positioned(
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/background.jpg'),
+                        fit: BoxFit.cover)),
+              ),
             ),
-          ),
-          */
-
+            */
             Container(),
             Align(
               child: Padding(
@@ -806,7 +805,7 @@ class _Package extends State<Package> {
               top: 35,
               left: 5,
               child: IconButton(
-                color: Colors.amberAccent,
+                color: Colors.black,
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);

@@ -241,6 +241,7 @@ class _Product_detail extends State<Product_detail> {
       getpic = picurlitem;
     }
 
+    /*
     Widget title = Text(
       '\n' + '\nสั่งซื้อสินค้า',
       style: TextStyle(
@@ -255,34 +256,94 @@ class _Product_detail extends State<Product_detail> {
             )
           ]),
     );
+    */
 
-    Widget subTitle = Padding(
-        padding: const EdgeInsets.only(right: 56.0),
-        child: Text(
-          '',
-          //dockey ,
-          // widget.dockey,
-          // "${widget.dockey}",
-          //data['name'] +
-          //' รายละเอียดการลงทุน \n ฝาก 100 ปันผล 3.5 บาท/วัน \n ฝาก 1,000 ปันผล 35 บาท/วัน \n ฝาก 10,000 ปันผล 350 บาท/วัน \n ฝาก 100,000 ปันผล 3,500 บาท/วัน '
+    Widget title = Positioned(
+      //padding: const EdgeInsets.only(right: 56.0),
+      //bottom: 0,
+      height: 150,
+      width: 380,
+      top: 50,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
+      child: InkWell(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FractionalTranslation(
+              translation: Offset(0, -0.5),
+              child: Container(
+                width: 500,
+                height: 100,
+                child: Center(
+                    child: Text(
+                  '\n' + '\nสั่งซื้อสินค้า',
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
 
-          //'รายละเอียดการลงทุน \n' +
-          //    desc1 +
-          //    '\n' +
-          //    desc2 +
-          //    '\n' +
-          //    desc3 +
-          //    '\n' +
-          //    desc4,
-
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16.0,
-          ),
-        ));
+    Widget subTitle = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      // padding: const EdgeInsets.only(right: 56.0),
+      //bottom: 190,
+      height: 500,
+      width: 380,
+      top: 120,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
+      child: InkWell(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FractionalTranslation(
+              translation: Offset(0, -1),
+              child: Text(
+                '\n' + '\n' + '\n' + '\n' + '\n',
+                style: TextStyle(
+                    color: Colors.green,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+            /*
+            FractionalTranslation(
+              translation: Offset(0, -1),
+              child: Text(
+                'รายละเอียดการลงทุน \n' +
+                    desc1 +
+                    '\n' +
+                    desc2 +
+                    '\n' +
+                    desc3 +
+                    '\n' +
+                    desc4,
+                style: TextStyle(
+                    color: Colors.black,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+            */
+          ],
+        ),
+      ),
+    );
 
     Widget picProduct = Positioned(
-      left: MediaQuery.of(context).size.width / 4,
+      height: 500,
+      width: 380,
+      top: 120,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
+      // left: MediaQuery.of(context).size.width / 4,
 
       //bottom: 190,
       child: InkWell(
@@ -338,8 +399,12 @@ class _Product_detail extends State<Product_detail> {
 
     Widget showbank = Positioned(
       //padding: const EdgeInsets.only(right: 56.0),
-      bottom: 0,
-      left: MediaQuery.of(context).size.width / 4,
+      height: 100,
+      width: 380,
+      top: 550,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
+      //left: MediaQuery.of(context).size.width / 4,
       child: InkWell(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -523,8 +588,13 @@ class _Product_detail extends State<Product_detail> {
       ),
     );
 
-    Widget registerForm = Container(
+    Widget registerForm = Positioned(
       height: 400,
+
+      width: 380,
+      top: 600,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
       child: Stack(
         children: <Widget>[
           Container(
@@ -602,6 +672,73 @@ class _Product_detail extends State<Product_detail> {
       ],
     );
 
+    return Material(
+      color: Colors.amber,
+      // body: Container(
+      //height: MediaQuery.of(context).size.height,
+      //width: MediaQuery.of(context).size.width,
+      // color: Colors.grey,
+      child: SingleChildScrollView(
+        child: Stack(
+          // alignment: Alignment.center,
+          children: <Widget>[
+            /*
+          Positioned(
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/background.jpg'),
+                      fit: BoxFit.cover)),
+            ),
+          ),
+          */
+
+            Container(),
+            Align(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 520.0),
+              ),
+            ),
+            title,
+            subTitle,
+            picProduct,
+            showbank,
+            registerForm,
+
+            /*       
+          Padding(
+            //padding: EdgeInsets.only(
+            //    bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: const EdgeInsets.only(left: 28.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  title,
+                  //subTitle,
+                  showbank,
+                  //registerForm,
+                ],
+              ),
+            ),
+          ),*/
+            Positioned(
+              top: 35,
+              left: 5,
+              child: IconButton(
+                color: Colors.black,
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+    /*
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -650,6 +787,7 @@ class _Product_detail extends State<Product_detail> {
         ),
       ),
     );
+    */
   }
 }
 

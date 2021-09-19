@@ -270,7 +270,7 @@ class _Meplusmain extends State<Meplusmain> {
 
     Widget showDesc = Positioned(
         height: 200,
-        width: 380,
+        width: 370,
         left: 15,
         //right: 0,
         //bottom: 50,
@@ -278,7 +278,7 @@ class _Meplusmain extends State<Meplusmain> {
         child: new Container(
           alignment: AlignmentDirectional.center,
           child: Container(
-            width: 380,
+            width: 370,
             height: 200,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -510,7 +510,7 @@ class _Meplusmain extends State<Meplusmain> {
     Widget showCard = Positioned(
       //height: 200,
       //width: 380,
-      left: 20,
+      left: 15,
       //right: 0,
       //bottom: 50,
       top: 350,

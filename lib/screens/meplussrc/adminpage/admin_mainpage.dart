@@ -278,12 +278,18 @@ class _Admin_mainpage extends State<Admin_mainpage> {
     );
 
     Widget showCard = Positioned(
+      left: 15,
+      height: 200,
+      //right: 0,
+      //bottom: 50,
+      top: 150,
       child: InkWell(
         //will break to another line on overflow
         //direction: Axis.horizontal, //use vertical to show  on vertical axis
         child: Container(
           child: Column(children: <Widget>[
             Container(
+              padding: const EdgeInsets.all(10.0),
               //margin: const EdgeInsets.all(30.0),
               //padding: const EdgeInsets.all(10.0),
               //decoration: myBoxDecoration(),
@@ -351,6 +357,7 @@ class _Admin_mainpage extends State<Admin_mainpage> {
                         ),
                       ],
                     ),
+                    SizedBox(width: 30),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -386,13 +393,14 @@ class _Admin_mainpage extends State<Admin_mainpage> {
                           //),
                         ),
                         Text(
-                          'รายละเอียดการลงทุน',
+                          'การลงทุน',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
+                    SizedBox(width: 30),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -445,12 +453,17 @@ class _Admin_mainpage extends State<Admin_mainpage> {
     );
 
     Widget showCardtwo = Positioned(
+      left: 15,
+      //right: 0,
+      //bottom: 50,
+      top: 280,
       child: InkWell(
         //will break to another line on overflow
         //direction: Axis.horizontal, //use vertical to show  on vertical axis
         child: Container(
           child: Column(children: <Widget>[
             Container(
+              padding: const EdgeInsets.all(10.0),
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -587,51 +600,54 @@ class _Admin_mainpage extends State<Admin_mainpage> {
       color: Color(0xffF9F9F9),
       // กำหนด --scroll view ทั้งหน้า  SingleChildScrollView
       child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(top: kToolbarHeight),
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Align(
-                alignment: Alignment(-1, 0),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 100.0),
-                  child: Text(
-                    'ADMIN',
-                    style: TextStyle(
-                      color: darkGrey,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: Stack(
+          //margin: const EdgeInsets.only(top: kToolbarHeight),
+          //padding: EdgeInsets.symmetric(horizontal: 16.0),
+          //child: Column(
+          // mainAxisSize: MainAxisSize.min,
+
+          children: <Widget>[
+            Align(
+              alignment: Alignment(-1, 0),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 200.0),
+                /*
+                child: Text(
+                  '  ADMIN',
+                  style: TextStyle(
+                    color: darkGrey,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+                */
               ),
+            ),
 
-              Container(
-                padding: EdgeInsets.only(left: 16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.white,
-                ),
+            Container(
+              // padding: EdgeInsets.only(left: 16.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.white,
               ),
+            ),
 
-              //showDesc,
-              //Spacer(flex: 1),
-              SizedBox(height: 20),
-              //packageLinkk,
-              //packageLink,
+            //showDesc,
+            //Spacer(flex: 1),
+            //SizedBox(height: 20),
+            //packageLinkk,
+            //packageLink,
 
-              SizedBox(height: 20),
-              showCard,
-              SizedBox(height: 20),
-              showCardtwo,
+            //SizedBox(height: 20),
+            showCard,
+            //SizedBox(height: 20),
+            showCardtwo,
 
-              //showname,
-            ],
-          ),
+            //showname,
+          ],
         ),
       ),
+      // ),
     );
     /*
     return Scaffold(
