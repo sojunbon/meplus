@@ -44,6 +44,7 @@ import 'package:meplus/screens/meplussrc/adminpage/admin_mainpage.dart';
 import 'package:meplus/screens/meplussrc/adminpage/adddescription.dart';
 import 'package:meplus/screens/meplussrc/adminpage/bankpage.dart';
 import 'package:meplus/screens/meplussrc/adminpage/alltopup.dart';
+import 'package:meplus/screens/meplussrc/adminpage/pictureadd.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -496,6 +497,49 @@ class _Admin_mainpage extends State<Admin_mainpage> {
                         ),
                         Text(
                           'บัญชีธนาคาร',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 30),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: transparentYellow,
+                                    blurRadius: 4,
+                                    spreadRadius: 1,
+                                    offset: Offset(0, 1))
+                              ]),
+                          height: 80,
+                          width: 80,
+                          child: IconButton(
+                            icon: Image.asset('assets/icons/checklist.png'),
+                            onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (_) => Pictureadd())), //MainPage()
+                          ),
+
+                          //Text(
+                          //  'สินค้า',
+                          //  style: TextStyle(
+                          //    fontWeight: FontWeight.bold,
+                          //  ),
+                          //),
+                        ),
+                        Text(
+                          'ทดสอบรูป',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),

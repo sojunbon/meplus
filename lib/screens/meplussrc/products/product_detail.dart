@@ -341,7 +341,7 @@ class _Product_detail extends State<Product_detail> {
     Widget picProduct = Positioned(
       height: 500,
       width: 380,
-      top: 120,
+      top: 100,
       //left: MediaQuery.of(context).size.width / 4,
       left: 15,
       // left: MediaQuery.of(context).size.width / 4,
@@ -402,7 +402,7 @@ class _Product_detail extends State<Product_detail> {
       //padding: const EdgeInsets.only(right: 56.0),
       height: 100,
       width: 380,
-      top: 550,
+      top: 540,
       //left: MediaQuery.of(context).size.width / 4,
       left: 15,
       //left: MediaQuery.of(context).size.width / 4,
@@ -477,6 +477,30 @@ class _Product_detail extends State<Product_detail> {
     );
 
     Widget uploadButton = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 10,
+      top: 150,
+      //bottom: 0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 60.0),
+            child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.camera,
+                size: 30.0,
+              ),
+              onPressed: () {
+                pickImage(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    /*
+    Widget uploadButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 100,
       child: InkWell(
@@ -511,7 +535,7 @@ class _Product_detail extends State<Product_detail> {
         ),
       ),
     );
-
+  */
     Widget saveButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 1,
@@ -593,7 +617,7 @@ class _Product_detail extends State<Product_detail> {
       height: 400,
 
       width: 380,
-      top: 600,
+      top: 620,
       //left: MediaQuery.of(context).size.width / 4,
       left: 15,
       child: Stack(
@@ -697,7 +721,7 @@ class _Product_detail extends State<Product_detail> {
             Container(),
             Align(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 520.0),
+                padding: EdgeInsets.symmetric(vertical: 550.0),
               ),
             ),
             title,

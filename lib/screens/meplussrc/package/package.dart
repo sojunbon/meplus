@@ -120,6 +120,7 @@ class _Package extends State<Package> {
 
   String imageUrl;
   Future pickImage(context) async {
+    //Future pickImage() async {
     //final pickedFile = await picker.getImage(source: ImageSource.gallery);
     var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -127,9 +128,11 @@ class _Package extends State<Package> {
       _imageFile = File(pickedFile.path);
     });
     uploadImageToFirebase(context);
+    //uploadImageToFirebase();
   }
 
   Future uploadImageToFirebase(BuildContext context) async {
+    //Future uploadImageToFirebase() async {
     String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
@@ -534,8 +537,29 @@ class _Package extends State<Package> {
     );
 
     Widget uploadButton = Positioned(
-      left: MediaQuery.of(context).size.width / 4,
-      bottom: 100,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 10,
+      top: 150,
+      //bottom: 0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 60.0),
+            child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.camera,
+                size: 30.0,
+              ),
+              onPressed: () {
+                pickImage(context);
+                // pickImage();
+              },
+            ),
+          ),
+        ],
+      ),
+
+      /*
       child: InkWell(
         // onTap: () => pickImage(context);
 
@@ -566,7 +590,7 @@ class _Package extends State<Package> {
               ],
               borderRadius: BorderRadius.circular(9.0)),
         ),
-      ),
+      ),*/
     );
 
     Widget saveButton = Positioned(
@@ -876,8 +900,6 @@ Widget build(BuildContext context) {
   // TODO: implement build
   throw UnimplementedError();
 }
-
-
 
 /*
 import 'package:flutter/material.dart';

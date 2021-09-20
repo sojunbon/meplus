@@ -313,6 +313,7 @@ class _Addproducts extends State<Addproducts> {
       ),
     );
 
+    /*
     Widget uploadButton = Positioned(
       left: MediaQuery.of(context).size.width / 4,
       bottom: 60,
@@ -346,6 +347,30 @@ class _Addproducts extends State<Addproducts> {
               ],
               borderRadius: BorderRadius.circular(9.0)),
         ),
+      ),
+    );
+    */
+
+    Widget uploadButton = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 10,
+      top: 150,
+      //bottom: 0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 60.0),
+            child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.camera,
+                size: 30.0,
+              ),
+              onPressed: () {
+                pickImage(context);
+              },
+            ),
+          ),
+        ],
       ),
     );
 

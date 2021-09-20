@@ -8,6 +8,7 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
+
 dependencies:
   flutter:
     sdk: flutter
@@ -77,7 +78,8 @@ dependencies:
   #firebase_auth: ^0.18.1+2
   #splashscreen : 1.2.0
   #flutter_signin_button: ^1.0.0
-  image_picker: ^0.6.2+3
+  #image_picker: ^0.6.2+3
+  image_picker: ^0.6.7+11
   solid_bottom_sheet: ^0.1.10
   #image_picker_modern: ^0.4.12+2
   firebase_storage: ^3.1.6
