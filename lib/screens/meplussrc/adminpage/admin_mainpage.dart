@@ -45,6 +45,7 @@ import 'package:meplus/screens/meplussrc/adminpage/adddescription.dart';
 import 'package:meplus/screens/meplussrc/adminpage/bankpage.dart';
 import 'package:meplus/screens/meplussrc/adminpage/alltopup.dart';
 import 'package:meplus/screens/meplussrc/adminpage/pictureadd.dart';
+import 'package:meplus/screens/meplussrc/adminpage/delete_product.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -525,7 +526,51 @@ class _Admin_mainpage extends State<Admin_mainpage> {
                           height: 80,
                           width: 80,
                           child: IconButton(
-                            icon: Image.asset('assets/icons/checklist.png'),
+                            icon: Image.asset('assets/delete.png'),
+                            onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        Delete_product())), //MainPage()
+                          ),
+
+                          //Text(
+                          //  'สินค้า',
+                          //  style: TextStyle(
+                          //    fontWeight: FontWeight.bold,
+                          //  ),
+                          //),
+                        ),
+                        Text(
+                          'ลบสินค้า',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 30),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: transparentYellow,
+                                    blurRadius: 4,
+                                    spreadRadius: 1,
+                                    offset: Offset(0, 1))
+                              ]),
+                          height: 80,
+                          width: 80,
+                          child: IconButton(
+                            icon: Image.asset('assets/gallery.png'),
                             onPressed: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (_) => Pictureadd())), //MainPage()
@@ -546,91 +591,6 @@ class _Admin_mainpage extends State<Admin_mainpage> {
                         ),
                       ],
                     ),
-                    /*
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8)),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: transparentYellow,
-                                    blurRadius: 4,
-                                    spreadRadius: 1,
-                                    offset: Offset(0, 1))
-                              ]),
-                          height: 80,
-                          width: 80,
-                          child: IconButton(
-                            icon: Image.asset('assets/icons/exchange.png'),
-                            onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (_) => Adddescription())),
-                          ),
-
-                          //Text(
-                          //  'สินค้า',
-                          //  style: TextStyle(
-                          //    fontWeight: FontWeight.bold,
-                          //  ),
-                          //),
-                        ),
-                        Text(
-                          'รายละเอียดการลงทุน',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8)),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: transparentYellow,
-                                    blurRadius: 4,
-                                    spreadRadius: 1,
-                                    offset: Offset(0, 1))
-                              ]),
-                          height: 80,
-                          width: 80,
-                          child: IconButton(
-                            icon: Image.asset('assets/icons/checklist.png'),
-                            onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => MainPage())),
-                          ),
-
-                          //Text(
-                          //  'สินค้า',
-                          //  style: TextStyle(
-                          //    fontWeight: FontWeight.bold,
-                          //  ),
-                          //),
-                        ),
-                        Text(
-                          'รายการ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    */
                   ],
                 ),
               ),

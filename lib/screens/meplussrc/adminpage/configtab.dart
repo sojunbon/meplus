@@ -156,7 +156,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: amounta,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.accessible),
+                    icon: const Icon(Icons.money),
                     hintText: 'ลงทุนตั้งแต่ 100',
                     labelText: 'ลงทุนตั้งแต่ 100',
                   ),
@@ -174,7 +174,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: amountb,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.accessible),
+                    icon: const Icon(Icons.money),
                     hintText: 'ลงทุนตั้งแต่ 1,000',
                     labelText: 'ลงทุนตั้งแต่ 1,000',
                   ),
@@ -192,7 +192,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: amountc,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.accessible),
+                    icon: const Icon(Icons.money),
                     hintText: 'ลงทุนตั้งแต่ 10,000',
                     labelText: 'ลงทุนตั้งแต่ 10,000',
                   ),
@@ -210,7 +210,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: amountd,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.accessible),
+                    icon: const Icon(Icons.money),
                     hintText: 'ลงทุนตั้งแต่ 100,000',
                     labelText: 'ลงทุนตั้งแต่ 100,000',
                   ),
@@ -228,7 +228,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: percenta,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.access_time),
+                    icon: const Icon(Icons.price_check_outlined),
                     hintText: 'Percent ลำดับที่ 1',
                     labelText: 'Percent ลำดับที่ 1',
                   ),
@@ -246,7 +246,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: percentb,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.access_time),
+                    icon: const Icon(Icons.price_check_outlined),
                     hintText: 'Percent ลำดับที่ 2',
                     labelText: 'Percent ลำดับที่ 2',
                   ),
@@ -264,7 +264,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: percentc,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.access_time),
+                    icon: const Icon(Icons.price_check_outlined),
                     hintText: 'Percent ลำดับที่ 3',
                     labelText: 'Percent ลำดับที่ 3',
                   ),
@@ -282,7 +282,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: percentd,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.access_time),
+                    icon: const Icon(Icons.price_check_outlined),
                     hintText: 'Percent ลำดับที่ 4',
                     labelText: 'Percent ลำดับที่ 4',
                   ),

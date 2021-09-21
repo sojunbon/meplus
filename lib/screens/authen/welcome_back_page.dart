@@ -54,7 +54,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
       '\nME PLUS',
       style: TextStyle(
           color: Colors.white,
-          fontSize: 34.0,
+          fontSize: 30.0,
           fontWeight: FontWeight.bold,
           shadows: [
             BoxShadow(
@@ -68,10 +68,10 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     Widget subTitle = Padding(
         padding: const EdgeInsets.only(right: 56.0),
         child: Text(
-          'Login to your account using\nEmail',
+          'Login to your account using email',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16.0,
+            fontSize: 12.0,
           ),
         ));
 
@@ -136,7 +136,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
+                      fontSize: 15.0))),
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
@@ -180,7 +180,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
+                      fontSize: 15.0))),
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
@@ -220,7 +220,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
+                      fontSize: 15.0))),
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
@@ -260,7 +260,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
+                      fontSize: 15.0))),
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [

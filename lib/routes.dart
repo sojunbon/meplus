@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 import 'package:meplus/screens/meplussrc/package/package.dart';
 
@@ -14,6 +15,7 @@ class Routes {
   // static const String splash = '/splash';
   static const String meproduct = '/meproduct';
   static const String package = '/package';
+  static const String login = '/login';
   // static const String home = '/home';
   //static const String setting = '/setting';
   //static const String create_edit_todo = '/create_edit_todo';
@@ -22,6 +24,7 @@ class Routes {
     //  splash: (BuildContext context) => SplashScreen(),
     meproduct: (BuildContext context) => Meproducts(),
     package: (BuildContext context) => Package(),
+    login: (BuildContext context) => WelcomeBackPage(),
     //  home: (BuildContext context) => TodosScreen(),
     // setting: (BuildContext context) => SettingScreen(),
     //  create_edit_todo: (BuildContext context) => CreateEditTodoScreen(),

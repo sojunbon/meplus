@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:meplus/components/notification.dart';
 //import 'package:meplus/components/show_notification.dart';
-
+import 'package:flutter/services.dart';
 //import 'package:meplus/providers/add_money_service.dart';
 import 'package:meplus/providers/logger_service.dart';
 import 'package:nice_button/nice_button.dart';
@@ -34,7 +36,8 @@ class Package extends StatefulWidget {
   //Package({Key key, @required this.name, @required this.email})
   //     : super(key: key);
 
-  Package({Key key, this.user}) : super(key: key);
+  //Package({Key key, this.user}) : super(key: key);
+  Package({Key key}) : super(key: key);
   @override
   _Package createState() => _Package();
 
@@ -43,7 +46,7 @@ class Package extends StatefulWidget {
 
 class _Package extends State<Package> {
   UserManagement userObj = new UserManagement();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   File _imageFile;
 
   ///NOTE: Only supported on Android & iOS
@@ -77,51 +80,17 @@ class _Package extends State<Package> {
 
   String formatdate;
 
-  String bankname_trans;
-  String bankacct_trans;
+  var bankname_trans;
+  var bankacct_trans;
+  var nametrans;
 
-  //var outputDateFormat = DateFormat('dd/MM/yyyy');
-  //var getdate = FieldValue.serverTimestamp();
-
-  /*
-  int _counter = 0;
-  File _image;
-  String _uploadedFileURL;
-  bool isLoading = false;
-  Future chooseFile() async {
-    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
-      setState(() {
-        _image = image;
-      });
-    });
-  }
-
-  Future uploadFile() async {
-    String fileName = basename(_imageFile.path);
-    setState(() {
-      isLoading = true;
-    });
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        //.child('uploads/$fileName');
-        .child('images/$fileName}');
-    //.child('images/${Path.basename(_image.path)}}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      setState(() {
-        _uploadedFileURL = fileURL;
-        isLoading = false;
-      });
-    });
-  }
-  */
+  ClipboardData datab;
 
   String imageUrl;
   Future pickImage(context) async {
     //Future pickImage() async {
     //final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
     var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
@@ -138,9 +107,16 @@ class _Package extends State<Package> {
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => imageUrl = value,
-        );
+
+    imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+    //taskSnapshot.ref.getDownloadURL().then(
+    //      (value) => imageUrl = value,
+    //    );
+
+    //StorageUploadTask uploadTask = ref.putFile(avatarImageFile);
+    //StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    //String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
   }
 
   dynamic data;
@@ -197,10 +173,22 @@ class _Package extends State<Package> {
         descb = datadesc['descb'];
         descc = datadesc['descc'];
         descd = datadesc['descd'];
-        bankname_trans = datadesc['bankname'];
-        bankacct_trans = datadesc['bankaccount'];
+        bankname_trans = datadesc['bankname'].toString();
+        bankacct_trans = datadesc['bankaccount'].toString();
+        nametrans = datadesc['name'];
+
+        //datab = ClipboardData(text: bankacct_trans.toString());
+        //Clipboard.setData(datab);
       });
     });
+
+    Future<void> _copyToClipboard() async {
+      await Clipboard.setData(ClipboardData(text: bankacct_trans.toString()));
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(datab.toString()),
+      ));
+    }
+
     /*
     DocumentSnapshot ds = await Firestore.instance
         .collection('packagedesc')
@@ -345,7 +333,7 @@ class _Package extends State<Package> {
                     child: Text(
                   '\n' + '\nPACKAGE',
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 15,
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 )),
@@ -437,6 +425,8 @@ class _Package extends State<Package> {
         ));
         */
 
+    //datab = ClipboardData(text: bankacct_trans.toString());
+    //Clipboard.setData(datab);
     Widget showbank = Positioned(
       //padding: const EdgeInsets.only(right: 56.0),
       //bottom: 0,
@@ -445,30 +435,98 @@ class _Package extends State<Package> {
       top: 300,
       //left: MediaQuery.of(context).size.width / 4,
       left: 15,
+      child: Stack(
+        // child: Column(
+        //  mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FractionalTranslation(
+            translation: Offset(0, -0.5),
+            child: Container(
+              width: 500,
+              height: 100,
+              child: Center(
+                child: Text(
+                  'กรุณาโอนเข้าบัญชี \n' +
+                      bankname_trans.toString() +
+                      '\n' +
+                      'ชื่อบัญชี ' +
+                      nametrans.toString() +
+                      '\n' +
+                      bankacct_trans.toString(),
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.amberAccent,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(width: 5, color: Colors.grey)),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Widget copyClipboard = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 210,
+      top: 245,
+      //bottom: 0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 60.0),
+            child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.copy,
+                size: 15.0,
+              ),
+              onPressed: () {
+                Clipboard.setData(
+                    ClipboardData(text: bankacct_trans.toString()));
+                //  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                //   content: Text(datab.toString()),
+                // ));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Widget subTitlen = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      // padding: const EdgeInsets.only(right: 56.0),
+      //bottom: 190,
+      height: 500,
+      width: 380,
+      top: 610,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
       child: InkWell(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FractionalTranslation(
-              translation: Offset(0, -0.5),
-              child: Container(
-                width: 500,
-                height: 100,
-                child: Center(
-                    child: Text(
-                  'กรุณาโอนเข้าบัญชี \n' +
-                      bankname_trans +
-                      '\n' +
-                      bankacct_trans,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                )),
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(width: 5, color: Colors.amber)),
+              translation: Offset(0, -1),
+              child: Text(
+                '\n' + '\n' + '\n' + '\n' + '\n',
+                style: TextStyle(
+                    color: Colors.green,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 14),
+              ),
+            ),
+            FractionalTranslation(
+              translation: Offset(0, -1),
+              child: Text(
+                'กรุณา upload สลิปโอนเงินก่อนบันทึกข้อมูล',
+                style: TextStyle(
+                    color: Colors.black,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 14),
               ),
             ),
           ],
@@ -804,9 +862,11 @@ class _Package extends State<Package> {
                 padding: EdgeInsets.symmetric(vertical: 420.0),
               ),
             ),
-            title,
+            //title,
             subTitle,
             showbank,
+            copyClipboard,
+            subTitlen,
             registerForm,
 
             /*       
@@ -844,81 +904,8 @@ class _Package extends State<Package> {
   }
 }
 
-/*
-return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/background.jpg'),
-                    fit: BoxFit.cover)),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: transparentYellow,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 28.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Spacer(flex: 5),
-                //Spacer(flex: 1),
-                title,
-                Spacer(),
-                subTitle,
-
-                Spacer(flex: 2),
-                registerForm,
-                Spacer(flex: 2),
-                // Padding(
-                // padding: EdgeInsets.only(bottom: 20), child: socialRegister)
-              ],
-            ),
-          ),
-          Positioned(
-            top: 35,
-            left: 5,
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          )
-        ],
-      ),
-    );
-*/
-
 @override
 Widget build(BuildContext context) {
   // TODO: implement build
   throw UnimplementedError();
 }
-
-/*
-import 'package:flutter/material.dart';
-import 'package:meplus/app_properties.dart';
-
-class Package extends StatefulWidget {
-  @override
-  _PackageState createState() => _PackageState();
-}
-
-class _PackageState extends State<Package> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Package Page'),
-      ),
-      body: Container(),
-    );
-  }
-}
-*/

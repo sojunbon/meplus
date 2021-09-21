@@ -50,6 +50,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "cached_network_image",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/cached_network_image-2.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
       "name": "characters",
       "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0",
       "packageUri": "lib/",
@@ -276,6 +282,18 @@
       "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_auth_buttons-0.5.0",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "flutter_blurhash",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_blurhash-0.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.4"
+    },
+    {
+      "name": "flutter_cache_manager",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
     },
     {
       "name": "flutter_launcher_icons",
@@ -506,6 +524,12 @@
       "languageVersion": "2.1"
     },
     {
+      "name": "octo_image",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/octo_image-0.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0",
       "packageUri": "lib/",
@@ -644,6 +668,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sqflite",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.0.0+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite_common-2.0.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0",
       "packageUri": "lib/",
@@ -672,6 +708,12 @@
       "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/styled_widget-0.2.2",
       "packageUri": "lib/",
       "languageVersion": "2.6"
+    },
+    {
+      "name": "synchronized",
+      "rootUri": "file:///Users/new/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "term_glyph",
@@ -782,7 +824,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-09-19T15:12:06.366522Z",
+  "generated": "2021-09-20T17:16:48.610546Z",
   "generator": "pub",
   "generatorVersion": "2.13.4"
 }

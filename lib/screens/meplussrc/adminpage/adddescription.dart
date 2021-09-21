@@ -109,7 +109,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: desca,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.account_balance),
+                    icon: const Icon(Icons.account_box),
                     hintText: 'รายการที่ 1',
                     labelText: 'รายการที่ 1',
                   ),
@@ -128,7 +128,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: descb,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.time_to_leave_rounded),
+                    icon: const Icon(Icons.account_box),
                     hintText: 'รายการที่ 2',
                     labelText: 'รายการที่ 2',
                   ),
@@ -146,7 +146,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: descc,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.accessible),
+                    icon: const Icon(Icons.account_box),
                     hintText: 'รายการที่ 3',
                     labelText: 'รายการที่ 3',
                   ),
@@ -164,7 +164,7 @@ class FirestoreListView extends StatelessWidget {
                 new TextFormField(
                   initialValue: descd,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.accessible),
+                    icon: const Icon(Icons.account_box),
                     hintText: 'รายการที่ 4',
                     labelText: 'รายการที่ 4',
                   ),

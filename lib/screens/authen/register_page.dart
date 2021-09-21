@@ -60,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String getMobile;
   DocumentSnapshot snapshotphone;
   String checkphoneExist;
+  bool loading = false;
   var firstColor = Color(0xffCCCC00), secondColor = Color(0xffCCCC00);
   @override
   void initState() {
@@ -67,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       setState(() {
         userID = user.uid;
+        loading = false;
       });
     });
     getData();

@@ -221,7 +221,8 @@ class ProjectsExpansionTile extends StatelessWidget {
 
     //  child: Image.asset('assets/icons/10 usd.png'),
     if (picurl == null) {
-      getpic = "assets/whitepaper.png";
+      getpic = Image.asset('assets/whitepaper.png') as String;
+      //"assets/whitepaper.png";
     } else {
       getpic = picurl;
     }
@@ -255,7 +256,7 @@ class ProjectsExpansionTile extends StatelessWidget {
                   child: Text(
                 amount.toString() + ' ฿',
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 14,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               )),
@@ -272,7 +273,7 @@ class ProjectsExpansionTile extends StatelessWidget {
               style: TextStyle(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.bold,
-                  fontSize: 28),
+                  fontSize: 14),
             ),
           ),
         ],

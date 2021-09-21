@@ -85,12 +85,21 @@ class _Addproducts extends State<Addproducts> {
   Future uploadImageToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+
+    imageUrl = await taskSnapshot.ref.getDownloadURL();
+    /*
+    String fileName = basename(_imageFile.path);
+    StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('products/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     taskSnapshot.ref.getDownloadURL().then(
           (value) => imageUrl = value,
         );
+        */
   }
 
   dynamic data;
@@ -380,7 +389,7 @@ class _Addproducts extends State<Addproducts> {
       child: InkWell(
         onTap: () async {
           if (imageUrl == null) {
-            showMessageBox(context, "Error", "กรุณา upload สลิปโอนเงิน",
+            showMessageBox(context, "Error", "กรุณา upload รูปสินค้า",
                 actions: [dismissButton(context)]);
             logger.e("Transfer money slip");
           } else {

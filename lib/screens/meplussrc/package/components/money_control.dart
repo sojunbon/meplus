@@ -69,7 +69,7 @@ Future<void> generateData(
   var fcount_refer;
   var fcount_percent;
   bool recount;
-  var percentcal;
+  double percentcal;
   double calpay;
   bool paym;
 
@@ -125,16 +125,26 @@ Future<void> generateData(
 
   var getamount = documents['amount'];
   if (getamount >= amounta && getamount < amountb) {
-    percentcal = percenta;
+    percentcal = double.parse(percenta);
   } else if (getamount >= amountb && getamount < amountc) {
-    percentcal = percentb;
+    percentcal = double.parse(percentb);
   } else if (getamount >= amountc && getamount < amountd) {
-    percentcal = percentc;
+    percentcal = double.parse(percentc);
   } else if (getamount >= amountd) {
-    percentcal = percentd;
+    percentcal = double.parse(percentd);
   }
 
-  calpay = (getamount * percentcal) / 100;
+  double txamt = getamount;
+  //double.parse(getamount);
+  //double fxamt = double.parse(percentcal);
+  if (txamt != 0 && percentcal != 0) {
+    calpay = (txamt * percentcal) / 100;
+    //calpay = (getamount * fcount_refer) / 100;
+  } else {
+    calpay = 0;
+  }
+
+  //calpay = (getamount * percentcal) / 100;
 
   DateTime serverdate = await NTP.now();
   String getPhoneNewn = documents['mobile'];
@@ -143,25 +153,26 @@ Future<void> generateData(
       await Firestore.instance.collection("referfriend").getDocuments();
   for (int i = 0; i < querySnapshotuser.documents.length; i++) {
     var userphongapn = querySnapshotuser.documents[i];
-    phoneUserPrimaryn = userphongapn.data["mobile"];
+    phoneUserPrimaryn = userphongapn.data["mobile"].toString();
 
     if (phoneUserPrimaryn == getPhoneNewn) {
-      phoneUsern = userphongapn.data["mobile"];
-      phoneUserRefern = userphongapn.data["mobile_refer"];
-      userid_refern = userphongapn.data["uid_refer"];
-      bankname_refern = userphongapn.data["bankname"];
-      bankacctn = userphongapn.data["bankaccount"];
-      namexxn = userphongapn.data["name"];
+      phoneUsern = userphongapn.data["mobile"].toString();
+      phoneUserRefern = userphongapn.data["mobile_refer"].toString();
+      userid_refern = userphongapn.data["uid_refer"].toString();
+      bankname_refern = userphongapn.data["bankname"].toString();
+      bankacctn = userphongapn.data["bankaccount"].toString();
+      namexxn = userphongapn.data["name"].toString();
     } else {
       phoneUsern = "";
     }
     print(userphongapn.documentID);
   }
-
+  int count_con = int.parse(count);
+  int perday_con = int.parse(perday);
   // --- คำนวณวัน ---
-  for (int ii = 1; ii <= count; ii++) {
+  for (int ii = 1; ii <= count_con; ii++) {
     var today = serverdate; // DateTime.now();
-    int newdaycal = ii * perday;
+    int newdaycal = ii * perday_con; //perday;
     var fiftyDaysFromNow = today.add(Duration(days: newdaycal));
 
     var tooodayx = DateTime.now();
@@ -215,7 +226,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   var fcount_refer;
   var fcount_percent;
   bool recount;
-  var percentcal;
+  double percentcal;
   double calpay;
   bool paym;
 
@@ -272,7 +283,8 @@ Future<void> generateReferFriend(BuildContext context, String docid,
     fcount_percent = documentSnapshot.data['fcount_percent'];
   });
 
-  String getPhoneNew = documents['mobile']; // user create new package
+  String getPhoneNew =
+      documents['mobile'].toString(); // user create new package
 
   QuerySnapshot querySnapshotuser =
       await Firestore.instance.collection("referfriend").getDocuments();
@@ -281,12 +293,12 @@ Future<void> generateReferFriend(BuildContext context, String docid,
     phoneUserPrimary = userphongap.data["mobile"];
 
     if (phoneUserPrimary == getPhoneNew) {
-      phoneUser = userphongap.data["mobile"];
-      phoneUserRefer = userphongap.data["mobile_refer"];
-      userid_refer = userphongap.data["uid_refer"];
-      bankname_refer = userphongap.data["bankname"];
-      bankacct = userphongap.data["bankaccount"];
-      namexx = userphongap.data["name"];
+      phoneUser = userphongap.data["mobile"].toString();
+      phoneUserRefer = userphongap.data["mobile_refer"].toString();
+      userid_refer = userphongap.data["uid_refer"].toString();
+      bankname_refer = userphongap.data["bankname"].toString();
+      bankacct = userphongap.data["bankaccount"].toString();
+      namexx = userphongap.data["name"].toString();
     } else {
       phoneUser = "";
     }
@@ -294,13 +306,13 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   }
 
   // count moneytrans
-  var countReferFriend = 1;
+  int countReferFriend = 1;
   int ct = 0;
   QuerySnapshot querycount =
       await Firestore.instance.collection("moneytrans").getDocuments();
   for (int i = 1; i < querycount.documents.length; i++) {
     var getcount = querycount.documents[i];
-    phoneUserPrimary = getcount.data["mobile"];
+    phoneUserPrimary = getcount.data["mobile"].toString();
 
     if (phoneUserPrimary == getPhoneNew) {
       ct++;
@@ -323,9 +335,19 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   String formatdatex = DateFormat('ddMMyyyy').format(serverdate);
   double convertdate = double.parse(formatdatex);
 
+  double tamt = getamount; //double.parse(getamount);
+  double famt = double.parse(fcount_refer);
+
+  if (tamt != 0 && famt != 0) {
+    calpay = (tamt * famt) / 100;
+    //calpay = (getamount * fcount_refer) / 100;
+  } else {
+    calpay = 0;
+  }
+
   if (userid != userid_refer && userid_refer != null) {
     if (countReferFriend <= fcount) {
-      calpay = (getamount * fcount_refer) / 100;
+      //calpay = (getamount * fcount_refer) / 100;
 
       int g = 0;
       g++;
@@ -355,7 +377,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
           docid,
           g);
     } else if (countReferFriend > fcount) {
-      calpay = (getamount * fcount_percent) / 100;
+      //calpay = (getamount * fcount_percent) / 100;
       int g = 0;
       g++;
       addPaymentItemRefer(

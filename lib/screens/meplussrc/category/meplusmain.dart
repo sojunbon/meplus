@@ -326,7 +326,7 @@ class _Meplusmain extends State<Meplusmain> {
                       child: Text(
                         "       " + sumpayment.toString(),
                         style: (TextStyle(
-                            fontSize: 20.0,
+                            fontSize: 14.0,
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic,
                             color: Colors.pinkAccent)),
@@ -341,7 +341,7 @@ class _Meplusmain extends State<Meplusmain> {
                       child: Text(
                         "       " + sumdibpayment.toString(),
                         style: (TextStyle(
-                            fontSize: 20.0,
+                            fontSize: 14.0,
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic,
                             color: Colors.cyan)),
@@ -377,7 +377,7 @@ class _Meplusmain extends State<Meplusmain> {
                                       color: const Color(0xfffefefe),
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FontStyle.normal,
-                                      fontSize: 20.0))),
+                                      fontSize: 14.0))),
 
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -416,7 +416,7 @@ class _Meplusmain extends State<Meplusmain> {
                                       color: const Color(0xfffefefe),
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FontStyle.normal,
-                                      fontSize: 20.0))),
+                                      fontSize: 14.0))),
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                                   colors: [

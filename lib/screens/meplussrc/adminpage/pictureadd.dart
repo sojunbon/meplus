@@ -4,7 +4,140 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 
+class Pictureadd extends StatefulWidget {
+  // MyHomePage({Key key}) : super(key: key);
+  @override
+  _Pictureadd createState() => _Pictureadd();
+}
+
+class _Pictureadd extends State<Pictureadd> {
+  File _image;
+  String _uploadedFileURL;
+
+  int _counter = 0;
+
+  bool isLoading = false;
+
+  Future chooseFile() async {
+    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = image;
+      });
+    });
+  }
+
+  Future uploadFile() async {
+    setState(() {
+      isLoading = true;
+    });
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${Path.basename(_image.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _uploadedFileURL = fileURL;
+        isLoading = false;
+      });
+    });
+  }
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('Firestore File Upload'),
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text('Selected Image'),
+                        _image != null
+                            ? Image.file(
+                                _image,
+                                // height: 150,
+                                height: 150,
+                                width: 150,
+                              )
+                            : Container(
+                                child: Center(
+                                  child: Text(
+                                    "No Image is Selected",
+                                  ),
+                                ),
+                                height: 150,
+                              ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text('Uploaded Image'),
+                        _uploadedFileURL != null
+                            ? Image.network(
+                                _uploadedFileURL,
+                                height: 150,
+                                width: 150,
+                              )
+                            : Container(
+                                child: Center(
+                                  child: Text(
+                                    "No Image is Selected",
+                                  ),
+                                ),
+                                height: 150,
+                              ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            _image != null
+                ? isLoading
+                    ? CircularProgressIndicator()
+                    : RaisedButton(
+                        child: Text('Upload Image'),
+                        onPressed: uploadFile,
+                        color: Colors.red,
+                      )
+                : Container()
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: chooseFile,
+        tooltip: 'Pick Image',
+        child: Icon(Icons.add_a_photo),
+      ),
+    );
+  }
+}
+
+
+/*
 class Pictureadd extends StatefulWidget {
   @override
   _Pictureadd createState() => _Pictureadd();
@@ -134,3 +267,4 @@ class _Pictureadd extends State<Pictureadd> {
   }
 }
 // https://github.com/flutter-devs/Flutter-Firebase-Storage/blob/master/lib/profilepage.dart
+*/

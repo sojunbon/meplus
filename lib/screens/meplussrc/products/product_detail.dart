@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -74,8 +75,12 @@ class _Product_detail extends State<Product_detail> {
   var desc;
   var picurlitem;
 
+  var cachimg =
+      "https://firebasestorage.googleapis.com/v0/b/meplus-b563a.appspot.com/o/cacheimage%2Fwhitepaper.png?alt=media&token=18bcae85-4154-4410-b716-e54e1d17303f";
+
   var bankname_trans;
   var bankacct_trans;
+  var nametrans;
 
   String formatdate;
 
@@ -96,9 +101,18 @@ class _Product_detail extends State<Product_detail> {
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+
+    imageUrl = await taskSnapshot.ref.getDownloadURL();
+    /*
+    String fileName = basename(_imageFile.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     taskSnapshot.ref.getDownloadURL().then(
           (value) => imageUrl = value,
         );
+        */
   }
 
   dynamic data;
@@ -139,8 +153,9 @@ class _Product_detail extends State<Product_detail> {
         descb = datadesc['descb'];
         descc = datadesc['descc'];
         descd = datadesc['descd'];
-        bankname_trans = datadesc['bankname'];
-        bankacct_trans = datadesc['bankaccount'];
+        bankname_trans = datadesc['bankname'].toString();
+        bankacct_trans = datadesc['bankaccount'].toString();
+        nametrans = datadesc['name'];
       });
     });
   }
@@ -236,11 +251,14 @@ class _Product_detail extends State<Product_detail> {
     String getpic;
 
     //  child: Image.asset('assets/icons/10 usd.png'),
+
     if (picurlitem == null) {
-      getpic = "assets/whitepaper.png";
+      getpic = cachimg;
     } else {
       getpic = picurlitem;
     }
+
+    //getpic = picurlitem.toString();
 
     /*
     Widget title = Text(
@@ -280,7 +298,7 @@ class _Product_detail extends State<Product_detail> {
                     child: Text(
                   '\n' + '\nสั่งซื้อสินค้า',
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 16,
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 )),
@@ -338,6 +356,57 @@ class _Product_detail extends State<Product_detail> {
       ),
     );
 
+    Widget subTitlen = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      // padding: const EdgeInsets.only(right: 56.0),
+      //bottom: 190,
+      height: 500,
+      width: 380,
+      top: 820,
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 15,
+      child: InkWell(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FractionalTranslation(
+              translation: Offset(0, -1),
+              child: Text(
+                '\n' + '\n' + '\n' + '\n' + '\n',
+                style: TextStyle(
+                    color: Colors.green,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 14),
+              ),
+            ),
+            FractionalTranslation(
+              translation: Offset(0, -1),
+              child: Text(
+                'กรุณา upload สลิปโอนเงินก่อนบันทึกข้อมูล',
+                style: TextStyle(
+                    color: Colors.black,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    Widget _getImage(dynamic article) {
+      NetworkImage _imagex;
+      try {
+        _imagex = NetworkImage(
+          '${article['urlToImage']}'.isNotEmpty
+              ? '${article['urlToImage']}'
+              : FlutterLogo(),
+        );
+      } catch (e) {
+        debugPrint(e); // to see what the error was
+        _imagex = NetworkImage("some default URI");
+      }
+    }
+
     Widget picProduct = Positioned(
       height: 500,
       width: 380,
@@ -362,8 +431,11 @@ class _Product_detail extends State<Product_detail> {
                         bottomLeft: Radius.circular(10)),
                     //decoration: BoxDecoration(
                     //    borderRadius: BorderRadius.circular(25),
+
                     image: DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(getpic)))),
+                        fit: BoxFit.cover, image: NetworkImage(getpic))
+                    //Image(image: CachedNetworkImageProvider(url))
+                    )),
             FractionalTranslation(
               translation: Offset(0, -0.5),
               child: Container(
@@ -373,7 +445,7 @@ class _Product_detail extends State<Product_detail> {
                     child: Text(
                   price.toString() + ' ฿',
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 14,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
                 )),
@@ -406,34 +478,64 @@ class _Product_detail extends State<Product_detail> {
       //left: MediaQuery.of(context).size.width / 4,
       left: 15,
       //left: MediaQuery.of(context).size.width / 4,
-      child: InkWell(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FractionalTranslation(
-              translation: Offset(0, -0.5),
-              child: Container(
-                width: 500,
-                height: 100,
-                child: Center(
-                    child: Text(
-                  'สั่งซื้อสินค้า กรุณาโอนเข้าบัญชี \n' +
-                      bankname_trans +
-                      '\n' +
-                      bankacct_trans,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                )),
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(width: 5, color: Colors.white)),
-              ),
+      child: Stack(
+        // child: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FractionalTranslation(
+            translation: Offset(0, -0.5),
+            child: Container(
+              width: 500,
+              height: 100,
+              child: Center(
+                  child: Text(
+                'สั่งซื้อสินค้า กรุณาโอนเข้าบัญชี \n' +
+                    bankname_trans.toString() +
+                    '\n' +
+                    'ชื่อบัญชี ' +
+                    nametrans.toString() +
+                    '\n' +
+                    bankacct_trans.toString(),
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              )),
+              decoration: BoxDecoration(
+                  color: Colors.amberAccent,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(width: 5, color: Colors.white)),
             ),
-          ],
-        ),
+          ),
+        ],
+        // ),
+      ),
+    );
+
+    Widget copyClipboard = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      left: 210,
+      top: 480,
+      //bottom: 0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 60.0),
+            child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.copy,
+                size: 15.0,
+              ),
+              onPressed: () {
+                Clipboard.setData(
+                    ClipboardData(text: bankacct_trans.toString()));
+                //  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                //   content: Text(datab.toString()),
+                // ));
+              },
+            ),
+          ),
+        ],
       ),
     );
 
@@ -724,10 +826,12 @@ class _Product_detail extends State<Product_detail> {
                 padding: EdgeInsets.symmetric(vertical: 550.0),
               ),
             ),
-            title,
+            //title,
             subTitle,
             picProduct,
             showbank,
+            copyClipboard,
+            subTitlen,
             registerForm,
 
             /*       

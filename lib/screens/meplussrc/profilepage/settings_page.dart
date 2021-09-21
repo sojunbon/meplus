@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:meplus/custom_background.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
@@ -14,8 +15,39 @@ import 'package:meplus/providers/login_provider.dart';
 
 import 'package:meplus/screens/meplussrc/profilepage/address_name.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  // StatelessWidget {
   UserManagement userObj = new UserManagement();
+
+  @override
+  _SettingsPage createState() => _SettingsPage();
+}
+
+class _SettingsPage extends State<SettingsPage> {
+  String userID = "";
+  FirebaseUser _user;
+  @override
+  void initState() {
+    super.initState();
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    //  setState(() {
+    //    userID = user.uid;
+    //  });
+    //});
+    _checkUser();
+  }
+
+  Future<void> _checkUser() async {
+    _user = await FirebaseAuth.instance.currentUser();
+    setState(() {});
+  }
+
+  Future logout() async {
+    await context.read<LoginProvider>().signOut().signOut().then((value) =>
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => WelcomeBackPage()),
+            (route) => false));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +160,19 @@ class SettingsPage extends StatelessWidget {
                                 Navigator.of(context).pop();
 
                                 //context.read<LoginProvider>().logout();
-                                userObj.signOut();
+                                //userObj.signOut();
+                                logout();
+                                /*
+                                if (_user == null) {
+                                  return context
+                                      .read<LoginProvider>()
+                                      .signOut();
+                                } else {
+                                  return context
+                                      .read<LoginProvider>()
+                                      .signOut();
+                                }
+                                */
                               },
                               /* onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
