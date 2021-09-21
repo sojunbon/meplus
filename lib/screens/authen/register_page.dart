@@ -61,6 +61,8 @@ class _RegisterPageState extends State<RegisterPage> {
   DocumentSnapshot snapshotphone;
   String checkphoneExist;
   bool loading = false;
+  bool isLoading = false;
+
   var firstColor = Color(0xffCCCC00), secondColor = Color(0xffCCCC00);
   @override
   void initState() {
@@ -535,6 +537,21 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
             ),
           ),
+          Positioned(
+            left: 180,
+            //left: MediaQuery.of(context).size.width / 6,
+            top: 10,
+            child: isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    ),
+                    color: Colors.transparent, //.withOpacity(0.8),
+                  )
+                : Container(),
+          ),
           // registerButton,
         ],
       ),
@@ -697,6 +714,10 @@ return Scaffold(
     String bankacct;
     String namexx;
 
+    setState(() {
+      isLoading = true;
+    });
+
     QuerySnapshot querySnapshotuser =
         await Firestore.instance.collection("users").getDocuments();
     for (int i = 0; i < querySnapshotuser.documents.length; i++) {
@@ -821,6 +842,11 @@ return Scaffold(
         },
       );
     }
+
+    setState(() {
+      isLoading = false;
+    });
+
     //String title = "Save";
     //String message = "Create user complete,please press back button.";
 

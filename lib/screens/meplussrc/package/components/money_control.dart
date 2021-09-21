@@ -182,6 +182,10 @@ Future<void> generateData(
     String formatdatexxx = DateFormat('ddMMyyyy').format(fiftyDaysFromNow);
     double convertdatex = double.parse(formatdatexxx);
 
+    String genday = DateFormat('dd').format(fiftyDaysFromNow);
+    String genmth = DateFormat('MM').format(fiftyDaysFromNow);
+    String genyear = DateFormat('yyyy').format(fiftyDaysFromNow);
+
     //DateTime getnewday = DateTime(newday.year, newday.month, newday.day);
     addPaymentItem(
         context,
@@ -204,6 +208,9 @@ Future<void> generateData(
           "date_query": convertdatex, // for query date
           "mobile": documents['mobile'],
           "desc": "ลงทุน",
+          "genday": genday,
+          "genmth": genmth,
+          "genyear": genyear,
         },
         docid,
         ii);
@@ -335,6 +342,10 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   String formatdatex = DateFormat('ddMMyyyy').format(serverdate);
   double convertdate = double.parse(formatdatex);
 
+  String genday = DateFormat('dd').format(serverdate);
+  String genmth = DateFormat('MM').format(serverdate);
+  String genyear = DateFormat('yyyy').format(serverdate);
+
   double tamt = getamount; //double.parse(getamount);
   double famt = double.parse(fcount_refer);
 
@@ -373,6 +384,9 @@ Future<void> generateReferFriend(BuildContext context, String docid,
             "date_query": convertdate, // for query date
             "mobile": phoneUserRefer,
             "desc": "แนะนำเพื่อน",
+            "genday": genday,
+            "genmth": genmth,
+            "genyear": genyear,
           },
           docid,
           g);
@@ -401,6 +415,9 @@ Future<void> generateReferFriend(BuildContext context, String docid,
             "date_query": convertdate, // for query date
             "mobile": phoneUserRefer,
             "desc": "แนะนำเพื่อน",
+            "genday": genday,
+            "genmth": genmth,
+            "genyear": genyear,
           },
           docid,
           g);

@@ -398,8 +398,8 @@ class _Addproducts extends State<Addproducts> {
             ),
           ),
           Positioned(
-            left: MediaQuery.of(context).size.width / 4,
-            top: 150,
+            left: 5, //left: MediaQuery.of(context).size.width / 4,
+            top: 10,
             child: isLoading
                 ? Container(
                     child: Center(

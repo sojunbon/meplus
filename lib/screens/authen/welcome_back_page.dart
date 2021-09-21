@@ -48,6 +48,21 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   UserManagement userObj = new UserManagement();
 
+  bool isLoading = false;
+
+  void _showLoadingIndicator() {
+    print('isloading');
+    setState(() {
+      isLoading = true;
+    });
+    Future.delayed(const Duration(milliseconds: 50), () {
+      setState(() {
+        isLoading = false;
+      });
+      print(isLoading);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
@@ -88,6 +103,9 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
         */
         // -------- Me plus Login -------
         onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
           if (!await context
               .read<LoginProvider>()
               .login(email.text.trim(), password.text.trim())) {
@@ -106,6 +124,9 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
             //showModalAlertDialog(context);
 
           }
+          setState(() {
+            isLoading = true;
+          });
           /*
           FirebaseAuth.instance.currentUser().then((firebaseUser) async {
             if (firebaseUser == null) {
@@ -155,6 +176,30 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
               ],
               borderRadius: BorderRadius.circular(9.0)),
         ),
+      ),
+    );
+
+    Widget loader = Positioned(
+      //left: MediaQuery.of(context).size.width / 4,
+      //bottom: 0,
+
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            left: 165, //left: MediaQuery.of(context).size.width / 4,
+            top: 10,
+            child: isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    ),
+                    color: Colors.transparent, //.withOpacity(0.8),
+                  )
+                : Container(),
+          ),
+        ],
       ),
     );
 
@@ -319,6 +364,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
             ),
           ),
           loginButton,
+          loader,
           registerMember,
           //registerPhone,
           registerApple,

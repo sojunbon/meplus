@@ -179,6 +179,9 @@ class ExpansionTileList extends StatelessWidget {
           getdocuments: doc,
           count: doc['tradecount'],
           desc: doc['desc'],
+          genday: doc['genday'],
+          genmth: doc['genmth'],
+          genyear: doc['genyear'],
           firestore: firestore,
         ),
       );
@@ -209,6 +212,9 @@ class ProjectsExpansionTile extends StatelessWidget {
     this.getdocuments,
     this.count,
     this.desc,
+    this.genday,
+    this.genmth,
+    this.genyear,
     this.firestore,
   });
 
@@ -218,7 +224,10 @@ class ProjectsExpansionTile extends StatelessWidget {
   final String bankaccount;
   final String caldate;
   final String desc;
-  var datequery;
+  final String genday;
+  final String genmth;
+  final String genyear;
+  double datequery;
   var calpayment;
   var count;
   DateTime displaydate;
@@ -238,8 +247,33 @@ class ProjectsExpansionTile extends StatelessWidget {
 
     PageStorageKey _projectKey = PageStorageKey('$projectKey');
     var getprjkey = _projectKey;
+
+    String daycur;
+    String yrcur;
+    String mthcur;
+
+    int caldategen = datequery.toInt(); //.parse(datequery);
     String formatdate = DateFormat('ddMMyyyy').format(DateTime.now());
-    if (datequery <= double.parse(formatdate)) {
+    int convdate = int.parse(formatdate);
+
+    String getrdate = caldategen.toString();
+
+    //if (getrdate.length == 8) // 02102021
+
+    daycur = DateFormat('dd').format(DateTime.now());
+    mthcur = DateFormat('MM').format(DateTime.now());
+    yrcur = DateFormat('yyyy').format(DateTime.now());
+
+    int getcurday = int.parse(daycur);
+    int getcurmth = int.parse(mthcur);
+    int getcuryear = int.parse(yrcur);
+
+    int getday = int.parse(genday);
+    int getmth = int.parse(genmth);
+    int getyear = int.parse(genyear);
+
+    if (getday <= getcurday && getmth <= getcurmth && getyear <= getcuryear) {
+      // if (caldategen <= convdate) {
       return Card(
         child: ExpansionTile(
           key: _projectKey,

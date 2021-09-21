@@ -618,8 +618,9 @@ class _Product_detail extends State<Product_detail> {
             ),
           ),
           Positioned(
-            left: MediaQuery.of(context).size.width / 4,
-            top: 150,
+            //left: MediaQuery.of(context).size.width / 4,
+            left: 5,
+            top: 10,
             child: isLoading
                 ? Container(
                     child: Center(
