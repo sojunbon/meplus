@@ -100,6 +100,7 @@ class FirestoreListView extends StatelessWidget {
         String bankname = documents[index].data['bankname'].toString();
         String bankaccount = documents[index].data['bankaccount'].toString();
         String namebank = documents[index].data['name'].toString();
+        String line = documents[index].data['line'].toString();
 
         return ListTile(
           title: Container(
@@ -156,6 +157,24 @@ class FirestoreListView extends StatelessWidget {
 
                       await transaction.update(
                           snapshot.reference, {'bankaccount': bankaccount});
+                    });
+                  },
+                  //keyboardType: TextInputType.number,
+                ),
+                new TextFormField(
+                  initialValue: line,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.link_rounded),
+                    hintText: 'Line',
+                    labelText: 'Line',
+                  ),
+                  onFieldSubmitted: (String line) {
+                    Firestore.instance.runTransaction((transaction) async {
+                      DocumentSnapshot snapshot =
+                          await transaction.get(documents[index].reference);
+
+                      await transaction
+                          .update(snapshot.reference, {'line': line});
                     });
                   },
                   //keyboardType: TextInputType.number,

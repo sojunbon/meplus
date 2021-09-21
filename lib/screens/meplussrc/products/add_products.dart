@@ -70,7 +70,7 @@ class _Addproducts extends State<Addproducts> {
   var descd;
 
   String formatdate;
-
+  bool isLoading = false;
   String imageUrl;
   Future pickImage(context) async {
     //final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -84,12 +84,30 @@ class _Addproducts extends State<Addproducts> {
 
   Future uploadImageToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile.path);
+    setState(() {
+      isLoading = true;
+    });
+    StorageReference storageReference =
+        FirebaseStorage.instance.ref().child('products/$fileName');
+    //.child('uploads/${Path.basename(_imageFile.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(_imageFile);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        imageUrl = fileURL;
+        isLoading = false;
+      });
+    });
+    /*
+    String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
 
     imageUrl = await taskSnapshot.ref.getDownloadURL();
+    */
     /*
     String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef =
@@ -365,7 +383,7 @@ class _Addproducts extends State<Addproducts> {
       left: 10,
       top: 150,
       //bottom: 0,
-      child: Column(
+      child: Stack(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 60.0),
@@ -378,6 +396,20 @@ class _Addproducts extends State<Addproducts> {
                 pickImage(context);
               },
             ),
+          ),
+          Positioned(
+            left: MediaQuery.of(context).size.width / 4,
+            top: 150,
+            child: isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    ),
+                    color: Colors.transparent, //.withOpacity(0.8),
+                  )
+                : Container(),
           ),
         ],
       ),

@@ -35,6 +35,7 @@ import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:meplus/screens/meplussrc/package/withdraw_money.dart';
 import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -55,6 +56,7 @@ class _Meplusmain extends State<Meplusmain> {
   String userID = "";
   Firestore _db = Firestore.instance;
   TabController tabController;
+  String linead;
   var sumtotal;
   var sumpayment;
   var sumdibpayment;
@@ -73,6 +75,7 @@ class _Meplusmain extends State<Meplusmain> {
     queryValues();
     queryPayment();
     queryDibPayment();
+    getDescription();
     //getSumtotalValue();
   }
 
@@ -86,6 +89,15 @@ class _Meplusmain extends State<Meplusmain> {
       namedis = snapshot.data['name'];
       return namedis;
     });
+  }
+
+  _launchURL() async {
+    String url = linead; //'https://flutter.dev';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   dynamic userdesc;
@@ -191,6 +203,22 @@ class _Meplusmain extends State<Meplusmain> {
       sumdibpayment = tempTotal.toString();
 
       return sumdibpayment;
+    });
+  }
+
+  dynamic datadesc;
+  Future getDescription() async {
+    final DocumentReference getpackage =
+        Firestore.instance.collection("packagedesc").document('desc');
+
+    await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
+      setState(() {
+        datadesc = getsnapshot.data;
+        linead = datadesc['line'].toString();
+
+        //datab = ClipboardData(text: bankacct_trans.toString());
+        //Clipboard.setData(datab);
+      });
     });
   }
 
@@ -690,6 +718,175 @@ class _Meplusmain extends State<Meplusmain> {
       ),
     );
 
+    Widget showCardtwo = Positioned(
+      //height: 200,
+      //width: 380,
+      left: 15,
+      //right: 0,
+      //bottom: 50,
+      top: 470,
+      child: InkWell(
+        //will break to another line on overflow
+        //direction: Axis.horizontal, //use vertical to show  on vertical axis
+        child: Container(
+          child: Column(children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          width: MediaQuery.of(context).size.width / 4,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: transparentYellow,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 1))
+                              ]),
+                          height: 80,
+                          //width: 80,
+                          child: IconButton(
+                            //padding: EdgeInsets.zero,
+                            //padding: const EdgeInsets.all(16.0),
+                            icon: Image.asset('assets/icons/line.png'),
+
+                            onPressed: () {
+                              _launchURL();
+                            },
+                            //onPressed: () => Navigator.of(context).push(
+                            //    MaterialPageRoute(
+                            //        builder: (_) => Meproducts())),
+                          ),
+
+                          //Text(
+                          //  'สินค้า',
+                          //  style: TextStyle(
+                          //    fontWeight: FontWeight.bold,
+                          //  ),
+                          //),
+                        ),
+                        Text(
+                          'ติดต่อเรา',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    /*
+                    SizedBox(width: 25),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          width: MediaQuery.of(context).size.width / 4,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: transparentYellow,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 1))
+                              ]),
+                          height: 80,
+                          //width: 80,
+                          child: IconButton(
+                            //padding: EdgeInsets.zero,
+                            //padding: const EdgeInsets.all(16.0),
+                            icon: Image.asset('assets/icons/exchange.png'),
+                            onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => Package())),
+                          ),
+
+                          //Text(
+                          //  'สินค้า',
+                          //  style: TextStyle(
+                          //    fontWeight: FontWeight.bold,
+                          //  ),
+                          //),
+                        ),
+                        Text(
+                          'ลงทุน',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 25),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          width: MediaQuery.of(context).size.width / 4,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: transparentYellow,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 1))
+                              ]),
+                          height: 80,
+
+                          //width: 80,
+                          child: IconButton(
+                            //padding: EdgeInsets.zero,
+                            //padding: const EdgeInsets.all(16.0),
+                            icon: Image.asset('assets/icons/checklist.png'),
+                            onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => Topuplist())),
+                          ),
+
+                          //Text(
+                          //  'สินค้า',
+                          //  style: TextStyle(
+                          //    fontWeight: FontWeight.bold,
+                          //  ),
+                          //),
+                        ),
+                        Text(
+                          'รายการ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    */
+                  ],
+                ),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+
     return Material(
       color: Color(0xffF9F9F9),
       // กำหนด --scroll view ทั้งหน้า  SingleChildScrollView
@@ -749,6 +946,8 @@ class _Meplusmain extends State<Meplusmain> {
 
             //SizedBox(height: 20),
             showCard,
+
+            showCardtwo,
 
             //showname,
           ],

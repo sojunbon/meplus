@@ -26,6 +26,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPage extends State<SettingsPage> {
   String userID = "";
   FirebaseUser _user;
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -43,10 +44,15 @@ class _SettingsPage extends State<SettingsPage> {
   }
 
   Future logout() async {
-    await context.read<LoginProvider>().signOut().signOut().then((value) =>
-        Navigator.of(context).pushAndRemoveUntil(
+    setState(() {
+      isLoading = true;
+    });
+    await context.read<LoginProvider>().signOut().signOut().then(
+        (value) => Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => WelcomeBackPage()),
-            (route) => false));
+            (route) => false), setState(() {
+      isLoading = true;
+    }));
   }
 
   @override
@@ -177,6 +183,25 @@ class _SettingsPage extends State<SettingsPage> {
                               /* onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (_) => WelcomeBackPage())), */
+                            ),
+                            Padding(
+                              //left: MediaQuery.of(context).size.width / 4,
+                              // top: 150,
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: isLoading
+                                  ? Container(
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.blue),
+                                        ),
+                                      ),
+                                      color: Colors
+                                          .transparent, //.withOpacity(0.8),
+                                    )
+                                  : Container(),
                             ),
                           ],
                         ),
