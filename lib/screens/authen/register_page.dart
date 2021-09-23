@@ -806,6 +806,14 @@ return Scaffold(
                   email: getmail, //emailString.toString(),
                   password: getpassword)) //passwordString.toString()))
               .user;
+
+      /*
+          (await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: getmail, //emailString.toString(),
+                  password: getpassword)) //passwordString.toString()))
+              .user;
+      */
+
       await Firestore.instance.collection("users").document(user.uid).setData({
         "name": getname, //nameString,
         "namesirname": getname, //nameString,
@@ -827,9 +835,9 @@ return Scaffold(
         "address": "",
       }).catchError((response) {
         print('response = ${response.toString()}');
-        //String title = response.code;
-        //String message = response.message;
-        //myAlert(title, message);
+        String title = 'แจ้งเตือน';
+        String message = 'เบอร์โทรนี้เคยลงทะเบียนแล้ว';
+        myAlert(title, message);
       });
       showModalAlertDialog(context);
     }
@@ -1008,7 +1016,6 @@ return Scaffold(
                             .then((firebaseUser) {
                           if (firebaseUser == null) {
                             userObj.signOut();
-                            //FirebaseAuth.instance.signOut();
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
