@@ -117,7 +117,7 @@ class ProjectList extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('orders')
-          //.where("active", isEqualTo: false)
+          .where("active", isEqualTo: false)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');

@@ -693,19 +693,19 @@ class _Package extends State<Package> {
 
           if (data['bankaccount'] == "") {
             showMessageBox(
-                context, "Error", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
+                context, "แจ้งเตือน", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
                 actions: [dismissButton(context)]);
             logger.e("bank account can't be null");
           } else if (tradeamount.text == null) {
-            showMessageBox(context, "Error", "กรูณากรอกจำนวนเงิน",
+            showMessageBox(context, "แจ้งเตือน", "กรูณากรอกจำนวนเงิน",
                 actions: [dismissButton(context)]);
             logger.e("amount can't be null");
           } else if (double.parse(tradeamount.text) < 100) {
-            showMessageBox(context, "Error", "ลงทุนขั้นต่ำ 100 บาท",
+            showMessageBox(context, "แจ้งเตือน", "ลงทุนขั้นต่ำ 100 บาท",
                 actions: [dismissButton(context)]);
             logger.e("amount over 100");
           } else if (imageUrl == null) {
-            showMessageBox(context, "Error", "กรุณา upload สลิปโอนเงิน",
+            showMessageBox(context, "แจ้งเตือน", "กรุณา upload สลิปโอนเงิน",
                 actions: [dismissButton(context)]);
             logger.e("Transfer money slip");
           } else {

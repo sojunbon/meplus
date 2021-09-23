@@ -679,11 +679,12 @@ class _Product_detail extends State<Product_detail> {
       child: InkWell(
         onTap: () async {
           if (imageUrl == null) {
-            showMessageBox(context, "Error", "กรุณา upload สลิปโอนเงิน",
+            showMessageBox(context, "แจ้งเตือน", "กรุณา upload สลิปโอนเงิน",
                 actions: [dismissButton(context)]);
             logger.e("Transfer money slip");
-          } else if (data['address'] == null) {
-            showMessageBox(context, "Error", "กรุณา กรอกที่อยู่ จัดส่งสินค้า",
+          } else if (data['address'] == "") {
+            showMessageBox(
+                context, "แจ้งเตือน", "กรุณา กรอกที่อยู่ จัดส่งสินค้า",
                 actions: [dismissButton(context)]);
             logger.e("Transfer product");
           } else {

@@ -124,21 +124,25 @@ Future<void> generateData(
   });
 
   var getamount = documents['amount'];
-  if (getamount >= amounta && getamount < amountb) {
+  if (getamount >= double.parse(amounta) && getamount < double.parse(amountb)) {
     percentcal = double.parse(percenta);
-  } else if (getamount >= amountb && getamount < amountc) {
+  } else if (getamount >= double.parse(amountb) &&
+      getamount < double.parse(amountc)) {
     percentcal = double.parse(percentb);
-  } else if (getamount >= amountc && getamount < amountd) {
+  } else if (getamount >= double.parse(amountc) &&
+      getamount < double.parse(amountd)) {
     percentcal = double.parse(percentc);
-  } else if (getamount >= amountd) {
+  } else if (getamount >= double.parse(amountd)) {
     percentcal = double.parse(percentd);
   }
 
   double txamt = getamount;
+
+  double getperday = double.parse(perday);
   //double.parse(getamount);
   //double fxamt = double.parse(percentcal);
-  if (txamt != 0 && percentcal != 0) {
-    calpay = (txamt * percentcal) / 100;
+  if (getamount != 0 && percentcal != 0) {
+    calpay = ((txamt * percentcal) / 100) * getperday;
     //calpay = (getamount * fcount_refer) / 100;
   } else {
     calpay = 0;
@@ -356,8 +360,10 @@ Future<void> generateReferFriend(BuildContext context, String docid,
     calpay = 0;
   }
 
+  int con_fcount = int.parse(fcount);
+
   if (userid != userid_refer && userid_refer != null) {
-    if (countReferFriend <= fcount) {
+    if (countReferFriend <= con_fcount) {
       //calpay = (getamount * fcount_refer) / 100;
 
       int g = 0;
@@ -390,7 +396,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
           },
           docid,
           g);
-    } else if (countReferFriend > fcount) {
+    } else if (countReferFriend > con_fcount) {
       //calpay = (getamount * fcount_percent) / 100;
       int g = 0;
       g++;
