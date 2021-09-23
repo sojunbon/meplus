@@ -96,7 +96,20 @@ class _Meplusmain extends State<Meplusmain> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      await launch('https://lin.ee/Q2YqPcy');
+
+      // throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> lineurl() async {
+    String url = linead; //'https://flutter.dev';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      await launch('https://lin.ee/Q2YqPcy');
+
+      // throw 'Could not launch $url';
     }
   }
 
@@ -763,7 +776,8 @@ class _Meplusmain extends State<Meplusmain> {
                             icon: Image.asset('assets/icons/line.png'),
 
                             onPressed: () {
-                              _launchURL();
+                              //_launchURL();
+                              lineurl();
                             },
                             //onPressed: () => Navigator.of(context).push(
                             //    MaterialPageRoute(

@@ -208,7 +208,7 @@ class _RegisterPageState extends State<RegisterPage> {
       '  \nลงทะเบียนสมาชิก',
       style: TextStyle(
           color: Colors.white,
-          fontSize: 30.0,
+          fontSize: 22.0,
           fontWeight: FontWeight.bold,
           shadows: [
             BoxShadow(
@@ -261,7 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
+                      fontSize: 16.0))),
           /*
           decoration: BoxDecoration(
               gradient: mainButton,
@@ -296,7 +296,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                      fontSize: 20.0))),
+                      fontSize: 16.0))),
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
@@ -339,7 +339,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: TextField(
                     controller: mobilestr,
                     decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -349,7 +349,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: TextField(
                     controller: emailString,
                     decoration: InputDecoration(hintText: 'Email'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                   ),
                 ),
                 */
@@ -358,7 +358,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: TextField(
                     controller: nameString,
                     decoration: InputDecoration(hintText: 'ชื่อ - นามสกุล'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                   ),
                 ),
                 Padding(
@@ -367,7 +367,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: passwordString,
                     decoration:
                         InputDecoration(hintText: 'รหัสผ่าน 6 ตัวอักษร'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                     obscureText: true,
                   ),
                 ),
@@ -377,7 +377,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: TextField(
                     controller: banknamestr,
                     decoration: InputDecoration(hintText: 'ธนาคาร'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                   ),
                 ),
                 */
@@ -410,30 +410,32 @@ class _RegisterPageState extends State<RegisterPage> {
                           );
                         }
                         return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          //mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
                               "ธนาคาร",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16,
+                                fontSize: 14,
                                 //fontWeight: FontWeight.w600
                               ),
                               textAlign: TextAlign.left,
                             ),
-                            //Icon(FontAwesomeIcons.building,
-                            //    size: 25.0, color: Color(0xff5b86e5)),
-                            SizedBox(width: 126.0),
-                            DropdownButton(
-                              //isExpanded: false,
-                              value: selectbankname,
+                            Container(
+                              //Icon(FontAwesomeIcons.building,
+                              //    size: 25.0, color: Color(0xff5b86e5)),
 
-                              items: <String>[
-                                for (int i = 0;
-                                    i < snapshot.data.documents.length;
-                                    i++)
-                                  snapshot.data.documents[i].data['bankname'],
-                                /*
+                              //SizedBox(width: 200.0),
+                              //padding: EdgeInsets.all(15),
+
+                              child: DropdownButton(
+                                value: selectbankname,
+                                items: <String>[
+                                  for (int i = 0;
+                                      i < snapshot.data.documents.length;
+                                      i++)
+                                    snapshot.data.documents[i].data['bankname'],
+                                  /*
                                 'ธนาคารกสิกรไทย',
                                 'ธนาคารกรุงเทพ',
                                 'ธนาคารกรุงไทย',s
@@ -444,33 +446,44 @@ class _RegisterPageState extends State<RegisterPage> {
                                 'ธนาคารธนชาติ',
                                 'ธนาคารยูโอบี',
                                 */
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              hint: Text(
-                                "",
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                hint: Text(
+                                  "",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                elevation: 8,
+                                icon: Icon(Icons.arrow_drop_down_circle),
+                                dropdownColor: Colors.amber,
+
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                                //isExpanded: true,
+                                onChanged: (String value) {
+                                  final snackBar = SnackBar(
+                                    content: Text(
+                                      'เลือกธนาคาร $value',
+                                      style:
+                                          TextStyle(color: Color(0xff5b86e5)),
+                                    ),
+                                  );
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                  setState(() {
+                                    selectbankname = value;
+                                    //banknamestr =
+                                    //    selectbankname as TextEditingController;
+                                  });
+                                },
                               ),
-                              onChanged: (String value) {
-                                final snackBar = SnackBar(
-                                  content: Text(
-                                    'เลือกธนาคาร $value',
-                                    style: TextStyle(color: Color(0xff5b86e5)),
-                                  ),
-                                );
-                                Scaffold.of(context).showSnackBar(snackBar);
-                                setState(() {
-                                  selectbankname = value;
-                                  //banknamestr =
-                                  //    selectbankname as TextEditingController;
-                                });
-                              },
                             ),
                           ],
                         );
@@ -501,7 +514,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: TextField(
                     controller: bankacctstr,
                     decoration: InputDecoration(hintText: 'เลขบัญชี'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                   ),
                 ),
                 /*
@@ -521,7 +534,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: phonereferstr,
                     decoration:
                         InputDecoration(hintText: 'เบอร์โทรศัพท์ ผู้แนะนำ'),
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                     keyboardType: TextInputType.number,
                   ),
                 ),

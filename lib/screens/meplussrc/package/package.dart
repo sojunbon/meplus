@@ -520,7 +520,7 @@ class _Package extends State<Package> {
       //bottom: 190,
       height: 500,
       width: 380,
-      top: 610,
+      top: 595,
       //left: MediaQuery.of(context).size.width / 4,
       left: 15,
       child: InkWell(
