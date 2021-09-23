@@ -203,7 +203,7 @@ class BookList extends StatelessWidget {
                       },
                       title: new Text(
                           gettype + " : " + document['amount'].toString()),
-                      subtitle: new Text("ชื่อธนาคาร : " +
+                      subtitle: new Text("ธนาคาร : " +
                           ' ' +
                           document['bankname'] +
                           ' ' +

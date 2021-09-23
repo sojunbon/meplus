@@ -256,7 +256,7 @@ class ProjectsExpansionTile extends StatelessWidget {
         children: <Widget>[
           ListTile(
             title: Text(
-              bankname + " / เลขบัญชี : " + bankaccount,
+              'ธนาคาร' + bankname + " / เลขบัญชี : " + bankaccount,
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
@@ -426,8 +426,7 @@ class BookList extends StatelessWidget {
                       },
                       title: new Text(
                           gettype + " : " + document['amount'].toString()),
-                      subtitle: new Text("ชื่อธนาคาร : " +
-                          ' ' +
+                      subtitle: new Text("ธนาคาร" +
                           document['bankname'] +
                           ' ' +
                           document['bankaccount']),

@@ -303,7 +303,7 @@ class ProjectsExpansionTile extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              bankname + " / เลขบัญชี : " + bankaccount,
+              'ธนาคาร' + bankname + " / เลขบัญชี : " + bankaccount,
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),

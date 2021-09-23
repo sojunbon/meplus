@@ -293,6 +293,7 @@ class ProjectsExpansionTile extends StatelessWidget {
                 " \n วันที่ได้รับผลตอบแทน : " +
                 caldate +
                 " \n " +
+                "ธนาคาร" +
                 bankname +
                 " / เลขบัญชี : " +
                 bankaccount +
