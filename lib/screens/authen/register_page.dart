@@ -37,6 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController bankacctstr = TextEditingController(text: '');
   TextEditingController mobilestr = TextEditingController(text: '');
   TextEditingController phonereferstr = TextEditingController(text: '');
+
   //TextEditingController cmfPassword = TextEditingController(text: '');
   //String nameString, emailString, passwordString, cmfPassword;
   //final formKey = new GlobalKey<FormState>();
@@ -62,6 +63,8 @@ class _RegisterPageState extends State<RegisterPage> {
   String checkphoneExist;
   bool loading = false;
   bool isLoading = false;
+  String cat_mob;
+  String con_mob;
 
   var firstColor = Color(0xffCCCC00), secondColor = Color(0xffCCCC00);
   @override
@@ -334,11 +337,22 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    controller: mobilestr,
+                    decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
+                    style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                /*
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
                     controller: emailString,
                     decoration: InputDecoration(hintText: 'Email'),
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ),
+                */
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
@@ -490,14 +504,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ),
+                /*
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
                     controller: mobilestr,
                     decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
                     style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
                   ),
                 ),
+                */
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
@@ -505,6 +522,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration:
                         InputDecoration(hintText: 'เบอร์โทรศัพท์ ผู้แนะนำ'),
                     style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
                   ),
                 ),
                 Padding(
@@ -517,12 +535,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   text: "บันทึก",
                   gradientColors: [secondColor, firstColor],
                   onPressed: () {
+                    cat_mob = mobilestr.text;
+                    con_mob = cat_mob + '@mail.com';
                     print(
-                        'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString , bankname = $selectbankname , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
+                        'name = $nameString,namesirname = $nameString, email = $con_mob, password = $passwordString , bankname = $selectbankname , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
+
+                    //print(
+                    //    'name = $nameString,namesirname = $nameString, email = $emailString, password = $passwordString , bankname = $selectbankname , bankaccount = $bankacctstr , phone = $mobilestr  , mobilerefer = $phonereferstr ');
 
                     // --- convert TextEditingController ---
+
                     disname = nameString.text;
-                    dismail = emailString.text;
+                    dismail = con_mob; // emailString.text;
                     dispass = passwordString.text;
                     disbank = selectbankname;
                     //banknamestr.text;

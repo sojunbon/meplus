@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/services.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'register_page.dart';
@@ -49,6 +50,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
   UserManagement userObj = new UserManagement();
 
   bool isLoading = false;
+  String conphone;
 
   void _showLoadingIndicator() {
     print('isloading');
@@ -83,7 +85,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     Widget subTitle = Padding(
         padding: const EdgeInsets.only(right: 56.0),
         child: Text(
-          'Login to your account using email',
+          'Login to your account using phone',
           style: TextStyle(
             color: Colors.white,
             fontSize: 12.0,
@@ -103,12 +105,14 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
         */
         // -------- Me plus Login -------
         onTap: () async {
+          conphone = email.text.trim() + '@mail.com';
           setState(() {
             isLoading = true;
           });
           if (!await context
               .read<LoginProvider>()
-              .login(email.text.trim(), password.text.trim())) {
+              .login(conphone.trim(), password.text.trim())) {
+            // .login(email.text.trim(), password.text.trim())) {
             _key.currentState;
             /*
             Flushbar(
@@ -346,9 +350,10 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
-                    decoration: InputDecoration(hintText: 'Email'),
+                    decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
                     controller: email,
                     style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
                   ),
                 ),
                 Padding(
