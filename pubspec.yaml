@@ -115,6 +115,11 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  plugin:
+    platforms:
+      android:
+        package: org.codehq.Embedding
+        pluginClass: EmbeddingPlugin
   assets:
      - assets/
      - assets/images/
