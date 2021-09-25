@@ -9,8 +9,7 @@ class Repository {
 
   /// Authentication
 
-  Stream<FirebaseUser> get onAuthStateChange =>
-      _authResources.onAuthStateChange;
+  Stream<User> get onAuthStateChange => _authResources.onAuthStateChange;
   Future<int> loginWithEmailAndPassword(String email, String password) =>
       _authResources.loginWithEmailAndPassword(email, password);
   Future<int> signUpWithEmailAndPassword(

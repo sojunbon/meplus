@@ -4,28 +4,23 @@ import 'package:flutter/services.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'register_page.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
-import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
-import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
-import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
-//import 'package:meplus/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
-import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/material/button_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:apple_sign_in/apple_sign_in_button.dart';
 import 'package:meplus/components/notification.dart';
-import 'package:meplus/screens/signin_with_email/register_with_email.dart';
-import 'package:meplus/services/signin_with_email_method_services/signin_with_email_service.dart';
+
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/providers/register_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:meplus/services/usermngmt.dart';
 //----- ME PLUS Main page -----
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class WelcomeBackPage extends StatefulWidget {
   WelcomeBackPage({Key key}) : super(key: key);
@@ -41,6 +36,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     // initLineSdk();
     //setState(() { userStatus = null; });
     super.initState();
+    Firebase.initializeApp();
   }
 
   TextEditingController email = TextEditingController(text: "");
@@ -542,19 +538,22 @@ return Scaffold(
                     ElevatedButton(
                       child: const Text('OK'),
                       onPressed: () {
-                        FirebaseAuth.instance
-                            .currentUser()
-                            .then((firebaseUser) {
-                          if (firebaseUser == null) {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        WelcomeBackPage()));
-                          } else {
-                            userObj.signOut();
-                          }
-                        });
+                        //FirebaseAuth.instance
+                        //   .currentUser()
+                        // .then((firebaseUser) {
+                        // if (firebaseUser == null) {
+                        final FirebaseAuth auth = FirebaseAuth.instance;
+                        final User user = auth.currentUser;
+                        if (user == null) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      WelcomeBackPage()));
+                        } else {
+                          userObj.signOut();
+                        }
+                        // });
                         /*
                         Navigator.pushReplacement(
                             context,
@@ -587,16 +586,19 @@ return Scaffold(
       child: Text("OK"),
       onPressed: () {
         //Navigator.push(
-        FirebaseAuth.instance.currentUser().then((firebaseUser) {
-          if (firebaseUser == null) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => WelcomeBackPage()));
-          } else {
-            userObj.signOut();
-          }
-        });
+
+        final FirebaseAuth auth = FirebaseAuth.instance;
+        final User user = auth.currentUser;
+        // FirebaseAuth.instance.currentUser().then((firebaseUser) {
+        if (user == null) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => WelcomeBackPage()));
+        } else {
+          userObj.signOut();
+        }
+        // });
       },
     );
 

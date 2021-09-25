@@ -1,9 +1,7 @@
 import 'package:meplus/app_properties.dart';
-import 'package:meplus/screens/shopping/faq_page.dart';
-import 'package:meplus/screens/shopping/payment/payment_page.dart';
+
 import 'package:meplus/screens/meplussrc/profilepage/settings_page.dart';
-import 'package:meplus/screens/shopping/tracking_page.dart';
-import 'package:meplus/screens/shopping/wallet/wallet_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:meplus/services/usermngmt.dart';
 import 'package:provider/provider.dart';

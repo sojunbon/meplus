@@ -25,11 +25,13 @@ class _Topuplist extends State<Topuplist> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    setState(() {
+      userID = user.uid;
     });
+    //});
   }
 
   @override
@@ -109,7 +111,7 @@ class BookList extends StatelessWidget {
     final user = (context.watch<LoginProvider>().user);
     var gettype;
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
+      stream: FirebaseFirestore.instance
           .collection('moneytrans')
           .where("uid", isEqualTo: user.uid)
           //  .where("active", isEqualTo: "true")
@@ -124,8 +126,7 @@ class BookList extends StatelessWidget {
           default:
             return new ListView(
               padding: EdgeInsets.only(bottom: 80),
-              children:
-                  snapshot.data.documents.map((DocumentSnapshot document) {
+              children: snapshot.data.docs.map((DocumentSnapshot document) {
                 if (document['paytype'] == 1) {
                   gettype = 'ฝากเงิน';
                 } else {

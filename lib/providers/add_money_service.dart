@@ -16,13 +16,13 @@ Future<void> addMoneyItem(
       ":" +
       now.second.toString());
   String autodoc = documentName + txttime;
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("moneytrans")
-      .document(autodoc)
+      .doc(autodoc)
       //.collection("users")
       //.document()
       //.document(autodoc)
-      .setData(data)
+      .set(data)
       .then((returnData) {
     showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
     logger.i("setData success");
@@ -42,13 +42,13 @@ Future<void> addReferFriend(
       ":" +
       now.second.toString());
   // String autodoc = documentName + txttime;
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("referfriend")
-      .document()
+      .doc()
       //.collection("users")
       //.document()
       //.document(autodoc)
-      .setData(data)
+      .set(data)
       .then((returnData) {
     //  showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
     logger.i("setData success");
@@ -69,12 +69,12 @@ Future<void> addPayMoneyItem(
       now.second.toString());
   String autodoc = documentName + txttime;
 
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("users")
-      .document(documentName)
+      .doc(documentName)
       .collection("moneytrans")
-      .document()
-      .setData(data)
+      .doc()
+      .set(data)
       .then((returnData) {
     showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
     logger.i("setData success");

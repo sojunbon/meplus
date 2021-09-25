@@ -11,7 +11,6 @@ import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/meplussrc/category/melink.dart';
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 import 'package:meplus/my_app.dart';
-import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 import 'package:nice_button/NiceButton.dart';
 import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +20,7 @@ import 'package:meplus/screens/authen/dropdownlist.dart';
 
 import 'package:meplus/screens/authen/components/referfriend_control.dart';
 //import 'package:meplus/providers/add_money_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 //import 'forgot_password_page.dart';
 
@@ -70,37 +70,46 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-        loading = false;
-      });
+    Firebase.initializeApp();
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    //final User user = auth.currentUser;
+
+    //final User user = Provider.of<User>(context);
+    // print(user.uid);
+
+    //FirebaseAuth.instance.currentUser().then((User user) {
+    setState(() {
+      //userID = user.uid;
+      loading = false;
     });
+
     getData();
     checkPhoneSnap(mobilestr.text);
     //checkPhone();
   }
 
   Future<dynamic> checkPhoneSnap(String phone) async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    FirebaseFirestore.instance
         .collection("referfriend")
-        .document(phone)
+        .doc(phone)
         .snapshots()
         .listen((snapshot) {
-      getMobile = snapshot.data['mobile'];
+      getMobile = snapshot['mobile'];
       return getMobile;
     });
   }
 
   getDataPhone(String phone) async {
-    final phonesnap = await Firestore.instance
+    final phonesnap = await FirebaseFirestore.instance
         .collection('referfriend')
-        .document(phone)
+        .doc(phone)
         .get();
 
     //DocumentSnapshot snapshot = phonesnap.data['mobile'];
-    snapshotphone = phonesnap.data['mobile'];
+    snapshotphone = phonesnap['mobile'];
 
     print(snapshotphone);
     //return snapshotphone;
@@ -111,10 +120,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   dynamic data;
   Future<dynamic> getData() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
 
     final DocumentReference document =
-        Firestore.instance.collection("users").document(user.uid);
+        FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
@@ -128,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     final DocumentReference document =
-        Firestore.instance.collection("referfriend").document(phone);
+        FirebaseFirestore.instance.collection("referfriend").doc(phone);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
@@ -138,69 +147,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<QuerySnapshot> getmobie(String _mobile) async {
-    return await Firestore.instance
+    return await FirebaseFirestore.instance
         .collection('users')
         .where('mobile', isEqualTo: _mobile)
-        .getDocuments();
+        .get();
   }
-
-  /*
-  dynamic phoneexist;
-  Future<dynamic> checkPhoneNumber() {
-    String getmobile = mobilestr.text;
-
-    Firestore.instance
-        .collection('users')
-        .where("mobile", isEqualTo: getmobile)
-        .snapshots()
-        .listen((snapshot) {
-      snapshot.documents.forEach((result) {
-        phoneexist = result.data;
-      });
-    });
-  }
-  */
-
-  // void handleSwitch(
-  //     String docid, DocumentSnapshot documents, BuildContext context) {
-  // --- insert data รายการ Refer Friend ---
-  //  generateRefer(context, docid, documents);
-  // }
-
-  /*
-  void getCal() async {
-    final db = Firestore.instance;
-    await db
-        .collection('conftab')
-        .document('conf')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      count = documentSnapshot.data['count'];
-      percenta = documentSnapshot.data['percenta'];
-      percentb = documentSnapshot.data['percentb'];
-      percentc = documentSnapshot.data['percentc'];
-      percentd = documentSnapshot.data['percentd'];
-      perday = documentSnapshot.data['perday'];
-    });
-  }
-  
-
-  Future<String> checkPhoneNumber(String mobilenum) {
-    String getmobile;
-
-    Firestore.instance
-        .collection('users')
-        .where("mobile", isEqualTo: mobilenum)
-        .snapshots()
-        .listen((snapshot) {
-      snapshot.documents.forEach((result) {
-        //getmobile = result.data('mobile');
-        getmobile = result.data['mobile'];
-        return getmobile;
-      });
-    });
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
@@ -383,24 +334,22 @@ class _RegisterPageState extends State<RegisterPage> {
                 */
                 // ----------------- Dropdown select BANK ---------------------
                 StreamBuilder<QuerySnapshot>(
-                    stream:
-                        Firestore.instance.collection("banktable").snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection("banktable")
+                        .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return CircularProgressIndicator();
 
                       {
                         List<DropdownMenuItem> currencyItems = [];
-                        for (int i = 0;
-                            i < snapshot.data.documents.length;
-                            i++) {
-                          DocumentSnapshot snap = snapshot.data.documents[i];
-                          var getbankname =
-                              snapshot.data.documents[i].data['bankname'];
+                        for (int i = 0; i < snapshot.data.docs.length; i++) {
+                          DocumentSnapshot snap = snapshot.data.docs[i];
+                          var getbankname = snapshot.data.docs[i]['bankname'];
 
                           currencyItems.add(
                             DropdownMenuItem(
                               child: Text(
-                                snapshot.data.documents[i].data['bankname'],
+                                snapshot.data.docs[i]['bankname'],
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
@@ -432,9 +381,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 value: selectbankname,
                                 items: <String>[
                                   for (int i = 0;
-                                      i < snapshot.data.documents.length;
+                                      i < snapshot.data.docs.length;
                                       i++)
-                                    snapshot.data.documents[i].data['bankname'],
+                                    snapshot.data.docs[i]['bankname'],
                                   /*
                                 'ธนาคารกสิกรไทย',
                                 'ธนาคารกรุงเทพ',
@@ -756,21 +705,21 @@ return Scaffold(
     });
 
     QuerySnapshot querySnapshotuser =
-        await Firestore.instance.collection("users").getDocuments();
-    for (int i = 0; i < querySnapshotuser.documents.length; i++) {
-      var userphongap = querySnapshotuser.documents[i];
-      phoneUserPrimary = userphongap.data["mobile"];
+        await FirebaseFirestore.instance.collection("users").get();
+    for (int i = 0; i < querySnapshotuser.docs.length; i++) {
+      var userphongap = querySnapshotuser.docs[i];
+      phoneUserPrimary = userphongap["mobile"];
 
       if (phoneUserPrimary == getrefer) {
         phoneUserRefer = phoneUserPrimary;
-        userid_refer = userphongap.data["uid"];
-        bankname_refer = userphongap.data["bankname"];
-        bankacct = userphongap.data["bankaccount"];
-        namexx = userphongap.data["name"];
+        userid_refer = userphongap["uid"];
+        bankname_refer = userphongap["bankname"];
+        bankacct = userphongap["bankaccount"];
+        namexx = userphongap["name"];
       } else {
         phoneUser = "";
       }
-      print(userphongap.documentID);
+      print(userphongap.id);
     }
 
     /*
@@ -792,10 +741,10 @@ return Scaffold(
     */
 
     QuerySnapshot querySnapshot =
-        await Firestore.instance.collection("users").getDocuments();
-    for (int i = 0; i < querySnapshot.documents.length; i++) {
-      var phongap = querySnapshot.documents[i];
-      checkphoneExist = phongap.data["mobile"];
+        await FirebaseFirestore.instance.collection("users").get();
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var phongap = querySnapshot.docs[i];
+      checkphoneExist = phongap["mobile"];
 
       if (checkphoneExist == getphone) {
         phoneExistPrimary = checkphoneExist;
@@ -806,7 +755,7 @@ return Scaffold(
         //userid_new = phongap.data["uid"];
         checkstate = false;
       }
-      print(phongap.documentID);
+      print(phongap.id);
     }
 
     if (phoneExistPrimary == getphone) {
@@ -814,7 +763,7 @@ return Scaffold(
     }
 
     if (phoneExistPrimary == null) {
-      final FirebaseUser user =
+      final User user =
           (await FirebaseAuth.instance.createUserWithEmailAndPassword(
                   email: getmail, //emailString.toString(),
                   password: getpassword)) //passwordString.toString()))
@@ -827,7 +776,7 @@ return Scaffold(
               .user;
       */
 
-      await Firestore.instance.collection("users").document(user.uid).setData({
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
         "name": getname, //nameString,
         "namesirname": getname, //nameString,
         "email": getmail, //emailString,
@@ -857,17 +806,17 @@ return Scaffold(
 
     String checknewuid;
     QuerySnapshot querySnapshotNewUser =
-        await Firestore.instance.collection("users").getDocuments();
-    for (int i = 0; i < querySnapshotNewUser.documents.length; i++) {
-      var newusersnap = querySnapshotNewUser.documents[i];
-      checknewuid = newusersnap.data["mobile"];
+        await FirebaseFirestore.instance.collection("users").get();
+    for (int i = 0; i < querySnapshotNewUser.docs.length; i++) {
+      var newusersnap = querySnapshotNewUser.docs[i];
+      checknewuid = newusersnap["mobile"];
 
       if (checknewuid == getphone) {
-        userid_new = newusersnap.data["uid"];
+        userid_new = newusersnap["uid"];
       } else {
         //userid_new = phongap.data["uid"];
       }
-      print(newusersnap.documentID);
+      print(newusersnap.id);
     }
     if (phoneUserRefer != null && phoneExistPrimary == null) {
       addReferFriend(
@@ -1024,27 +973,31 @@ return Scaffold(
                     ElevatedButton(
                       child: const Text('OK'),
                       onPressed: () {
-                        FirebaseAuth.instance
-                            .currentUser()
-                            .then((firebaseUser) {
-                          if (firebaseUser == null) {
-                            userObj.signOut();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        WelcomeBackPage()));
-                          } else {
-                            Navigator.push(
-                                //Navigator.pop(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MemainPage(
-                                        user: context
-                                            .watch<LoginProvider>()
-                                            .user)));
-                          }
-                        });
+                        //FirebaseAuth.instance
+                        //  .currentUser()
+                        //  .then((firebaseUser)
+                        final FirebaseAuth auth = FirebaseAuth.instance;
+                        final User user = auth.currentUser;
+                        // {
+                        if (user == null) {
+                          userObj.signOut();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      WelcomeBackPage()));
+                        } else {
+                          Navigator.push(
+                              //Navigator.pop(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MemainPage(
+                                      user: context
+                                          .watch<LoginProvider>()
+                                          .user)));
+                        }
+                        //}
+                        //);
                         /*
                         Navigator.push(
                             //Navigator.pop(

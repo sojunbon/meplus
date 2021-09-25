@@ -19,14 +19,14 @@ Future<void> addProductItem(
       ":" +
       now.second.toString());
   //String autodoc = documentName + txttime;
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("orders")
-      .document()
+      .doc()
       //.document(autodoc)
       //.collection("users")
       //.document()
       //.document(autodoc)
-      .setData(data)
+      .set(data)
       .then((returnData) {
     showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
     logger.i("setData success");
@@ -48,13 +48,13 @@ Future<void> addItem(
       ":" +
       now.second.toString());
   String autodoc = documentName + txttime;
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("products")
       //.document(autodoc)
       //.collection("users")
-      .document()
+      .doc()
       //.document(autodoc)
-      .setData(data)
+      .set(data)
       .then((returnData) {
     showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
     logger.i("setData success");
@@ -66,16 +66,15 @@ Future<void> addItem(
 queryValues() async {
   double tempTotal = 0;
   String sumtotal;
-  FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  Firestore.instance
+  User user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore.instance
       .collection('moneytrans')
       .where("uid", isEqualTo: user.uid)
       .where("active", isEqualTo: true)
       .where("payment", isEqualTo: false)
       .snapshots()
       .listen((snapshot) {
-    tempTotal =
-        snapshot.documents.fold(0, (tot, doc) => tot + doc.data['amount']);
+    tempTotal = snapshot.docs.fold(0, (tot, doc) => tot + doc['amount']);
     sumtotal = tempTotal.toString();
 
     return sumtotal;
@@ -113,7 +112,7 @@ Future<void> generateData(
   double tempTotal = 0;
   String sumtotal;
   var getdocid = docid;
-  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  User user = FirebaseAuth.instance.currentUser;
 
   count = 0;
   amounta = 0;
@@ -131,25 +130,25 @@ Future<void> generateData(
   calpay = 0;
   percentcal = 0;
 
-  final db = Firestore.instance;
+  final db = FirebaseFirestore.instance;
   await db
       .collection('conftab')
-      .document('conf')
+      .doc('conf')
       .get()
       .then((DocumentSnapshot documentSnapshot) {
-    count = documentSnapshot.data['count'];
-    amounta = documentSnapshot.data['amounta'];
-    amountb = documentSnapshot.data['amountb'];
-    amountc = documentSnapshot.data['amountc'];
-    amountd = documentSnapshot.data['amountd'];
-    percenta = documentSnapshot.data['percenta'];
-    percentb = documentSnapshot.data['percentb'];
-    percentc = documentSnapshot.data['percentc'];
-    percentd = documentSnapshot.data['percentd'];
-    perday = documentSnapshot.data['perday'];
-    fcount = documentSnapshot.data['fcount'];
-    fcount_refer = documentSnapshot.data['fcount_refer'];
-    fcount_percent = documentSnapshot.data['fcount_percent'];
+    count = documentSnapshot['count'];
+    amounta = documentSnapshot['amounta'];
+    amountb = documentSnapshot['amountb'];
+    amountc = documentSnapshot['amountc'];
+    amountd = documentSnapshot['amountd'];
+    percenta = documentSnapshot['percenta'];
+    percentb = documentSnapshot['percentb'];
+    percentc = documentSnapshot['percentc'];
+    percentd = documentSnapshot['percentd'];
+    perday = documentSnapshot['perday'];
+    fcount = documentSnapshot['fcount'];
+    fcount_refer = documentSnapshot['fcount_refer'];
+    fcount_percent = documentSnapshot['fcount_percent'];
   });
 
   var getamount = documents['amount'];
@@ -169,22 +168,22 @@ Future<void> generateData(
   String getPhoneNewn = documents['mobile'];
 
   QuerySnapshot querySnapshotuser =
-      await Firestore.instance.collection("referfriend").getDocuments();
-  for (int i = 0; i < querySnapshotuser.documents.length; i++) {
-    var userphongapn = querySnapshotuser.documents[i];
-    phoneUserPrimaryn = userphongapn.data["mobile"];
+      await FirebaseFirestore.instance.collection("referfriend").get();
+  for (int i = 0; i < querySnapshotuser.docs.length; i++) {
+    var userphongapn = querySnapshotuser.docs[i];
+    phoneUserPrimaryn = userphongapn["mobile"];
 
     if (phoneUserPrimaryn == getPhoneNewn) {
-      phoneUsern = userphongapn.data["mobile"];
-      phoneUserRefern = userphongapn.data["mobile_refer"];
-      userid_refern = userphongapn.data["uid_refer"];
-      bankname_refern = userphongapn.data["bankname"];
-      bankacctn = userphongapn.data["bankaccount"];
-      namexxn = userphongapn.data["name"];
+      phoneUsern = userphongapn["mobile"];
+      phoneUserRefern = userphongapn["mobile_refer"];
+      userid_refern = userphongapn["uid_refer"];
+      bankname_refern = userphongapn["bankname"];
+      bankacctn = userphongapn["bankaccount"];
+      namexxn = userphongapn["name"];
     } else {
       phoneUsern = "";
     }
-    print(userphongapn.documentID);
+    print(userphongapn.id);
   }
 
   // --- คำนวณวัน ---
@@ -251,7 +250,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   double tempTotal = 0;
   String sumtotal;
   var getdocid = docid;
-  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  User user = await FirebaseAuth.instance.currentUser;
 
   count = 0;
   amounta = 0;
@@ -277,59 +276,59 @@ Future<void> generateReferFriend(BuildContext context, String docid,
   String phoneUser;
   String namexx;
 
-  final db = Firestore.instance;
+  final db = FirebaseFirestore.instance;
   await db
       .collection('conftab')
-      .document('conf')
+      .doc('conf')
       .get()
       .then((DocumentSnapshot documentSnapshot) {
-    count = documentSnapshot.data['count'];
-    amounta = documentSnapshot.data['amounta'];
-    amountb = documentSnapshot.data['amountb'];
-    amountc = documentSnapshot.data['amountc'];
-    amountd = documentSnapshot.data['amountd'];
-    percenta = documentSnapshot.data['percenta'];
-    percentb = documentSnapshot.data['percentb'];
-    percentc = documentSnapshot.data['percentc'];
-    percentd = documentSnapshot.data['percentd'];
-    perday = documentSnapshot.data['perday'];
+    count = documentSnapshot['count'];
+    amounta = documentSnapshot['amounta'];
+    amountb = documentSnapshot['amountb'];
+    amountc = documentSnapshot['amountc'];
+    amountd = documentSnapshot['amountd'];
+    percenta = documentSnapshot['percenta'];
+    percentb = documentSnapshot['percentb'];
+    percentc = documentSnapshot['percentc'];
+    percentd = documentSnapshot['percentd'];
+    perday = documentSnapshot['perday'];
     // นับครั้ง refer friend ครบกี่ครั้ง
-    fcount = documentSnapshot.data['fcount'];
+    fcount = documentSnapshot['fcount'];
     // percent ที่ได้รับ ครบตามการ  count
-    fcount_refer = documentSnapshot.data['fcount_refer'];
+    fcount_refer = documentSnapshot['fcount_refer'];
     // percent ที่ได้รับทุกการลงทุน
-    fcount_percent = documentSnapshot.data['fcount_percent'];
+    fcount_percent = documentSnapshot['fcount_percent'];
   });
 
   String getPhoneNew = documents['mobile']; // user create new package
 
   QuerySnapshot querySnapshotuser =
-      await Firestore.instance.collection("referfriend").getDocuments();
-  for (int i = 0; i < querySnapshotuser.documents.length; i++) {
-    var userphongap = querySnapshotuser.documents[i];
-    phoneUserPrimary = userphongap.data["mobile"];
+      await FirebaseFirestore.instance.collection("referfriend").get();
+  for (int i = 0; i < querySnapshotuser.docs.length; i++) {
+    var userphongap = querySnapshotuser.docs[i];
+    phoneUserPrimary = userphongap["mobile"];
 
     if (phoneUserPrimary == getPhoneNew) {
-      phoneUser = userphongap.data["mobile"];
-      phoneUserRefer = userphongap.data["mobile_refer"];
-      userid_refer = userphongap.data["uid_refer"];
-      bankname_refer = userphongap.data["bankname"];
-      bankacct = userphongap.data["bankaccount"];
-      namexx = userphongap.data["name"];
+      phoneUser = userphongap["mobile"];
+      phoneUserRefer = userphongap["mobile_refer"];
+      userid_refer = userphongap["uid_refer"];
+      bankname_refer = userphongap["bankname"];
+      bankacct = userphongap["bankaccount"];
+      namexx = userphongap["name"];
     } else {
       phoneUser = "";
     }
-    print(userphongap.documentID);
+    print(userphongap.id);
   }
 
   // count moneytrans
   var countReferFriend = 1;
   int ct = 0;
   QuerySnapshot querycount =
-      await Firestore.instance.collection("moneytrans").getDocuments();
-  for (int i = 1; i < querycount.documents.length; i++) {
-    var getcount = querycount.documents[i];
-    phoneUserPrimary = getcount.data["mobile"];
+      await FirebaseFirestore.instance.collection("moneytrans").get();
+  for (int i = 1; i < querycount.docs.length; i++) {
+    var getcount = querycount.docs[i];
+    phoneUserPrimary = getcount["mobile"];
 
     if (phoneUserPrimary == getPhoneNew) {
       ct++;
@@ -337,7 +336,7 @@ Future<void> generateReferFriend(BuildContext context, String docid,
     } else {
       phoneUser = "";
     }
-    print(getcount.documentID);
+    print(getcount.id);
   }
 
   var getamount = documents['amount'];
@@ -436,10 +435,10 @@ Future<void> addPaymentItem(
   //double getcount = double.parse(count);
   //for (int i = 0; i < getcount; i++) {
 
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("trademoney")
-      .document(autodoc)
-      .setData(data)
+      .doc(autodoc)
+      .set(data)
       .then((returnData) {
     //updateTotal(data['uid']);
 
@@ -471,10 +470,10 @@ Future<void> addPaymentItemRefer(
   //double getcount = double.parse(count);
   //for (int i = 0; i < getcount; i++) {
 
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("trademoney")
-      .document(autodoc)
-      .setData(data)
+      .doc(autodoc)
+      .set(data)
       .then((returnData) {
     //updateTotal(data['uid']);
 

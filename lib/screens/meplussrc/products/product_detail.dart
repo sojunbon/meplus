@@ -30,7 +30,7 @@ import 'package:meplus/screens/authen/register_page.dart';
 import 'package:meplus/screens/meplussrc/products/components/product_control.dart';
 
 class Product_detail extends StatefulWidget {
-  FirebaseUser user;
+  User user;
   final String dockey;
 
   //Product_detail({Key key, this.dockey}) : super(key: key);
@@ -56,7 +56,7 @@ class _Product_detail extends State<Product_detail> {
   String userID = "";
 
   String namedis;
-  Firestore _db = Firestore.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   TabController tabController;
   var percent;
   var count;
@@ -87,7 +87,9 @@ class _Product_detail extends State<Product_detail> {
   String imageUrl;
   Future pickImage(context) async {
     //final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    //var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       _imageFile = File(pickedFile.path);
@@ -96,6 +98,27 @@ class _Product_detail extends State<Product_detail> {
   }
 
   Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    setState(() {
+      isLoading = true;
+    });
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    Reference ref = storage.ref().child('uploads/$fileName');
+    UploadTask uploadTask = ref.putFile(_imageFile);
+    uploadTask.whenComplete(() {
+      //_uploadedFileURL = ref.getDownloadURL().toString();
+
+      setState(() {
+        imageUrl = ref.getDownloadURL().toString();
+        isLoading = false;
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+    return imageUrl;
+
+    /*
     String fileName = basename(_imageFile.path);
     setState(() {
       isLoading = true;
@@ -112,6 +135,7 @@ class _Product_detail extends State<Product_detail> {
         isLoading = false;
       });
     });
+    */
 
     /*
     String fileName = basename(_imageFile.path);
@@ -137,10 +161,10 @@ class _Product_detail extends State<Product_detail> {
 
   dynamic data;
   Future<dynamic> getData() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
 
     final DocumentReference document =
-        Firestore.instance.collection("users").document(user.uid);
+        FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
@@ -150,13 +174,13 @@ class _Product_detail extends State<Product_detail> {
   }
 
   Future<dynamic> getUsername() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    User user = await FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
         .collection("users")
-        .document(user.uid)
+        .doc(user.uid)
         .snapshots()
         .listen((snapshot) {
-      namedis = snapshot.data['name'];
+      namedis = snapshot['name'];
       return namedis;
     });
   }
@@ -164,7 +188,7 @@ class _Product_detail extends State<Product_detail> {
   dynamic datadesc;
   Future getDescription() async {
     final DocumentReference getpackage =
-        Firestore.instance.collection("packagedesc").document('desc');
+        FirebaseFirestore.instance.collection("packagedesc").doc('desc');
 
     await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {
@@ -182,9 +206,9 @@ class _Product_detail extends State<Product_detail> {
 
   dynamic picdat;
   Future getPicture() async {
-    final DocumentReference getpack = Firestore.instance
+    final DocumentReference getpack = FirebaseFirestore.instance
         .collection("products") //.document(dockey.toString());
-        .document(dockey);
+        .doc(dockey);
 
     await getpack.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {
@@ -200,11 +224,13 @@ class _Product_detail extends State<Product_detail> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    setState(() {
+      userID = user.uid;
     });
+    //});
 
     getData();
     getPicture();
@@ -215,18 +241,18 @@ class _Product_detail extends State<Product_detail> {
   }
 
   void getCal() async {
-    final db = Firestore.instance;
+    final db = FirebaseFirestore.instance;
     await db
         .collection('conftab')
-        .document('conf')
+        .doc('conf')
         .get()
         .then((DocumentSnapshot documentSnapshot) {
-      count = documentSnapshot.data['count'];
-      percenta = documentSnapshot.data['percenta'];
-      percentb = documentSnapshot.data['percentb'];
-      percentc = documentSnapshot.data['percentc'];
-      percentd = documentSnapshot.data['percentd'];
-      perday = documentSnapshot.data['perday'];
+      count = documentSnapshot['count'];
+      percenta = documentSnapshot['percenta'];
+      percentb = documentSnapshot['percentb'];
+      percentc = documentSnapshot['percentc'];
+      percentd = documentSnapshot['percentd'];
+      perday = documentSnapshot['perday'];
     });
   }
 

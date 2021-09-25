@@ -2,25 +2,21 @@ import 'dart:io' show Platform;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
-import 'package:meplus/screens/authen/register_page.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
-import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
-import 'package:meplus/screens/shopping/product/product_page.dart';
-import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
-import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
+
+//import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
 //import 'package:meplus/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
-import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
+//import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/material/button_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:apple_sign_in/apple_sign_in_button.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:meplus/components/notification.dart';
-import 'package:meplus/screens/signin_with_email/register_with_email.dart';
-import 'package:meplus/services/signin_with_email_method_services/signin_with_email_service.dart';
+
+//import 'package:meplus/services/signin_with_email_method_services/signin_with_email_service.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/providers/register_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +26,10 @@ import 'package:meplus/services/usermngmt.dart';
 //----- ME PLUS Main page -----
 import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 
+import 'package:meplus/screens/meplussrc/products/product_page.dart';
+
 class Melink extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _Melink createState() => _Melink();
@@ -45,27 +43,30 @@ class _Melink extends State<Melink> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String namedis;
   String userID = "";
-  Firestore _db = Firestore.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   @override
   void initState() {
     // initLineSdk();
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+
+    setState(() {
+      userID = user.uid;
     });
+    //});
     getUsername();
   }
 
   Future<dynamic> getUsername() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    User user = await FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
         .collection("users")
-        .document(user.uid)
+        .doc(user.uid)
         .snapshots()
         .listen((snapshot) {
-      namedis = snapshot.data['name'];
+      namedis = snapshot['name'];
       return namedis;
     });
   }
@@ -99,7 +100,7 @@ class _Melink extends State<Melink> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => MainPage())); //RegisterPage()));
+              builder: (_) => ProductPage())); //RegisterPage()));
         },
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
@@ -186,20 +187,22 @@ class _Melink extends State<Melink> {
       bottom: 1,
       child: InkWell(
         onTap: () async {
-          FirebaseAuth.instance.currentUser().then((firebaseUser) {
-            if (firebaseUser == null) {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => WelcomeBackPage()));
-            } else {
-              userObj.signOut();
-              //Navigator.pushReplacement(
-              //    context,
-              //   MaterialPageRoute(
-              //       builder: (BuildContext context) => HomePage()));
-            }
-          });
+          //FirebaseAuth.instance.currentUser().then((firebaseUser) {
+          final FirebaseAuth auth = FirebaseAuth.instance;
+          final User user = auth.currentUser;
+          if (user == null) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => WelcomeBackPage()));
+          } else {
+            userObj.signOut();
+            //Navigator.pushReplacement(
+            //    context,
+            //   MaterialPageRoute(
+            //       builder: (BuildContext context) => HomePage()));
+          }
+          //});
         },
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),

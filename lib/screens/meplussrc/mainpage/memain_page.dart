@@ -1,12 +1,7 @@
 import 'package:meplus/app_properties.dart';
 import 'package:meplus/custom_background.dart';
 import 'package:meplus/models/product.dart';
-import 'package:meplus/screens/shopping/category/category_list_page.dart';
-import 'package:meplus/screens/shopping/notifications_page.dart';
-import 'package:meplus/screens/shopping/search_page.dart';
-//import 'package:meplus/screens/shopping/profile/profile_page.dart';
-import 'package:meplus/screens/shopping/shop/check_out_page.dart';
-import 'package:meplus/screens/shopping/tracking_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -23,8 +18,7 @@ import 'package:meplus/screens/meplussrc/category/mecard.dart';
 import 'package:meplus/models/category.dart';
 
 import 'package:meplus/components/notification.dart';
-import 'package:meplus/screens/shopping/signin_page.dart';
-import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
+//import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meplus/services/usermngmt.dart';
@@ -41,7 +35,7 @@ import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 import 'package:meplus/screens/meplussrc/products/orders_list.dart';
 
 class MemainPage extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -80,7 +74,7 @@ class _MainPageState extends State<MemainPage>
 
   int _currentIndex = 0;
   PageController _pageController;
-  FirebaseUser currentUser;
+  User currentUser;
 
   @override
   void initState() {
@@ -96,7 +90,7 @@ class _MainPageState extends State<MemainPage>
   }
 
   void getCurrentUser() async {
-    currentUser = await FirebaseAuth.instance.currentUser();
+    currentUser = FirebaseAuth.instance.currentUser;
   }
 
   @override
@@ -106,14 +100,14 @@ class _MainPageState extends State<MemainPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          IconButton(
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => NotificationsPage())),
-              icon: Icon(Icons.notifications)),
-          IconButton(
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => SearchPage())),
-              icon: SvgPicture.asset('assets/icons/search_icon.svg'))
+          //IconButton(
+          //  onPressed: () => Navigator.of(context)
+          //      .push(MaterialPageRoute(builder: (_) => NotificationsPage())),
+          //  icon: Icon(Icons.notifications)),
+          //IconButton(
+          // onPressed: () => Navigator.of(context)
+          //     .push(MaterialPageRoute(builder: (_) => SearchPage())),
+          // icon: SvgPicture.asset('assets/icons/search_icon.svg'))
         ],
       ),
     );

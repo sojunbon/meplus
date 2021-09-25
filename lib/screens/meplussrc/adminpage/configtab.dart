@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 
 class Configtab extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _Configtab createState() => _Configtab();
@@ -33,16 +33,18 @@ class _Configtab extends State<Configtab> {
   TextEditingController controller = TextEditingController();
   String collectionName = "Users";
   bool isEditing = false;
-  FirebaseUser curUser;
+  User curUser;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    setState(() {
+      userID = user.uid;
     });
+    //});
 
     _pageController = PageController();
   }
@@ -59,7 +61,7 @@ class _Configtab extends State<Configtab> {
         actions: <Widget>[],
       ),
       body: StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('conftab')
             //.document(conf)
             //.where("uid", isEqualTo: userID)
@@ -69,7 +71,7 @@ class _Configtab extends State<Configtab> {
 
           Text("Loading . . . ");
 
-          return FirestoreListView(documents: snapshot.data.documents);
+          return FirestoreListView(documents: snapshot.data.docs);
         },
       ),
     );
@@ -97,20 +99,19 @@ class FirestoreListView extends StatelessWidget {
         //int score = documents[index].data['score'];
         //bool active = documents[index].data['active'] ?? false;
 
-        String perday = documents[index].data['perday'].toString();
-        String count = documents[index].data['count'].toString();
-        String amounta = documents[index].data['amounta'].toString();
-        String amountb = documents[index].data['amountb'].toString();
-        String amountc = documents[index].data['amountc'].toString();
-        String amountd = documents[index].data['amountd'].toString();
-        String percenta = documents[index].data['percenta'].toString();
-        String percentb = documents[index].data['percentb'].toString();
-        String percentc = documents[index].data['percentc'].toString();
-        String percentd = documents[index].data['percentd'].toString();
-        String fcount = documents[index].data['fcount'].toString();
-        String fcount_refer = documents[index].data['fcount_refer'].toString();
-        String fcount_percent =
-            documents[index].data['fcount_percent'].toString();
+        String perday = documents[index]['perday'].toString();
+        String count = documents[index]['count'].toString();
+        String amounta = documents[index]['amounta'].toString();
+        String amountb = documents[index]['amountb'].toString();
+        String amountc = documents[index]['amountc'].toString();
+        String amountd = documents[index]['amountd'].toString();
+        String percenta = documents[index]['percenta'].toString();
+        String percentb = documents[index]['percentb'].toString();
+        String percentc = documents[index]['percentc'].toString();
+        String percentd = documents[index]['percentd'].toString();
+        String fcount = documents[index]['fcount'].toString();
+        String fcount_refer = documents[index]['fcount_refer'].toString();
+        String fcount_percent = documents[index]['fcount_percent'].toString();
 
         return ListTile(
           title: Container(
@@ -124,12 +125,13 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'คำนวนตามวัน',
                   ),
                   onFieldSubmitted: (String getpercent) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
                       // getpercent = double.parse(percent);
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'perday': getpercent});
                     });
                   },
@@ -143,11 +145,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Count payment',
                   ),
                   onFieldSubmitted: (String getcount) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'count': getcount});
                     });
                   },
@@ -161,11 +164,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ลงทุนตั้งแต่ 100',
                   ),
                   onFieldSubmitted: (String amounta) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'amounta': amounta});
                     });
                   },
@@ -179,11 +183,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ลงทุนตั้งแต่ 1,000',
                   ),
                   onFieldSubmitted: (String amountb) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'amountb': amountb});
                     });
                   },
@@ -197,11 +202,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ลงทุนตั้งแต่ 10,000',
                   ),
                   onFieldSubmitted: (String amountc) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'amountc': amountc});
                     });
                   },
@@ -215,11 +221,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ลงทุนตั้งแต่ 100,000',
                   ),
                   onFieldSubmitted: (String amountd) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'amountd': amountd});
                     });
                   },
@@ -233,11 +240,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Percent ลำดับที่ 1',
                   ),
                   onFieldSubmitted: (String percenta) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'percenta': percenta});
                     });
                   },
@@ -251,11 +259,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Percent ลำดับที่ 2',
                   ),
                   onFieldSubmitted: (String percenta) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'percentb': percentb});
                     });
                   },
@@ -269,11 +278,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Percent ลำดับที่ 3',
                   ),
                   onFieldSubmitted: (String percentc) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'percentc': percentc});
                     });
                   },
@@ -287,11 +297,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Percent ลำดับที่ 4',
                   ),
                   onFieldSubmitted: (String percentd) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'percentd': percentd});
                     });
                   },
@@ -305,11 +316,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Count รอบแนะนำเพื่อน',
                   ),
                   onFieldSubmitted: (String fcount) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'fcount': fcount});
                     });
                   },
@@ -323,11 +335,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Percent แนะนำเพื่อน',
                   ),
                   onFieldSubmitted: (String fcount_refer) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction.update(
+                      transaction.update(
                           snapshot.reference, {'fcount_refer': fcount_refer});
                     });
                   },
@@ -341,11 +354,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Percent /รอบแนะนำเพื่อน',
                   ),
                   onFieldSubmitted: (String fcount_percent) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction.update(snapshot.reference,
+                      transaction.update(snapshot.reference,
                           {'fcount_percent': fcount_percent});
                     });
                   },

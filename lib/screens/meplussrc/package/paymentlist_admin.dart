@@ -40,7 +40,7 @@ class _Paymentlist extends State<Paymentlist> {
   var fcount_refer;
   var fcount;
 
-  FirebaseUser currentUser;
+  User currentUser;
 
   TextEditingController titleController = new TextEditingController();
   TextEditingController authorController = new TextEditingController();
@@ -48,32 +48,35 @@ class _Paymentlist extends State<Paymentlist> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    // FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+
+    setState(() {
+      userID = user.uid;
     });
+    // });
     getCal();
   }
 
   void getCal() async {
-    final db = Firestore.instance;
+    final db = FirebaseFirestore.instance;
     await db
         .collection('conftab')
-        .document('conf')
+        .doc('conf')
         .get()
         .then((DocumentSnapshot documentSnapshot) {
-      count = documentSnapshot.data['count'];
-      percenta = documentSnapshot.data['percenta'];
-      percentb = documentSnapshot.data['percentb'];
-      percentc = documentSnapshot.data['percentc'];
-      percentd = documentSnapshot.data['percentd'];
-      perday = documentSnapshot.data['perday'];
-      fcount = documentSnapshot.data['fcount']; // จำนวนรอบ แนะนำเพื่อน
+      count = documentSnapshot['count'];
+      percenta = documentSnapshot['percenta'];
+      percentb = documentSnapshot['percentb'];
+      percentc = documentSnapshot['percentc'];
+      percentd = documentSnapshot['percentd'];
+      perday = documentSnapshot['perday'];
+      fcount = documentSnapshot['fcount']; // จำนวนรอบ แนะนำเพื่อน
       fcount_refer =
-          documentSnapshot.data['fcount_refer']; // percent ที่ได้รับในรอบนั้นๆ
-      fcount_percent =
-          documentSnapshot.data['fcount_percent']; // percent ที่ได้รับ
+          documentSnapshot['fcount_refer']; // percent ที่ได้รับในรอบนั้นๆ
+      fcount_percent = documentSnapshot['fcount_percent']; // percent ที่ได้รับ
     });
   }
 
@@ -124,7 +127,7 @@ class ProjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
+      stream: FirebaseFirestore.instance
           .collection('trademoney')
           //.where("date_query",
           //    isLessThanOrEqualTo: 8092021) //double.parse(formatdate))
@@ -134,7 +137,7 @@ class ProjectList extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return const Text('No data...');
         //final int projectsCount = snapshot.data.documents.length;
-        List<DocumentSnapshot> documents = snapshot.data.documents; //!.docs;
+        List<DocumentSnapshot> documents = snapshot.data.docs; //!.docs;
         return ExpansionTileList(
           documents: documents,
         );
@@ -167,7 +170,7 @@ class ExpansionTileList extends StatelessWidget {
       children.add(
         ProjectsExpansionTile(
           name: doc['name'],
-          projectKey: doc.documentID,
+          projectKey: doc.id,
           amount: doc['amount'],
           calpayment: doc['calpayment'],
           //gettype: displayType,
@@ -350,18 +353,18 @@ class ProjectsExpansionTile extends StatelessWidget {
 
   void handleSwitch(bool value, String docid, DocumentSnapshot documents,
       BuildContext context) {
-    var attendanceCollection = Firestore.instance
+    var attendanceCollection = FirebaseFirestore.instance
         .collection('trademoney')
-        .document(docid)
+        .doc(docid)
         .collection(docid);
     var documentId = docid.toString();
     //document["name"].toString().toLowerCase();
-    var attendanceReference = attendanceCollection.document(documentId);
+    var attendanceReference = attendanceCollection.doc(documentId);
     //return FirestoreListView(documents: snapshot.data.documents);
 
-    Firestore.instance.runTransaction((transaction) async {
+    FirebaseFirestore.instance.runTransaction((transaction) async {
       DocumentSnapshot snapshot = await transaction.get(documents.reference);
-      await transaction.update(snapshot.reference, {"active": value});
+      transaction.update(snapshot.reference, {"active": value});
       //await updateTotal(snapshot.data['uid']);
     });
     // --- insert data รายการ trade ---
@@ -369,8 +372,8 @@ class ProjectsExpansionTile extends StatelessWidget {
   }
 
   updateTotal(String docid) {
-    var postRef = Firestore.instance.collection("users").document(docid);
-    Firestore.instance.runTransaction((transaction) async {
+    var postRef = FirebaseFirestore.instance.collection("users").doc(docid);
+    FirebaseFirestore.instance.runTransaction((transaction) async {
       await transaction.get(postRef).then((res) async {
         transaction.update(postRef, {
           'sumtotal': sumtotal,

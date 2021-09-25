@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/startscreen/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'my_app.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  //runApp(MyApp());
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LoginProvider.instance())

@@ -4,9 +4,9 @@ import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'components/product_display.dart';
+//import 'components/product_display.dart';
 import 'view_product_page.dart';
-import 'package:meplus/screens/meplussrc/products/components/product_options.dart';
+//import 'package:meplus/screens/meplussrc/products/components/product_options.dart';
 import 'package:meplus/models/newproduct.dart';
 
 class ProductPage extends StatefulWidget {

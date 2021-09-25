@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 
 class Adddescription extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _Adddescription createState() => _Adddescription();
@@ -33,16 +33,21 @@ class _Adddescription extends State<Adddescription> {
   TextEditingController controller = TextEditingController();
   String collectionName = "Users";
   bool isEditing = false;
-  FirebaseUser curUser;
+  User curUser;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+
+    // if (user == null) {
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    setState(() {
+      userID = user.uid;
     });
+    // });
 
     _pageController = PageController();
   }
@@ -59,7 +64,7 @@ class _Adddescription extends State<Adddescription> {
         actions: <Widget>[],
       ),
       body: StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('packagedesc')
             //.document(conf)
             //.where("uid", isEqualTo: userID)
@@ -69,7 +74,7 @@ class _Adddescription extends State<Adddescription> {
 
           Text("Loading . . . ");
 
-          return FirestoreListView(documents: snapshot.data.documents);
+          return FirestoreListView(documents: snapshot.data.docs);
         },
       ),
     );
@@ -97,10 +102,10 @@ class FirestoreListView extends StatelessWidget {
         //int score = documents[index].data['score'];
         //bool active = documents[index].data['active'] ?? false;
 
-        String desca = documents[index].data['desca'].toString();
-        String descb = documents[index].data['descb'].toString();
-        String descc = documents[index].data['descc'].toString();
-        String descd = documents[index].data['descd'].toString();
+        String desca = documents[index]['desca'].toString();
+        String descb = documents[index]['descb'].toString();
+        String descc = documents[index]['descc'].toString();
+        String descd = documents[index]['descd'].toString();
 
         return ListTile(
           title: Container(
@@ -114,13 +119,13 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'รายการที่ 1',
                   ),
                   onFieldSubmitted: (String desca) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
                       // getpercent = double.parse(percent);
-                      await transaction
-                          .update(snapshot.reference, {'desca': desca});
+                      transaction.update(snapshot.reference, {'desca': desca});
                     });
                   },
                   //keyboardType: TextInputType.number,
@@ -133,12 +138,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'รายการที่ 2',
                   ),
                   onFieldSubmitted: (String descb) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
-                          .update(snapshot.reference, {'descb': descb});
+                      transaction.update(snapshot.reference, {'descb': descb});
                     });
                   },
                   //keyboardType: TextInputType.number,
@@ -151,12 +156,14 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'รายการที่ 3',
                   ),
                   onFieldSubmitted: (String descc) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
-                          .update(snapshot.reference, {'descc': descc});
+                      transaction.update(snapshot.reference, {'descc': descc});
+                      // await transaction
+                      //    .update(snapshot.reference, {'descc': descc});
                     });
                   },
                   //keyboardType: TextInputType.number,
@@ -169,12 +176,25 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'รายการที่ 4',
                   ),
                   onFieldSubmitted: (String descd) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
-                          .update(snapshot.reference, {'descd': descd});
+                      // await transaction
+                      transaction.update(snapshot.reference, {'descd': descd});
+
+                      /*
+                          if (documentSnapshot.data()['upVoters'].contains(user.uid)) {
+                          transaction.update(documentReference, <String, dynamic>{
+                              'upVoters': FieldValue.arrayRemove([user.uid])
+                          });
+                          } else {
+                              transaction.update(documentReference, <String, dynamic>{
+                              'upVoters': FieldValue.arrayUnion([user.uid])
+                          });
+                          }
+                          */
                     });
                   },
                   //keyboardType: TextInputType.number,

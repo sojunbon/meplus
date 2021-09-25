@@ -27,13 +27,13 @@ Future<void> addReferFriend(
   //   .get()
   //   .then((DocumentSnapshot documentSnapshot) {
 
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("referfriend")
-      .document(getmobilephone)
+      .doc(getmobilephone)
       //.collection("users")
       //.document()
       //.document(autodoc)
-      .setData(data)
+      .set(data)
       .then((returnData) {
     //  showMessageBox(context, "Success", "", actions: [dismissButton(context)]);
     logger.i("setData success");
@@ -55,10 +55,10 @@ Future<void> checkPhoneExist(
   String checkmobile;
   String checkmobile_dis;
 
-  return Firestore.instance
+  return FirebaseFirestore.instance
       .collection("phonecheck")
-      .document(getmobilephone)
-      .setData(data)
+      .doc(getmobilephone)
+      .set(data)
       .then((returnData) {
     logger.i("setData success");
   }).catchError((e) {

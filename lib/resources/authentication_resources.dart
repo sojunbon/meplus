@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 class AuthenticationResources {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Stream<FirebaseUser> get onAuthStateChange =>
-      _firebaseAuth.onAuthStateChanged;
+  Stream<User> get onAuthStateChange => _firebaseAuth.authStateChanges();
 
   Future<String> getUserUID() async {
-    final FirebaseUser user = await _firebaseAuth.currentUser();
+    final User user =
+        _firebaseAuth.currentUser; //await _firebaseAuth.currentUser();
     return user.uid;
   }
 
@@ -30,7 +30,7 @@ class AuthenticationResources {
   Future<int> signUpWithEmailAndPassword(
       String email, String password, String displayName) async {
     try {
-      AuthResult authResult = await _firebaseAuth
+      UserCredential authResult = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       await setUserDisplayName(authResult.user, displayName);
       return 1;
@@ -44,10 +44,15 @@ class AuthenticationResources {
     }
   }
 
-  Future<void> setUserDisplayName(FirebaseUser user, String displayName) async {
-    UserUpdateInfo updateInfo = UserUpdateInfo();
-    updateInfo.displayName = displayName;
-    await user.updateProfile(updateInfo);
+  Future<void> setUserDisplayName(User user, String displayName) async {
+    //UserUpdateInfo updateInfo = UserUpdateInfo();
+
+    await user.updateProfile(displayName: displayName); //added this line
+    //return _user(user);
+    await user.reload();
+
+    //updateInfo.displayName = displayName;
+    //await user.updateProfile(updateInfo);
   }
 
   Future<void> get signOut async {

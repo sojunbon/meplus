@@ -1,4 +1,3 @@
-import 'package:meplus/screens/shopping/product/components/rating_bottomSheet.dart';
 //import 'package:meplus/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,8 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 //import '../../app_properties.dart';
 import 'package:meplus/app_properties.dart';
 import 'components/color_list.dart';
-import 'components/more_products.dart';
-import 'package:meplus/screens/meplussrc/products/components/product_options.dart';
 import 'package:meplus/models/newproduct.dart';
 
 class ViewProductPage extends StatefulWidget {
@@ -105,10 +102,10 @@ class _ViewProductPageState extends State<ViewProductPage> {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: <Widget>[
-                ProductOption(
-                  _scaffoldKey,
-                  newproduct: newproduct,
-                ),
+                // ProductOption(
+                //  _scaffoldKey,
+                //  newproduct: newproduct,
+                // ),
                 description,
                 Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -127,7 +124,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return RatingBottomSheet();
+                            //return RatingBottomSheet();
                           },
                           //elevation: 0,
                           //backgroundColor: Colors.transparent

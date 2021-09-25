@@ -7,7 +7,7 @@ import 'package:meplus/providers/login_provider.dart';
 //import 'package:meplus/screen/login_screen.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 //import 'package:meplus/screen/firstpage.dart';
-import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
+
 import 'package:meplus/components/show_notification.dart';
 //import '../loginpage.dart';
 //import '../dashboard.dart';
@@ -29,7 +29,7 @@ class UserManagement {
 
   Widget handleAuth() {
     return new StreamBuilder(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data.uid);
@@ -50,28 +50,31 @@ class UserManagement {
   }
 
   authorizeAdmin(BuildContext context) {
-    FirebaseAuth.instance.currentUser().then((user) {
-      Firestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: user.uid)
-          .getDocuments()
-          .then((docs) {
-        if (docs.documents[0].exists) {
-          // if (docs.documents[0].data['role'] == 'admin') {
-          if (docs.documents[0].data['usertype'] == 'admin') {
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (BuildContext context) => new AdminPage()));
-          } else {
-            //print('Not Authorized');
-            showMessageBox(context, "มีสิทธิ์เข้าใช้งานเฉพาะ Admin", "",
-                actions: [dismissButton(context)]);
-            logger.i("Warning");
-          }
+    //FirebaseAuth.instance.currentUser().then((user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: user.uid)
+        .get()
+        .then((docs) {
+      if (docs.docs[0].exists) {
+        // if (docs.documents[0].data['role'] == 'admin') {
+        if (docs.docs[0]['usertype'] == 'admin') {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new AdminPage()));
+        } else {
+          //print('Not Authorized');
+          showMessageBox(context, "มีสิทธิ์เข้าใช้งานเฉพาะ Admin", "",
+              actions: [dismissButton(context)]);
+          logger.i("Warning");
         }
-      });
+      }
     });
+    //});
   }
 
 /*

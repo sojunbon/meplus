@@ -15,23 +15,44 @@ class Pictureadd extends StatefulWidget {
 class _Pictureadd extends State<Pictureadd> {
   File _image;
   String _uploadedFileURL;
+  final picker = ImagePicker();
 
   int _counter = 0;
 
   bool isLoading = false;
 
   Future chooseFile() async {
-    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
-      setState(() {
-        _image = image;
-      });
+    // await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(pickedFile.path);
     });
+    // });
   }
 
   Future uploadFile() async {
     setState(() {
       isLoading = true;
     });
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    Reference ref =
+        storage.ref().child('images/${Path.basename(_image.path)}}');
+    UploadTask uploadTask = ref.putFile(_image);
+    uploadTask.whenComplete(() {
+      //_uploadedFileURL = ref.getDownloadURL().toString();
+
+      setState(() {
+        _uploadedFileURL = ref.getDownloadURL().toString();
+        isLoading = false;
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+    return _uploadedFileURL;
+
+    /*
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
         .child('images/${Path.basename(_image.path)}}');
@@ -44,6 +65,7 @@ class _Pictureadd extends State<Pictureadd> {
         isLoading = false;
       });
     });
+    */
   }
 
   void _incrementCounter() {

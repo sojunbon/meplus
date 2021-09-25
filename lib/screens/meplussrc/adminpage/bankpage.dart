@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 
 class Bankpage extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _Bankpage createState() => _Bankpage();
@@ -33,16 +33,19 @@ class _Bankpage extends State<Bankpage> {
   TextEditingController controller = TextEditingController();
   String collectionName = "Users";
   bool isEditing = false;
-  FirebaseUser curUser;
+  User curUser;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    setState(() {
+      userID = user.uid;
     });
+    //});
 
     _pageController = PageController();
   }
@@ -59,7 +62,7 @@ class _Bankpage extends State<Bankpage> {
         actions: <Widget>[],
       ),
       body: StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('packagedesc')
             //.document(conf)
             //.where("uid", isEqualTo: userID)
@@ -69,7 +72,7 @@ class _Bankpage extends State<Bankpage> {
 
           Text("Loading . . . ");
 
-          return FirestoreListView(documents: snapshot.data.documents);
+          return FirestoreListView(documents: snapshot.data.docs);
         },
       ),
     );
@@ -97,10 +100,10 @@ class FirestoreListView extends StatelessWidget {
         //int score = documents[index].data['score'];
         //bool active = documents[index].data['active'] ?? false;
 
-        String bankname = documents[index].data['bankname'].toString();
-        String bankaccount = documents[index].data['bankaccount'].toString();
-        String namebank = documents[index].data['name'].toString();
-        String line = documents[index].data['line'].toString();
+        String bankname = documents[index]['bankname'].toString();
+        String bankaccount = documents[index]['bankaccount'].toString();
+        String namebank = documents[index]['name'].toString();
+        String line = documents[index]['line'].toString();
 
         return ListTile(
           title: Container(
@@ -114,12 +117,13 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ชื่อธนาคาร',
                   ),
                   onFieldSubmitted: (String bankname) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
                       // getpercent = double.parse(percent);
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'bankname': bankname});
                     });
                   },
@@ -133,11 +137,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ชื่อบัญชี',
                   ),
                   onFieldSubmitted: (String namebank) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'name': namebank});
                     });
                   },
@@ -151,11 +156,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'เลขบัญชี',
                   ),
                   onFieldSubmitted: (String bankaccount) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction.update(
+                      transaction.update(
                           snapshot.reference, {'bankaccount': bankaccount});
                     });
                   },
@@ -169,12 +175,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'Line',
                   ),
                   onFieldSubmitted: (String line) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
-                          .update(snapshot.reference, {'line': line});
+                      transaction.update(snapshot.reference, {'line': line});
                     });
                   },
                   //keyboardType: TextInputType.number,

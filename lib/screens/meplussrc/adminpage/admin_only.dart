@@ -21,7 +21,7 @@ class AdminPage extends StatefulWidget {
 class _AdminPage extends State<AdminPage> {
   int _currentIndex = 0;
   PageController _pageController;
-  FirebaseUser currentUser;
+  User currentUser;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _AdminPage extends State<AdminPage> {
   }
 
   void getCurrentUser() async {
-    currentUser = await FirebaseAuth.instance.currentUser();
+    currentUser = FirebaseAuth.instance.currentUser;
   }
 
   @override

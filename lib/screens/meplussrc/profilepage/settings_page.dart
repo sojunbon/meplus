@@ -2,10 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:meplus/custom_background.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
-import 'package:meplus/screens/shopping/settings/change_country.dart';
-import 'package:meplus/screens/shopping/settings/change_password_page.dart';
-import 'package:meplus/screens/shopping/settings/legal_about_page.dart';
-import 'package:meplus/screens/shopping/settings/notifications_settings_page.dart';
+
 import 'package:flutter/material.dart';
 
 import 'change_language_page.dart';
@@ -25,7 +22,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> {
   String userID = "";
-  FirebaseUser _user;
+  User _user;
   bool isLoading = false;
   @override
   void initState() {
@@ -39,7 +36,7 @@ class _SettingsPage extends State<SettingsPage> {
   }
 
   Future<void> _checkUser() async {
-    _user = await FirebaseAuth.instance.currentUser();
+    _user = FirebaseAuth.instance.currentUser;
     setState(() {});
   }
 

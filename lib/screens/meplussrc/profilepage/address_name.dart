@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:meplus/providers/login_provider.dart';
 
 class Address_name extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _Address_name createState() => _Address_name();
@@ -33,15 +33,17 @@ class _Address_name extends State<Address_name> {
   TextEditingController controller = TextEditingController();
   String collectionName = "Users";
   bool isEditing = false;
-  FirebaseUser curUser;
+  User curUser;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    setState(() {
+      userID = user.uid;
+      // });
     });
 
     _pageController = PageController();
@@ -59,7 +61,7 @@ class _Address_name extends State<Address_name> {
         actions: <Widget>[],
       ),
       body: StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('users')
             //.document(conf)
             .where("uid", isEqualTo: userID)
@@ -69,7 +71,7 @@ class _Address_name extends State<Address_name> {
 
           Text("Loading . . . ");
 
-          return FirestoreListView(documents: snapshot.data.documents);
+          return FirestoreListView(documents: snapshot.data.docs);
         },
       ),
     );
@@ -97,8 +99,8 @@ class FirestoreListView extends StatelessWidget {
         //int score = documents[index].data['score'];
         //bool active = documents[index].data['active'] ?? false;
 
-        String address = documents[index].data['address'].toString();
-        String name = documents[index].data['name'].toString();
+        String address = documents[index]['address'].toString();
+        String name = documents[index]['name'].toString();
 
         return ListTile(
           title: Container(
@@ -112,13 +114,13 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ชื่อ นามสกุล',
                   ),
                   onFieldSubmitted: (String name) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
                       // getpercent = double.parse(percent);
-                      await transaction
-                          .update(snapshot.reference, {'name': name});
+                      transaction.update(snapshot.reference, {'name': name});
                     });
                   },
                   //keyboardType: TextInputType.number,
@@ -131,11 +133,12 @@ class FirestoreListView extends StatelessWidget {
                     labelText: 'ที่อยู่',
                   ),
                   onFieldSubmitted: (String address) {
-                    Firestore.instance.runTransaction((transaction) async {
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
                       DocumentSnapshot snapshot =
                           await transaction.get(documents[index].reference);
 
-                      await transaction
+                      transaction
                           .update(snapshot.reference, {'address': address});
                     });
                   },

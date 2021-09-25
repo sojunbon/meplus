@@ -3,25 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meplus/app_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:meplus/screens/authen/register_page.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
+
 import 'package:meplus/components/notification.dart';
 import 'package:meplus/components/signin_button.dart';
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/screens/meplussrc/mainpage/components/tab_view.dart';
-import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
-import 'package:meplus/screens/shopping/product/product_page.dart';
-import 'package:meplus/screens/signin_with_email/signin_with_email.dart';
-import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
+
+//import 'package:meplus/services/signin_with_apple_services/signin_with_apple_services.dart';
 //import 'package:meplus/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
-import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
+//import 'package:meplus/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/material/button_style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:apple_sign_in/apple_sign_in_button.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:meplus/components/notification.dart';
-import 'package:meplus/screens/signin_with_email/register_with_email.dart';
-import 'package:meplus/services/signin_with_email_method_services/signin_with_email_service.dart';
+
+//import 'package:meplus/services/signin_with_email_method_services/signin_with_email_service.dart';
 import 'package:meplus/providers/login_provider.dart';
 import 'package:meplus/providers/register_provider.dart';
 import 'package:nice_button/NiceButton.dart';
@@ -40,7 +38,7 @@ import 'package:url_launcher/url_launcher.dart';
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
 class Meplusmain extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   @override
   _Meplusmain createState() => _Meplusmain();
@@ -54,7 +52,7 @@ class _Meplusmain extends State<Meplusmain> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String namedis;
   String userID = "";
-  Firestore _db = Firestore.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   TabController tabController;
   String linead;
   var sumtotal;
@@ -65,10 +63,11 @@ class _Meplusmain extends State<Meplusmain> {
   void initState() {
     // initLineSdk();
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    setState(() {
+      userID = user.uid;
+      //});
     });
     //getUsername();
     userNameGet();
@@ -80,13 +79,13 @@ class _Meplusmain extends State<Meplusmain> {
   }
 
   Future<dynamic> getUsername() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    User user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
         .collection("users")
-        .document(user.uid)
+        .doc(user.uid)
         .snapshots()
         .listen((snapshot) {
-      namedis = snapshot.data['name'];
+      namedis = snapshot['name'];
       return namedis;
     });
   }
@@ -115,9 +114,9 @@ class _Meplusmain extends State<Meplusmain> {
 
   dynamic userdesc;
   Future userNameGet() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
     final DocumentReference getpackage =
-        Firestore.instance.collection("users").document(user.uid);
+        FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {
@@ -131,9 +130,9 @@ class _Meplusmain extends State<Meplusmain> {
   Future getSumtotalValue() async {
     bool gettype;
     double tempTotal = 0;
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
     final DocumentReference getpacksum =
-        Firestore.instance.collection("moneytrans").document();
+        FirebaseFirestore.instance.collection("moneytrans").doc();
 
     await getpacksum
         .get()
@@ -159,15 +158,14 @@ class _Meplusmain extends State<Meplusmain> {
     double tempTotal = 0;
     sumtotal = 0;
 
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    User user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
         .collection('moneytrans')
         .where("uid", isEqualTo: user.uid)
         .where("active", isEqualTo: true)
         .snapshots()
         .listen((snapshot) {
-      tempTotal =
-          snapshot.documents.fold(0, (tot, doc) => tot + doc.data['amount']);
+      tempTotal = snapshot.docs.fold(0, (tot, doc) => tot + doc['amount']);
 
       sumtotal = tempTotal.toString();
 
@@ -181,16 +179,15 @@ class _Meplusmain extends State<Meplusmain> {
     double tempTotal = 0;
     double sumdib = 0;
     sumtotal = 0;
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
 
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection('trademoney')
         .where("uid", isEqualTo: user.uid)
         //.where("active", isEqualTo: true)
         .snapshots()
         .listen((snapshot) {
-      tempTotal = snapshot.documents
-          .fold(0, (tot, doc) => tot + doc.data['calpayment']);
+      tempTotal = snapshot.docs.fold(0, (tot, doc) => tot + doc['calpayment']);
 
       sumdib = tempTotal;
       sumpayment = sumdib.toString(); //tempTotal.toString();
@@ -204,15 +201,14 @@ class _Meplusmain extends State<Meplusmain> {
 
     double tempTotal = 0;
     sumtotal = 0;
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    User user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
         .collection('trademoney')
         .where("uid", isEqualTo: user.uid)
         .where("active", isEqualTo: true)
         .snapshots()
         .listen((snapshot) {
-      tempTotal = snapshot.documents
-          .fold(0, (tot, doc) => tot + doc.data['calpayment']);
+      tempTotal = snapshot.docs.fold(0, (tot, doc) => tot + doc['calpayment']);
       sumdibpayment = tempTotal.toString();
 
       return sumdibpayment;
@@ -222,7 +218,7 @@ class _Meplusmain extends State<Meplusmain> {
   dynamic datadesc;
   Future getDescription() async {
     final DocumentReference getpackage =
-        Firestore.instance.collection("packagedesc").document('desc');
+        FirebaseFirestore.instance.collection("packagedesc").doc('desc');
 
     await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {

@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meplus/startscreen/splash_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 //import 'package:meplus/screens/main_page.dart';
-import 'package:meplus/screens/shopping/mainsrc/main_page.dart';
 
 import 'package:meplus/screens/authen/welcome_back_page.dart';
 import 'package:meplus/models/user.dart';
@@ -21,8 +21,32 @@ import 'package:meplus/screens/meplussrc/mainpage/memain_page.dart';
 class MyApp extends StatelessWidget {
   // UserManagement userObj = new UserManagement();
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      // Initialize FlutterFire
+      future: Firebase.initializeApp(),
+      builder: (context, snapshot) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'ME PLUS',
+          theme: ThemeData(
+            brightness: Brightness.light,
+            canvasColor: Colors.transparent,
+            primarySwatch: Colors.blue,
+            fontFamily: "Montserrat",
+          ),
+          //home: SplashScreen(),
+          home: _showScreen(context),
+          //routes: <String, WidgetBuilder>{
+          //  SPLASH_SCREEN: (BuildContext context) => SplashScreen(),
+          // },
+        );
+      },
+    );
+
+    /*
     return MaterialApp(
       title: 'ME PLUS',
       debugShowCheckedModeBanner: false,
@@ -35,6 +59,7 @@ class MyApp extends StatelessWidget {
       home: _showScreen(context), //SplashScreen(),
       //home: userObj.handleAuth(),
     );
+    */
   }
 }
 

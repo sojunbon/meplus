@@ -30,7 +30,7 @@ import 'package:meplus/screens/meplussrc/products/components/product_control.dar
 class Addproducts extends StatefulWidget {
   //final String name;
   //final String email;
-  FirebaseUser user;
+  User user;
 
   //Package({Key key, @required this.name, @required this.email})
   //     : super(key: key);
@@ -54,7 +54,7 @@ class _Addproducts extends State<Addproducts> {
   String userID = "";
 
   String namedis;
-  Firestore _db = Firestore.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   TabController tabController;
   var percent;
   var count;
@@ -74,7 +74,9 @@ class _Addproducts extends State<Addproducts> {
   String imageUrl;
   Future pickImage(context) async {
     //final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    //var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       _imageFile = File(pickedFile.path);
@@ -83,6 +85,26 @@ class _Addproducts extends State<Addproducts> {
   }
 
   Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    setState(() {
+      isLoading = true;
+    });
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    Reference ref = storage.ref().child('products/$fileName');
+    UploadTask uploadTask = ref.putFile(_imageFile);
+    uploadTask.whenComplete(() {
+      //_uploadedFileURL = ref.getDownloadURL().toString();
+
+      setState(() {
+        imageUrl = ref.getDownloadURL().toString();
+        isLoading = false;
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+    return imageUrl;
+    /*
     String fileName = basename(_imageFile.path);
     setState(() {
       isLoading = true;
@@ -99,33 +121,15 @@ class _Addproducts extends State<Addproducts> {
         isLoading = false;
       });
     });
-    /*
-    String fileName = basename(_imageFile.path);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('uploads/$fileName');
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-
-    imageUrl = await taskSnapshot.ref.getDownloadURL();
     */
-    /*
-    String fileName = basename(_imageFile.path);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('products/$fileName');
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => imageUrl = value,
-        );
-        */
   }
 
   dynamic data;
   Future<dynamic> getData() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = await FirebaseAuth.instance.currentUser;
 
     final DocumentReference document =
-        Firestore.instance.collection("users").document(user.uid);
+        FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
@@ -135,13 +139,13 @@ class _Addproducts extends State<Addproducts> {
   }
 
   Future<dynamic> getUsername() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
+    User user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
         .collection("users")
-        .document(user.uid)
+        .doc(user.uid)
         .snapshots()
         .listen((snapshot) {
-      namedis = snapshot.data['name'];
+      namedis = snapshot['name'];
       return namedis;
     });
   }
@@ -149,7 +153,7 @@ class _Addproducts extends State<Addproducts> {
   dynamic datadesc;
   Future getDescription() async {
     final DocumentReference getpackage =
-        Firestore.instance.collection("packagedesc").document('desc');
+        FirebaseFirestore.instance.collection("packagedesc").doc('desc');
 
     await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {
@@ -165,10 +169,13 @@ class _Addproducts extends State<Addproducts> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() {
-        userID = user.uid;
-      });
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+
+    setState(() {
+      userID = user.uid;
+      // });
     });
 
     getData();
@@ -179,36 +186,20 @@ class _Addproducts extends State<Addproducts> {
   }
 
   void getCal() async {
-    final db = Firestore.instance;
+    final db = FirebaseFirestore.instance;
     await db
         .collection('conftab')
-        .document('conf')
+        .doc('conf')
         .get()
         .then((DocumentSnapshot documentSnapshot) {
-      count = documentSnapshot.data['count'];
-      percenta = documentSnapshot.data['percenta'];
-      percentb = documentSnapshot.data['percentb'];
-      percentc = documentSnapshot.data['percentc'];
-      percentd = documentSnapshot.data['percentd'];
-      perday = documentSnapshot.data['perday'];
+      count = documentSnapshot['count'];
+      percenta = documentSnapshot['percenta'];
+      percentb = documentSnapshot['percentb'];
+      percentc = documentSnapshot['percentc'];
+      percentd = documentSnapshot['percentd'];
+      perday = documentSnapshot['perday'];
     });
   }
-
-  /*
-  void getDesc() async {
-    final db = Firestore.instance;
-    await db
-        .collection('packagedesc')
-        .document('desc')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      desca = documentSnapshot.data['desca'];
-      descb = documentSnapshot.data['descb'];
-      descc = documentSnapshot.data['descc'];
-      descd = documentSnapshot.data['descd'];
-    });
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
