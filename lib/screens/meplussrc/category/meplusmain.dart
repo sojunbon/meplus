@@ -76,13 +76,14 @@ class _Meplusmain extends State<Meplusmain> {
     queryValues();
     queryPayment();
     queryDibPayment();
-    getDescription();
+    //getDescription();
+    getPackageDesc();
     //getSumtotalValue();
   }
 
   Future<dynamic> getUsername() async {
     User user = await FirebaseAuth.instance.currentUser;
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("users")
         .doc(user.uid)
         .snapshots()
@@ -214,6 +215,28 @@ class _Meplusmain extends State<Meplusmain> {
       sumdibpayment = tempTotal.toString();
 
       return sumdibpayment;
+    });
+  }
+
+  Future<dynamic> getPackageDesc() async {
+    //User user = await FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
+        .collection("packagedesc")
+        .doc('desc')
+        .snapshots()
+        .listen((snapshot) {
+      //namedis = snapshot['name'];
+
+      linead = snapshot['line'].toString();
+      /*
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
+      */
     });
   }
 

@@ -145,16 +145,41 @@ class _Package extends State<Package> {
 
   dynamic data;
   Future<dynamic> getData() async {
-    User user = await FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser;
 
+    final _fireStore = FirebaseFirestore.instance;
+    final DocumentReference getpackage =
+        _fireStore.collection('users').doc(user.uid);
+
+    return _fireStore.runTransaction((transaction) async {
+      // Get the document
+      DocumentSnapshot snapshot = await transaction.get(getpackage);
+
+      setState(() {
+        data = snapshot.data;
+        print(snapshot.data());
+      });
+      /*
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
+      */
+    });
+    /*
     final DocumentReference document =
         FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
         data = snapshot.data;
+        print(snapshot.data());
       });
     });
+    */
   }
 
   Future<dynamic> getUsername() async {
@@ -169,40 +194,68 @@ class _Package extends State<Package> {
     });
   }
 
+  Future<dynamic> getPackageDesc() async {
+    //User user = await FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance
+        .collection("packagedesc")
+        .doc('desc')
+        .snapshots()
+        .listen((snapshot) {
+      //namedis = snapshot['name'];
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
+    });
+  }
+
+  Future<void> _copyToClipboard() async {
+    await Clipboard.setData(ClipboardData(text: bankacct_trans.toString()));
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(datab.toString()),
+    ));
+  }
+
   dynamic datadesc;
   Future getDescription() async {
     final _fireStore = FirebaseFirestore.instance;
     final DocumentReference getpackage =
-        await _fireStore.collection('packagedesc').doc('desc');
+        _fireStore.collection('packagedesc').doc('desc');
 
-    // FirebaseFirestore.instance.collection("packagedesc").doc('desc');
+    return _fireStore.runTransaction((transaction) async {
+      // Get the document
+      DocumentSnapshot snapshot = await transaction.get(getpackage);
 
-    //QuerySnapshot snapshot =
-    //    await FirebaseFirestore.instance.collection("Buyer Requests").get();
-    //return snapshot.docs;
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
 
+      // });
+      //print(snapshot.data());
+      /*
     await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {
         datadesc = getsnapshot.data;
-        desca = datadesc.data()['desca'];
-        descb = datadesc.data()['descb'];
-        descc = datadesc.data()['descc'];
-        descd = datadesc.data()['descd'];
-        bankname_trans = datadesc.data()['bankname'].toString();
-        bankacct_trans = datadesc.data()['bankaccount'].toString();
-        nametrans = datadesc.data()['name'];
+        desca = datadesc['desca'];
+        descb = datadesc['descb'];
+        descc = datadesc['descc'];
+        descd = datadesc['descd'];
+        bankname_trans = datadesc['bankname'].toString();
+        bankacct_trans = datadesc['bankaccount'].toString();
+        nametrans = datadesc['name'];
 
         //datab = ClipboardData(text: bankacct_trans.toString());
         //Clipboard.setData(datab);
-      });
+      });*/
     });
-
-    Future<void> _copyToClipboard() async {
-      await Clipboard.setData(ClipboardData(text: bankacct_trans.toString()));
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text(datab.toString()),
-      ));
-    }
 
     /*
     DocumentSnapshot ds = await Firestore.instance
@@ -234,14 +287,22 @@ class _Package extends State<Package> {
 
     setState(() {
       userID = user.uid;
+
+      //getDesc();
+      getCal();
+      getDescription();
+      getData();
     });
     // });
 
+    /*
     getData();
     //getDesc();
     getCal();
     getDescription();
+    //getPackageDesc();
     // getUsername();
+    */
   }
 
   void getCal() async {
@@ -676,12 +737,12 @@ class _Package extends State<Package> {
           //    .push(MaterialPageRoute(builder: (_) => RegisterPage()));
           //onPressed: () {
 
-          if (data['bankaccount'] == "") {
-            showMessageBox(
-                context, "แจ้งเตือน", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
-                actions: [dismissButton(context)]);
-            logger.e("bank account can't be null");
-          } else if (tradeamount.text == null) {
+          //if (data['bankaccount'] == "") {
+          //  showMessageBox(
+          //      context, "แจ้งเตือน", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
+          //      actions: [dismissButton(context)]);
+          //  logger.e("bank account can't be null");
+          if (tradeamount.text == null) {
             showMessageBox(context, "แจ้งเตือน", "กรูณากรอกจำนวนเงิน",
                 actions: [dismissButton(context)]);
             logger.e("amount can't be null");

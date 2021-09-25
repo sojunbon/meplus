@@ -185,6 +185,24 @@ class _Product_detail extends State<Product_detail> {
     });
   }
 
+  Future<dynamic> getPackageDesc() async {
+    //User user = await FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
+        .collection("packagedesc")
+        .doc('desc')
+        .snapshots()
+        .listen((snapshot) {
+      //namedis = snapshot['name'];
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
+    });
+  }
+
   dynamic datadesc;
   Future getDescription() async {
     final DocumentReference getpackage =
@@ -201,6 +219,19 @@ class _Product_detail extends State<Product_detail> {
         bankacct_trans = datadesc['bankaccount'].toString();
         nametrans = datadesc['name'];
       });
+    });
+  }
+
+  Future<dynamic> getPictureView() async {
+    //User user = await FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
+        .collection("products")
+        .doc(dockey)
+        .snapshots()
+        .listen((snapshotpic) {
+      picurlitem = snapshotpic['picurl'];
+      desc = snapshotpic['productdesc'];
+      price = snapshotpic['price'];
     });
   }
 
@@ -233,10 +264,12 @@ class _Product_detail extends State<Product_detail> {
     //});
 
     getData();
-    getPicture();
+    //getPicture();
+    getPictureView();
     //getDesc();
     getCal();
-    getDescription();
+    //getDescription();
+    getPackageDesc();
     // getUsername();
   }
 
