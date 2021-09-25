@@ -26,6 +26,7 @@ import 'package:meplus/services/usermngmt.dart';
 import 'package:meplus/models/useritem.dart';
 import 'package:meplus/screens/authen/register_page.dart';
 import 'package:meplus/screens/meplussrc/package/components/money_control.dart';
+import 'package:firebase_core/firebase_core.dart';
 //import 'forgot_password_page.dart';
 
 class Package extends StatefulWidget {
@@ -170,19 +171,26 @@ class _Package extends State<Package> {
 
   dynamic datadesc;
   Future getDescription() async {
+    final _fireStore = FirebaseFirestore.instance;
     final DocumentReference getpackage =
-        FirebaseFirestore.instance.collection("packagedesc").doc('desc');
+        await _fireStore.collection('packagedesc').doc('desc');
+
+    // FirebaseFirestore.instance.collection("packagedesc").doc('desc');
+
+    //QuerySnapshot snapshot =
+    //    await FirebaseFirestore.instance.collection("Buyer Requests").get();
+    //return snapshot.docs;
 
     await getpackage.get().then<dynamic>((DocumentSnapshot getsnapshot) async {
       setState(() {
         datadesc = getsnapshot.data;
-        desca = datadesc['desca'];
-        descb = datadesc['descb'];
-        descc = datadesc['descc'];
-        descd = datadesc['descd'];
-        bankname_trans = datadesc['bankname'].toString();
-        bankacct_trans = datadesc['bankaccount'].toString();
-        nametrans = datadesc['name'];
+        desca = datadesc.data()['desca'];
+        descb = datadesc.data()['descb'];
+        descc = datadesc.data()['descc'];
+        descd = datadesc.data()['descd'];
+        bankname_trans = datadesc.data()['bankname'].toString();
+        bankacct_trans = datadesc.data()['bankaccount'].toString();
+        nametrans = datadesc.data()['name'];
 
         //datab = ClipboardData(text: bankacct_trans.toString());
         //Clipboard.setData(datab);
@@ -219,6 +227,7 @@ class _Package extends State<Package> {
   @override
   void initState() {
     super.initState();
+    Firebase.initializeApp();
     //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;

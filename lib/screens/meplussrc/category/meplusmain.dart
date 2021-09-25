@@ -34,6 +34,7 @@ import 'package:meplus/screens/meplussrc/package/withdraw_money.dart';
 import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -63,14 +64,15 @@ class _Meplusmain extends State<Meplusmain> {
   void initState() {
     // initLineSdk();
     super.initState();
+    Firebase.initializeApp();
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     setState(() {
       userID = user.uid;
       //});
     });
-    //getUsername();
-    userNameGet();
+    getUsername();
+    //userNameGet();
     queryValues();
     queryPayment();
     queryDibPayment();
@@ -79,7 +81,7 @@ class _Meplusmain extends State<Meplusmain> {
   }
 
   Future<dynamic> getUsername() async {
-    User user = FirebaseAuth.instance.currentUser;
+    User user = await FirebaseAuth.instance.currentUser;
     FirebaseFirestore.instance
         .collection("users")
         .doc(user.uid)
