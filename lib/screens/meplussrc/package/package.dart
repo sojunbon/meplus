@@ -85,6 +85,11 @@ class _Package extends State<Package> {
   var bankacct_trans;
   var nametrans;
 
+  var userbank;
+  var useracct;
+  var username;
+  var usermobile;
+
   ClipboardData datab;
   bool isLoading = false;
   String imageUrl;
@@ -113,17 +118,18 @@ class _Package extends State<Package> {
     UploadTask uploadTask = ref.putFile(_imageFile);
     uploadTask.whenComplete(() {
       //_uploadedFileURL = ref.getDownloadURL().toString();
-
-      setState(() {
-        imageUrl = ref.getDownloadURL().toString();
-        isLoading = false;
+      ref.getDownloadURL().then((fileURL) {
+        setState(() {
+          imageUrl = fileURL;
+          //ref.getDownloadURL().toString();
+          isLoading = false;
+        });
+      }).catchError((onError) {
+        print(onError);
       });
-    }).catchError((onError) {
-      print(onError);
-    });
-    return imageUrl;
+      return imageUrl;
 
-    /*
+      /*
     String fileName = basename(_imageFile.path);
     setState(() {
       isLoading = true;
@@ -141,6 +147,7 @@ class _Package extends State<Package> {
       });
     });
     */
+    });
   }
 
   dynamic data;
@@ -191,6 +198,22 @@ class _Package extends State<Package> {
         .listen((snapshot) {
       namedis = snapshot['name'];
       return namedis;
+    });
+  }
+
+  Future<dynamic> getUserData() async {
+    User user = await FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+      namedis = snapshot['name'];
+      userbank = snapshot['bankname'].toString();
+      useracct = snapshot['bankaccount'].toString();
+      username = snapshot['name'];
+      usermobile = snapshot['mobile'];
     });
   }
 
@@ -287,7 +310,7 @@ class _Package extends State<Package> {
 
     setState(() {
       userID = user.uid;
-
+      getUserData();
       //getDesc();
       getCal();
       getDescription();
@@ -737,12 +760,13 @@ class _Package extends State<Package> {
           //    .push(MaterialPageRoute(builder: (_) => RegisterPage()));
           //onPressed: () {
 
-          //if (data['bankaccount'] == "") {
-          //  showMessageBox(
-          //      context, "แจ้งเตือน", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
-          //      actions: [dismissButton(context)]);
-          //  logger.e("bank account can't be null");
-          if (tradeamount.text == null) {
+          // if (data['bankaccount'] == "") {
+          if (useracct == "") {
+            showMessageBox(
+                context, "แจ้งเตือน", "กรูณากรอกข้อมูลธนาคารให้เรียบร้อย",
+                actions: [dismissButton(context)]);
+            logger.e("bank account can't be null");
+          } else if (tradeamount.text == null) {
             showMessageBox(context, "แจ้งเตือน", "กรูณากรอกจำนวนเงิน",
                 actions: [dismissButton(context)]);
             logger.e("amount can't be null");
@@ -781,11 +805,12 @@ class _Package extends State<Package> {
             addMoneyItem(
                 context,
                 {
-                  "name": data['name'], //nametxt,
+                  "name": username, //data['name'], //nametxt,
                   "amount": myamt, //amount.text,
                   "active": active, //"false",
-                  "bankname": data['bankname'], //banknamedis,
-                  "bankaccount": data['bankaccount'], //bankaccountdis,
+                  "bankname": userbank, //data['bankname'], //banknamedis,
+                  "bankaccount":
+                      useracct, //data['bankaccount'], //bankaccountdis,
                   "uid": userID,
                   "createdAt": FieldValue.serverTimestamp(),
                   "updatedAt": FieldValue.serverTimestamp(),
@@ -796,7 +821,7 @@ class _Package extends State<Package> {
                   "dateint": formatdate,
                   "picurl": imageUrl,
                   "paytype": 1, // 1 = ฝาก , 2 = ถอน , 3 ลงทุน , 4 แนะนำเพื่อน
-                  "mobile": data['mobile'],
+                  "mobile": usermobile, //data['mobile'],
                 },
                 userID);
             tradeamount.text = "";

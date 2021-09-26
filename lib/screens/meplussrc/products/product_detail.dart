@@ -28,6 +28,7 @@ import 'package:meplus/screens/authen/register_page.dart';
 //import 'forgot_password_page.dart';
 
 import 'package:meplus/screens/meplussrc/products/components/product_control.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Product_detail extends StatefulWidget {
   User user;
@@ -75,6 +76,12 @@ class _Product_detail extends State<Product_detail> {
   var desc;
   var picurlitem;
 
+  var userbank;
+  var useracct;
+  var username;
+  var usermobile;
+  var useraddress;
+
   var cachimg =
       "https://firebasestorage.googleapis.com/v0/b/meplus-b563a.appspot.com/o/cacheimage%2Fwhitepaper.png?alt=media&token=18bcae85-4154-4410-b716-e54e1d17303f";
 
@@ -109,16 +116,23 @@ class _Product_detail extends State<Product_detail> {
     uploadTask.whenComplete(() {
       //_uploadedFileURL = ref.getDownloadURL().toString();
 
-      setState(() {
-        imageUrl = ref.getDownloadURL().toString();
-        isLoading = false;
-      });
-    }).catchError((onError) {
-      print(onError);
-    });
-    return imageUrl;
+      ref.getDownloadURL().then((fileURL) {
+        setState(() {
+          imageUrl = fileURL;
+          //ref.getDownloadURL().toString();
+          isLoading = false;
+        });
 
-    /*
+        //setState(() {
+        //  imageUrl = ref.getDownloadURL().toString();
+        //  isLoading = false;
+        //});
+      }).catchError((onError) {
+        print(onError);
+      });
+      return imageUrl;
+
+      /*
     String fileName = basename(_imageFile.path);
     setState(() {
       isLoading = true;
@@ -137,7 +151,7 @@ class _Product_detail extends State<Product_detail> {
     });
     */
 
-    /*
+      /*
     String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
@@ -147,7 +161,7 @@ class _Product_detail extends State<Product_detail> {
     imageUrl = await taskSnapshot.ref.getDownloadURL();
     */
 
-    /*
+      /*
     String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
@@ -157,20 +171,46 @@ class _Product_detail extends State<Product_detail> {
           (value) => imageUrl = value,
         );
         */
+    });
   }
 
   dynamic data;
   Future<dynamic> getData() async {
     User user = FirebaseAuth.instance.currentUser;
 
+    final _fireStore = FirebaseFirestore.instance;
+    final DocumentReference getpackage =
+        _fireStore.collection('users').doc(user.uid);
+
+    return _fireStore.runTransaction((transaction) async {
+      // Get the document
+      DocumentSnapshot snapshot = await transaction.get(getpackage);
+
+      setState(() {
+        data = snapshot.data;
+        print(snapshot.data());
+      });
+      /*
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
+      */
+    });
+    /*
     final DocumentReference document =
         FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       setState(() {
         data = snapshot.data;
+        print(snapshot.data());
       });
     });
+    */
   }
 
   Future<dynamic> getUsername() async {
@@ -197,8 +237,8 @@ class _Product_detail extends State<Product_detail> {
       descb = snapshot['descb'];
       descc = snapshot['descc'];
       descd = snapshot['descd'];
-      bankname_trans = snapshot['bankname'].toString();
-      bankacct_trans = snapshot['bankaccount'].toString();
+      bankname_trans = snapshot['bankname'];
+      bankacct_trans = snapshot['bankaccount'];
       nametrans = snapshot['name'];
     });
   }
@@ -224,7 +264,7 @@ class _Product_detail extends State<Product_detail> {
 
   Future<dynamic> getPictureView() async {
     //User user = await FirebaseAuth.instance.currentUser;
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("products")
         .doc(dockey)
         .snapshots()
@@ -252,18 +292,43 @@ class _Product_detail extends State<Product_detail> {
     });
   }
 
+  Future<dynamic> getUserData() async {
+    User user = await FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+      namedis = snapshot['name'];
+      userbank = snapshot['bankname'].toString();
+      useracct = snapshot['bankaccount'].toString();
+      username = snapshot['name'];
+      usermobile = snapshot['mobile'];
+      useraddress = snapshot['address'];
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    Firebase.initializeApp();
     //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     setState(() {
       userID = user.uid;
+      getUserData();
+      getPicurl();
+      //getPictureView();
+      getCal();
+      getPackageDesc();
+      getData();
     });
     //});
-
-    getData();
+    /*
+    getUserData();
+    //getData();
     //getPicture();
     getPictureView();
     //getDesc();
@@ -271,6 +336,7 @@ class _Product_detail extends State<Product_detail> {
     //getDescription();
     getPackageDesc();
     // getUsername();
+    */
   }
 
   void getCal() async {
@@ -286,6 +352,19 @@ class _Product_detail extends State<Product_detail> {
       percentc = documentSnapshot['percentc'];
       percentd = documentSnapshot['percentd'];
       perday = documentSnapshot['perday'];
+    });
+  }
+
+  void getPicurl() async {
+    final db = FirebaseFirestore.instance;
+    await db
+        .collection("products")
+        .doc(dockey)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      picurlitem = documentSnapshot['picurl'];
+      desc = documentSnapshot['productdesc'];
+      price = documentSnapshot['price'];
     });
   }
 

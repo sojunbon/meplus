@@ -65,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
   String cat_mob;
   String con_mob;
+  FocusNode _titleFocus;
 
   var firstColor = Color(0xffCCCC00), secondColor = Color(0xffCCCC00);
   @override
@@ -86,6 +87,13 @@ class _RegisterPageState extends State<RegisterPage> {
     getData();
     checkPhoneSnap(mobilestr.text);
     //checkPhone();
+  }
+
+  @override
+  void dispose() {
+    _titleFocus?.dispose();
+
+    super.dispose();
   }
 
   Future<dynamic> checkPhoneSnap(String phone) async {
@@ -980,7 +988,8 @@ return Scaffold(
                         final User user = auth.currentUser;
                         // {
                         if (user == null) {
-                          userObj.signOut();
+                          //userObj.signOut();
+                          context.watch<LoginProvider>().signOut();
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

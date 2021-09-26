@@ -24,6 +24,14 @@ class _SettingsPage extends State<SettingsPage> {
   String userID = "";
   User _user;
   bool isLoading = false;
+  FocusNode _titleFocus;
+
+  @override
+  void dispose() {
+    _titleFocus?.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();

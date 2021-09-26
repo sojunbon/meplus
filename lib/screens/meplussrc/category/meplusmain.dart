@@ -35,6 +35,10 @@ import 'package:meplus/screens/meplussrc/products/meproducts.dart';
 import 'package:meplus/screens/meplussrc/package/topuplist.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:meplus/models/getuser_model.dart';
+import 'package:meplus/screens/meplussrc/category/components/data_control.dart';
+import 'package:meplus/models/getuser_model.dart';
+import 'package:meplus/models/getuserlist.dart';
 
 var firstColor = Color(0xff9999FF), secondColor = Color(0xff9999FF);
 
@@ -60,6 +64,12 @@ class _Meplusmain extends State<Meplusmain> {
   var sumpayment;
   var sumdibpayment;
   var sumdibpaymentn;
+  final dbuser = DatabaseService();
+
+  String userbank;
+  String useracct;
+  String usermobile;
+
   @override
   void initState() {
     // initLineSdk();
@@ -69,16 +79,65 @@ class _Meplusmain extends State<Meplusmain> {
     final User user = auth.currentUser;
     setState(() {
       userID = user.uid;
-      //});
+      //getUserData(userID);
+      getUsername();
+      //userNameGet();
+      queryValues();
+      queryPayment();
+      queryDibPayment();
+      getPackageDesc();
+      getData();
     });
-    getUsername();
-    //userNameGet();
+
+    /*
+    //getUsername();
+    userNameGet();
     queryValues();
     queryPayment();
     queryDibPayment();
     //getDescription();
     getPackageDesc();
     //getSumtotalValue();
+    */
+  }
+
+  dynamic data;
+  Future<dynamic> getData() async {
+    User user = FirebaseAuth.instance.currentUser;
+
+    final _fireStore = FirebaseFirestore.instance;
+    final DocumentReference getpackage =
+        _fireStore.collection('users').doc(user.uid);
+
+    return _fireStore.runTransaction((transaction) async {
+      // Get the document
+      DocumentSnapshot snapshot = await transaction.get(getpackage);
+
+      setState(() {
+        data = snapshot.data;
+        print(snapshot.data());
+      });
+      /*
+      desca = snapshot['desca'];
+      descb = snapshot['descb'];
+      descc = snapshot['descc'];
+      descd = snapshot['descd'];
+      bankname_trans = snapshot['bankname'].toString();
+      bankacct_trans = snapshot['bankaccount'].toString();
+      nametrans = snapshot['name'];
+      */
+    });
+    /*
+    final DocumentReference document =
+        FirebaseFirestore.instance.collection("users").doc(user.uid);
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      setState(() {
+        data = snapshot.data;
+        print(snapshot.data());
+      });
+    });
+    */
   }
 
   Future<dynamic> getUsername() async {
@@ -217,6 +276,43 @@ class _Meplusmain extends State<Meplusmain> {
       return sumdibpayment;
     });
   }
+
+  Future<dynamic> getUserData(String uid) async {
+    //CollectionReference posts = FirebaseFirestore.instance.collection('users');
+    //posts.doc(uid).get();
+
+    //dbuser.streamPost(uid);
+
+    dbuser.streamPost(uid);
+
+    // final getusers = getuserss.first;
+
+    // return location.facts.map((e) => namedis = e.name);
+  }
+
+/*
+  void initialGetSaved(String uid) async{
+    sharedPreferences = await SharedPreferences.getInstance();
+      
+   // Read the data, decode it and store it in map structure
+   //Map<String,dynamic> jsondatais = jsonDecode(sharedPreferences.getString('userdata')!);
+
+    //convert it into User object
+    //var user = User.fromJson(jsondatais);
+
+    dbuser.streamPost(uid);
+
+    //if(jsondatais.isNotEmpty){
+      print(user.name);
+      print(user.email);
+      //set the sharedPreferences saved data to TextField
+      _name.value =  TextEditingValue(text: user.name);
+      _email.value =  TextEditingValue(text: user.email);
+      _phone.value =  TextEditingValue(text: user.phone);
+    }
+    
+  }
+  */
 
   Future<dynamic> getPackageDesc() async {
     //User user = await FirebaseAuth.instance.currentUser;

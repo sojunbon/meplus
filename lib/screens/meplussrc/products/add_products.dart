@@ -95,16 +95,21 @@ class _Addproducts extends State<Addproducts> {
     UploadTask uploadTask = ref.putFile(_imageFile);
     uploadTask.whenComplete(() {
       //_uploadedFileURL = ref.getDownloadURL().toString();
-
-      setState(() {
-        imageUrl = ref.getDownloadURL().toString();
-        isLoading = false;
+      ref.getDownloadURL().then((fileURL) {
+        setState(() {
+          imageUrl = fileURL;
+          //ref.getDownloadURL().toString();
+          isLoading = false;
+        });
+        //setState(() {
+        //  imageUrl = ref.getDownloadURL().toString();
+        //  isLoading = false;
+        //});
+      }).catchError((onError) {
+        print(onError);
       });
-    }).catchError((onError) {
-      print(onError);
-    });
-    return imageUrl;
-    /*
+      return imageUrl;
+      /*
     String fileName = basename(_imageFile.path);
     setState(() {
       isLoading = true;
@@ -122,6 +127,7 @@ class _Addproducts extends State<Addproducts> {
       });
     });
     */
+    });
   }
 
   dynamic data;

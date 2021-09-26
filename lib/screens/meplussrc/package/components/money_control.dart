@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:meplus/providers/logger_service.dart';
 import 'package:ntp/ntp.dart';
 import 'package:meplus/components/show_notification.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 // ----- Add moneytrans PACKAGE -------
 Future<void> addMoneyItem(

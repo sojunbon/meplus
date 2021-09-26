@@ -3,11 +3,12 @@ import 'package:meplus/app_properties.dart';
 //import 'package:meplus/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'components/product_display.dart';
 import 'view_product_page.dart';
 //import 'package:meplus/screens/meplussrc/products/components/product_options.dart';
 import 'package:meplus/models/newproduct.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class ProductPage extends StatefulWidget {
   final Newproduct newproduct;
@@ -20,8 +21,21 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final Newproduct newproduct;
-
+  String userID = "";
   _ProductPageState(this.newproduct);
+
+  @override
+  void initState() {
+    super.initState();
+    Firebase.initializeApp();
+    //FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+
+    setState(() {
+      userID = user.uid;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
