@@ -291,14 +291,17 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
       left: MediaQuery.of(context).size.width / 4,
       bottom: 10,
       child: InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-        },
+        //onTap: () {
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+
+        //  context.read<LoginProvider>().signInWithApple();
+        //},
         child: Container(
           //padding: const EdgeInsets.only(left: 32.0, right: 12.0),
           width: MediaQuery.of(context).size.width / 2,
           height: 80,
+          /*
           child: Center(
               child: new Text("Apple ID",
                   style: const TextStyle(
@@ -306,6 +309,20 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
                       fontSize: 15.0))),
+          */
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SignInWithAppleButton(
+                style: SignInWithAppleButtonStyle.black,
+                iconAlignment: IconAlignment.center,
+                onPressed: () {
+                  context.read<LoginProvider>().signInWithApple();
+                },
+              )
+            ],
+          ),
+          /*
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [
@@ -323,6 +340,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 )
               ],
               borderRadius: BorderRadius.circular(9.0)),
+              */
         ),
       ),
     );
